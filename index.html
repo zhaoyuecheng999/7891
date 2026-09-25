@@ -4,7 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
   <title>ZYC1145 · 乐子博客</title>
+  <link rel="icon" type="image/png" href="https://www.favicon.cc/avatar/680928/680928.png">
+  <link rel="apple-touch-icon" href="https://www.favicon.cc/avatar/680928/680928.png">
+
   <style>
+    /* ============================================================
+       CSS 部分：字体、主题变量、布局、样式、动画、响应式
+       ============================================================ */
+
     /* ---------- Minecraft 字体 ---------- */
     @font-face {
       font-family: 'Monocraft';
@@ -16,9 +23,9 @@
 
     /* ---------- 主题变量：浅色 ---------- */
     :root {
-      --bg-body: #f4faf7;
-      --bg-card: #ffffff;
-      --bg-subtle: #e8f5ee;
+      --bg-card: rgba(255, 255, 255, 0.86);
+      --bg-card-solid: #ffffff;
+      --bg-subtle: rgba(232, 245, 238, 0.9);
       --bg-highlight: #d8f3e3;
       --bg-avatar: #b7e4c7;
       --text-primary: #1b4332;
@@ -32,15 +39,18 @@
       --shadow-color: rgba(45, 106, 79, 0.15);
       --shadow-soft: rgba(45, 106, 79, 0.1);
       --btn-reset-text: #6b8a7a;
-      --hero-bg: #ffffff;
+      --hero-bg: rgba(255, 255, 255, 0.9);
       --footer-border: #d9e8e0;
+      --nav-bg: rgba(255, 255, 255, 0.7);
+      --danger: #d90429;
+      --danger-dark: #8d0801;
     }
 
     /* ---------- 主题变量：深色 ---------- */
     html.dark {
-      --bg-body: #0f1a16;
-      --bg-card: #16241e;
-      --bg-subtle: #1e3329;
+      --bg-card: rgba(22, 36, 30, 0.88);
+      --bg-card-solid: #16241e;
+      --bg-subtle: rgba(30, 51, 41, 0.9);
       --bg-highlight: #2d6a4f;
       --bg-avatar: #2d6a4f;
       --text-primary: #d8f3e3;
@@ -54,10 +64,14 @@
       --shadow-color: rgba(0, 0, 0, 0.4);
       --shadow-soft: rgba(0, 0, 0, 0.25);
       --btn-reset-text: #8fbfa8;
-      --hero-bg: #16241e;
+      --hero-bg: rgba(22, 36, 30, 0.9);
       --footer-border: #1e3329;
+      --nav-bg: rgba(15, 26, 22, 0.7);
+      --danger: #ef476f;
+      --danger-dark: #9d0208;
     }
 
+    /* ---------- 全局重置 ---------- */
     * {
       margin: 0;
       padding: 0;
@@ -66,23 +80,54 @@
 
     body {
       font-family: 'Monocraft', 'Courier New', monospace;
-      background: var(--bg-body);
       color: var(--text-secondary);
       line-height: 1.6;
-      padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: color 0.3s ease;
       -webkit-font-smoothing: none;
       -moz-osx-font-smoothing: unset;
+      position: relative;
+      background: transparent;
+      overflow-x: hidden;
+    }
+
+    /* ---------- 风景背景图 ---------- */
+    .bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      transition: filter 0.3s ease;
+    }
+
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(244, 250, 247, 0.35);
+      transition: background 0.3s ease;
+    }
+
+    html.dark .bg-layer::after {
+      background: rgba(15, 26, 22, 0.72);
     }
 
     .blog {
-      max-width: 1000px;
+      max-width: 1100px;
       width: 100%;
       padding: 0 1.5rem 2rem;
+      position: relative;
+      z-index: 1;
     }
 
     /* ---------- 顶部导航栏 ---------- */
@@ -90,12 +135,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.5rem 0 1.2rem;
-      border-bottom: 2px solid var(--border-soft);
-      margin-bottom: 2.8rem;
+      padding: 1.2rem 1.6rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 2px solid var(--border-color);
+      border-radius: 2.5rem;
+      margin: 1.5rem 0 2.8rem;
       flex-wrap: wrap;
       gap: 0.8rem 1.2rem;
-      transition: border-color 0.3s ease;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      box-shadow: 0 6px 0 var(--shadow-soft);
     }
 
     .nav-left {
@@ -112,7 +162,13 @@
       color: var(--text-primary);
       text-decoration: none;
       text-transform: uppercase;
-      transition: color 0.3s ease;
+      transition: color 0.2s ease;
+      cursor: pointer;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-brand:hover {
+      color: var(--accent);
     }
 
     .nav-links {
@@ -126,26 +182,27 @@
       color: var(--text-secondary);
       font-size: 0.95rem;
       font-weight: 500;
-      padding: 0.45rem 1rem;
-      border-radius: 0;
+      padding: 0.45rem 1.1rem;
+      border-radius: 2rem;
       transition: all 0.2s ease;
       background: transparent;
       border: 2px solid transparent;
       white-space: nowrap;
+      cursor: pointer;
     }
 
     .nav-links a:hover {
-      background: var(--bg-card);
+      background: var(--bg-card-solid);
       border-color: var(--border-color);
       color: var(--text-primary);
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
     }
 
     .nav-links a.active {
       background: var(--accent);
       color: #ffffff;
       border-color: var(--accent-dark);
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
     }
 
     .nav-links a.active:hover {
@@ -158,86 +215,44 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2.6rem;
+      height: 2.6rem;
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
-      border-radius: 0;
+      border-radius: 50%;
       color: var(--accent);
       font-size: 1.1rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
       flex-shrink: 0;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
 
     .theme-toggle:hover {
       background: var(--accent);
       color: #ffffff;
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--shadow-color);
-    }
-
-    .theme-toggle:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0 0 0 var(--shadow-color);
-    }
-
-    /* ---------- 实时时钟条 ---------- */
-    .clock-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      padding: 0.9rem 1.4rem;
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      box-shadow: 4px 4px 0 var(--shadow-soft);
-      flex-wrap: wrap;
-      transition: background 0.3s ease, border-color 0.3s ease;
-    }
-
-    .clock-time {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: 0.06em;
-      transition: color 0.3s ease;
-    }
-
-    .clock-date {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-      transition: color 0.3s ease;
-    }
-
-    .clock-sep {
-      width: 2px;
-      height: 1.4rem;
-      background: var(--border-color);
-      transition: background 0.3s ease;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-color);
     }
 
     /* ---------- 巨型标语 ---------- */
     .hero {
       text-align: center;
       margin: 0 0 2.8rem;
-      padding: 1.8rem 0.8rem 2rem;
+      padding: 2rem 1rem 2.2rem;
       background: var(--hero-bg);
-      border-radius: 0;
-      box-shadow: 6px 6px 0 var(--shadow-soft);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 2.5rem;
+      box-shadow: 0 6px 0 var(--shadow-soft);
       border: 2px solid var(--border-color);
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
-    .hero:hover {
-      box-shadow: 8px 8px 0 var(--shadow-color);
-    }
-
     .hero-big {
-      font-size: clamp(2.2rem, 10vw, 5rem);
+      font-size: clamp(1.6rem, 7.5vw, 3.8rem);
       font-weight: 600;
       line-height: 1.2;
       letter-spacing: 0.02em;
@@ -245,38 +260,19 @@
       margin-bottom: 0.6rem;
       word-break: break-word;
       transition: color 0.3s ease;
-    }
-
-    .hero-big:hover {
-      color: var(--accent);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     }
 
     .hero-sub {
       font-size: clamp(0.9rem, 3vw, 1.15rem);
       color: var(--text-secondary);
       font-weight: 400;
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 0 0.5rem;
       letter-spacing: 0.02em;
       line-height: 1.5;
-      transition: color 0.3s ease;
-    }
-
-    .hero-sub strong {
-      font-weight: 600;
-      color: var(--text-primary);
-      background: var(--bg-highlight);
-      padding: 0.1rem 0.6rem;
-      border-radius: 0;
-      border: 1px solid var(--border-color);
-      white-space: nowrap;
-      transition: all 0.3s ease;
-    }
-
-    html.dark .hero-sub strong {
-      color: #0f1a16;
-      background: #52b788;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     /* ---------- 个人资料卡片 ---------- */
@@ -286,22 +282,20 @@
       align-items: center;
       gap: 2rem;
       background: var(--bg-card);
-      padding: 2rem 2rem;
-      border-radius: 0;
-      box-shadow: 6px 6px 0 var(--shadow-soft);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 2.2rem;
+      border-radius: 2.5rem;
+      box-shadow: 0 6px 0 var(--shadow-soft);
       margin-bottom: 2rem;
       border: 2px solid var(--border-color);
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
-    .profile:hover {
-      box-shadow: 8px 8px 0 var(--shadow-color);
-    }
-
     .avatar {
       width: 120px;
       height: 120px;
-      border-radius: 0;
+      border-radius: 50%;
       background: var(--bg-avatar);
       display: flex;
       align-items: center;
@@ -310,11 +304,12 @@
       font-weight: 600;
       color: var(--text-primary);
       flex-shrink: 0;
-      box-shadow: 4px 4px 0 var(--shadow-color);
+      box-shadow: 0 4px 0 var(--shadow-color);
       transition: transform 0.2s, background 0.3s ease, color 0.3s ease;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       border: 2px solid var(--border-color);
+      cursor: pointer;
     }
 
     html.dark .avatar {
@@ -322,8 +317,8 @@
     }
 
     .avatar:hover {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 var(--shadow-color);
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--shadow-color);
     }
 
     .profile-info {
@@ -339,7 +334,6 @@
       margin-bottom: 0.4rem;
       color: var(--text-primary);
       text-transform: uppercase;
-      transition: color 0.3s ease;
     }
 
     .profile-tagline {
@@ -348,14 +342,14 @@
       margin-bottom: 1.3rem;
       line-height: 1.6;
       font-weight: 400;
-      transition: color 0.3s ease;
     }
 
     .profile-tagline strong {
       font-weight: 600;
       color: var(--text-primary);
       background: var(--bg-highlight);
-      padding: 0.1rem 0.6rem;
+      padding: 0.15rem 0.7rem;
+      border-radius: 2rem;
       border: 1px solid var(--border-color);
       white-space: nowrap;
       transition: all 0.3s ease;
@@ -366,48 +360,42 @@
       background: #52b788;
     }
 
+    /* ---------- 社交图标 ---------- */
     .social {
       display: flex;
       flex-wrap: wrap;
       gap: 0.8rem;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.6rem;
     }
 
     .social a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2.7rem;
+      height: 2.7rem;
       background: var(--bg-subtle);
-      border-radius: 0;
+      border-radius: 50%;
       color: var(--accent);
       font-size: 1.1rem;
+      font-weight: 700;
       text-decoration: none;
       transition: all 0.2s ease;
       border: 2px solid var(--border-color);
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
+      cursor: pointer;
+      font-family: 'Monocraft', 'Courier New', monospace;
     }
 
     .social a:hover {
       background: var(--accent);
       color: #ffffff;
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--shadow-color);
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-color);
       border-color: var(--accent-dark);
     }
 
-    .social a .icon-bilibili::before {
-      content: "B";
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: -0.5px;
-      display: inline-block;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    /* ---------- 联系方式 ---------- */
+    /* ---------- 联系方式（点击复制） ---------- */
     .contact {
       margin-top: 0.2rem;
     }
@@ -418,44 +406,271 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 0.6rem;
-      transition: color 0.3s ease;
+      margin-bottom: 0.8rem;
     }
 
     .contact-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem 1.4rem;
+      gap: 0.7rem 1rem;
       list-style: none;
     }
 
     .contact-list li {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
       font-size: 0.85rem;
       color: var(--text-secondary);
-      transition: color 0.3s ease;
+      background: var(--bg-subtle);
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 3px 0 var(--shadow-soft);
+      transition: all 0.2s ease;
+    }
+
+    .contact-list li:hover {
+      background: var(--accent);
+      color: #ffffff;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-soft);
+      border-color: var(--accent-dark);
+    }
+
+    .contact-list li:hover .icon-mail {
+      color: #ffffff;
     }
 
     .contact-list li .icon-mail {
       font-style: normal;
       font-size: 0.95rem;
       color: var(--accent);
-      transition: color 0.3s ease;
+      transition: color 0.2s ease;
     }
 
-    .contact-list a {
+    /* ---------- 乐子列表 ---------- */
+    .fun-list-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 2px solid var(--border-color);
+      border-radius: 2.5rem;
+      box-shadow: 0 6px 0 var(--shadow-soft);
+      padding: 2rem 2.2rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .fun-list-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .fun-list-title::before {
+      content: "▸";
       color: var(--accent);
-      text-decoration: none;
-      border-bottom: 2px dashed var(--bg-avatar);
-      padding-bottom: 1px;
-      transition: all 0.2s;
+      font-size: 1rem;
     }
 
-    .contact-list a:hover {
+    .fun-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      list-style: none;
+    }
+
+    .fun-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      border-radius: 2rem;
+      padding: 0.7rem 1.3rem;
+      box-shadow: 0 3px 0 var(--shadow-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .fun-list-item:hover {
+      background: var(--accent);
+      color: #ffffff;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-soft);
+      border-color: var(--accent-dark);
+    }
+
+    .fun-list-avatar {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      background: var(--bg-avatar);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
       color: var(--text-primary);
-      border-bottom-color: var(--accent);
+      border: 2px solid var(--border-color);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .fun-list-item:hover .fun-list-avatar {
+      background: #ffffff;
+      color: var(--accent);
+    }
+
+    .fun-list-name {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      transition: color 0.2s ease;
+    }
+
+    .fun-list-item:hover .fun-list-name {
+      color: #ffffff;
+    }
+
+    .fun-list-tag {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      margin-left: auto;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .fun-list-item:hover .fun-list-tag {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ---------- 实用网页区域 ---------- */
+    .links-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 2px solid var(--border-color);
+      border-radius: 2.5rem;
+      box-shadow: 0 6px 0 var(--shadow-soft);
+      padding: 2rem 2.2rem;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .links-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .links-title::before {
+      content: "▸";
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .link-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      border-radius: 1.4rem;
+      padding: 0.9rem 0.5rem;
+      box-shadow: 0 3px 0 var(--shadow-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      text-align: center;
+      min-height: 5rem;
+    }
+
+    .link-item:hover {
+      background: var(--accent);
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-soft);
+      border-color: var(--accent-dark);
+    }
+
+    .link-icon {
+      font-size: 1.4rem;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+
+    .link-item:hover .link-icon {
+      transform: scale(1.15);
+    }
+
+    .link-name {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      line-height: 1.2;
+      transition: color 0.2s ease;
+      word-break: break-word;
+    }
+
+    .link-item:hover .link-name {
+      color: #ffffff;
+    }
+
+    /* 复制成功提示 */
+    .copy-toast {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(2rem);
+      background: var(--accent);
+      color: #ffffff;
+      padding: 0.75rem 1.8rem;
+      border-radius: 2rem;
+      border: 2px solid var(--accent-dark);
+      box-shadow: 0 6px 0 var(--shadow-color);
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+      letter-spacing: 0.03em;
+      pointer-events: none;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* ---------- 好玩区域 ---------- */
@@ -468,16 +683,15 @@
 
     .fun-card {
       background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 2px solid var(--border-color);
-      box-shadow: 5px 5px 0 var(--shadow-soft);
-      padding: 1.5rem 1.4rem;
+      border-radius: 2rem;
+      box-shadow: 0 5px 0 var(--shadow-soft);
+      padding: 1.6rem 1.5rem;
       display: flex;
       flex-direction: column;
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
-    }
-
-    .fun-card:hover {
-      box-shadow: 7px 7px 0 var(--shadow-color);
     }
 
     .fun-card-title {
@@ -490,7 +704,6 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: color 0.3s ease;
     }
 
     .fun-card-title::before {
@@ -506,7 +719,6 @@
       margin-bottom: 1.2rem;
       flex: 1;
       min-height: 3.4rem;
-      transition: color 0.3s ease;
     }
 
     .dice-display {
@@ -521,6 +733,7 @@
       transition: color 0.3s ease, transform 0.15s;
       line-height: 1;
       user-select: none;
+      cursor: pointer;
     }
 
     .dice-display.rolling {
@@ -552,27 +765,23 @@
       user-select: none;
     }
 
-    .egg-face:active {
-      transform: scale(0.88);
-    }
-
     .egg-hint {
       font-size: 0.78rem;
       color: var(--text-faint);
-      transition: color 0.3s ease;
       text-align: center;
     }
 
     .fun-btn {
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
-      padding: 0.45rem 1.1rem;
+      border-radius: 2rem;
+      padding: 0.5rem 1.3rem;
       font-size: 0.88rem;
       font-weight: 500;
       color: var(--accent);
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
       font-family: 'Monocraft', 'Courier New', monospace;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -582,13 +791,8 @@
       background: var(--accent);
       color: #ffffff;
       border-color: var(--accent-dark);
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--shadow-color);
-    }
-
-    .fun-btn:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0 0 0 var(--shadow-color);
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-color);
     }
 
     /* ---------- 乐子计数器 ---------- */
@@ -598,12 +802,14 @@
       justify-content: center;
       gap: 1rem;
       margin-bottom: 2rem;
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.7rem;
       background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 2px solid var(--border-color);
-      box-shadow: 4px 4px 0 var(--shadow-soft);
+      border-radius: 3rem;
+      box-shadow: 0 4px 0 var(--shadow-soft);
       flex-wrap: wrap;
-      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .fun-counter .count-num {
@@ -612,40 +818,34 @@
       color: var(--text-primary);
       min-width: 3rem;
       text-align: center;
-      transition: color 0.3s ease;
     }
 
     .fun-counter button {
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
-      padding: 0.45rem 1.3rem;
+      border-radius: 2rem;
+      padding: 0.5rem 1.4rem;
       font-size: 0.95rem;
       font-weight: 500;
       color: var(--accent);
       cursor: pointer;
       transition: all 0.2s ease;
       font-family: 'Monocraft', 'Courier New', monospace;
-      box-shadow: 3px 3px 0 var(--shadow-color);
+      box-shadow: 0 3px 0 var(--shadow-color);
     }
 
     .fun-counter button:hover {
       background: var(--accent);
       color: #ffffff;
       border-color: var(--accent-dark);
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--shadow-color);
-    }
-
-    .fun-counter button:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0 0 0 var(--shadow-color);
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--shadow-color);
     }
 
     .fun-counter .fun-label {
       font-size: 0.9rem;
       color: var(--text-secondary);
       font-weight: 400;
-      transition: color 0.3s ease;
     }
 
     #funReset {
@@ -658,51 +858,126 @@
       background: var(--accent);
       color: #ffffff;
       box-shadow: none;
-      transform: translate(2px, 2px);
+      transform: translateY(2px);
     }
 
     /* ---------- 页脚 ---------- */
     .footer {
       margin-top: 3.5rem;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       color: var(--text-faint);
       border-top: 2px solid var(--footer-border);
       padding-top: 2rem;
       font-weight: 400;
-      letter-spacing: 0.02em;
-      transition: color 0.3s ease, border-color 0.3s ease;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .footer:hover {
+      color: var(--accent);
+    }
+
+    /* ---------- 千万别点区域（页面最下方） ---------- */
+    .danger-section {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .danger-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: var(--danger);
+      border: 3px solid var(--danger-dark);
+      border-radius: 3rem;
+      padding: 1rem 2.6rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 0 var(--danger-dark);
+      font-family: 'Monocraft', 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      animation: dangerPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dangerPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 6px 0 var(--danger-dark); }
+      50% { transform: scale(1.04); box-shadow: 0 8px 0 var(--danger-dark); }
+    }
+
+    .danger-btn:hover {
+      background: var(--danger-dark);
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+      animation: none;
+    }
+
+    .danger-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
+    }
+
+    .danger-hint {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* 按钮乱飞动画 */
+    .flying-btn {
+      position: fixed !important;
+      z-index: 9999 !important;
+      transition: all 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      pointer-events: none;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
     }
 
     /* ---------- 响应式 ---------- */
     @media (max-width: 640px) {
       .blog { padding: 0 1rem 1.5rem; }
-      .navbar { padding: 1rem 0 0.8rem; margin-bottom: 2rem; }
-      .hero { padding: 1.2rem 0.5rem 1.5rem; margin-bottom: 2rem; }
-      .hero-big { font-size: clamp(1.8rem, 12vw, 3.2rem); }
-      .clock-time { font-size: 1.2rem; }
-      .profile { flex-direction: column; text-align: center; padding: 1.8rem 1.2rem; gap: 1.2rem; }
+      .navbar { padding: 1rem 1.2rem; margin: 1rem 0 2rem; border-radius: 2rem; }
+      .hero { padding: 1.4rem 0.8rem 1.6rem; margin-bottom: 2rem; border-radius: 2rem; }
+      .hero-big { font-size: clamp(1.4rem, 10vw, 2.6rem); }
+      .danger-btn { padding: 0.85rem 2rem; font-size: 1rem; }
+      .profile { flex-direction: column; text-align: center; padding: 1.8rem 1.2rem; gap: 1.2rem; border-radius: 2rem; }
       .avatar { width: 100px; height: 100px; font-size: 1.6rem; }
       .profile-name { font-size: 1.6rem; }
       .social { justify-content: center; }
       .contact-list { justify-content: center; }
-      .fun-counter { flex-direction: column; gap: 0.7rem; padding: 1rem 1.2rem; }
+      .fun-list-card, .links-card { padding: 1.5rem 1.2rem; border-radius: 2rem; }
+      .fun-list { flex-direction: column; }
+      .fun-list-item { min-width: auto; }
+      .links-grid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 0.7rem; }
+      .link-icon { font-size: 1.2rem; }
+      .link-name { font-size: 0.6rem; }
+      .fun-counter { flex-direction: column; gap: 0.7rem; padding: 1.1rem 1.3rem; border-radius: 2rem; }
       .fun-zone { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 420px) {
-      .nav-links a { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+      .nav-links a { padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 1.5rem; }
       .nav-brand { font-size: 1.1rem; }
-      .fun-counter button { padding: 0.35rem 1rem; font-size: 0.8rem; }
-      .contact-list li { font-size: 0.75rem; }
-      .clock-bar { flex-direction: column; gap: 0.4rem; }
-      .clock-sep { display: none; }
+      .fun-counter button { padding: 0.4rem 1.1rem; font-size: 0.8rem; }
+      .contact-list li { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
+      .copy-toast { font-size: 0.8rem; padding: 0.65rem 1.4rem; }
+      .links-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 0.6rem; }
+      .link-item { padding: 0.7rem 0.4rem; min-height: 4.2rem; border-radius: 1.1rem; }
+      .link-name { font-size: 0.55rem; }
+      .danger-btn { padding: 0.75rem 1.6rem; font-size: 0.9rem; }
     }
 
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-    .icon { font-style: normal; display: inline-block; line-height: 1; }
-    .icon-github::before { content: "⌨"; font-weight: 400; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1rem; }
 
     /* 返回顶部 */
     .back-to-top {
@@ -712,11 +987,12 @@
       background: var(--accent);
       color: #ffffff;
       border: 2px solid var(--accent-dark);
-      width: 3rem;
-      height: 3rem;
+      border-radius: 50%;
+      width: 3.1rem;
+      height: 3.1rem;
       font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 4px 4px 0 var(--shadow-color);
+      box-shadow: 0 4px 0 var(--shadow-color);
       transition: all 0.25s ease;
       opacity: 0;
       visibility: hidden;
@@ -727,83 +1003,109 @@
     }
 
     .back-to-top.show { opacity: 1; visibility: visible; }
-    .back-to-top:hover { background: var(--accent-dark); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow-color); }
+    .back-to-top:hover { background: var(--accent-dark); transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow-color); }
 
     @media (max-width: 640px) {
-      .back-to-top { bottom: 1.2rem; right: 1.2rem; width: 2.6rem; height: 2.6rem; font-size: 1.1rem; }
+      .back-to-top { bottom: 1.2rem; right: 1.2rem; width: 2.7rem; height: 2.7rem; font-size: 1.1rem; }
     }
   </style>
 </head>
 <body>
+  <!-- 风景背景层 -->
+  <div class="bg-layer" aria-hidden="true"></div>
+
   <div class="blog">
     <!-- 顶部导航栏 -->
     <nav class="navbar">
       <div class="nav-left">
-        <a href="#" class="nav-brand">ZYC1145·乐子</a>
+        <a href="#" class="nav-brand" id="brandLink">ZYC1145·乐子</a>
         <div class="nav-links">
-          <a href="#profile" class="active">个人</a>
-          <a href="#social-links">社交链接</a>
+          <a href="#profile" class="nav-link active" data-target="profile">个人</a>
+          <a href="#social-links" class="nav-link" data-target="social-links">社交链接</a>
+          <a href="#fun-list" class="nav-link" data-target="fun-list">乐子列表</a>
+          <a href="#links" class="nav-link" data-target="links">实用网页</a>
         </div>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">☾</button>
     </nav>
 
-    <!-- 实时时钟条 -->
-    <div class="clock-bar">
-      <span class="clock-time" id="clockTime">--:--:--</span>
-      <span class="clock-sep"></span>
-      <span class="clock-date" id="clockDate">----年--月--日 星期-</span>
-    </div>
-
     <!-- 巨型标语 -->
     <section class="hero">
-      <div class="hero-big">看到的都是给</div>
-      <p class="hero-sub">刘轩廷是个<strong>乐子</strong>。</p>
+      <div class="hero-big">欢迎来到乐子网站</div>
+      <p class="hero-sub">世界上最乐子网站</p>
     </section>
 
     <!-- 个人资料卡片 -->
     <header class="profile" id="profile">
-      <div class="avatar" aria-label="头像">ZYC</div>
+      <div class="avatar" id="avatarBtn" aria-label="头像">ZYC</div>
       <div class="profile-info">
         <h1 class="profile-name">ZYC1145</h1>
-        <!-- 原简介已移除，替换为桑晨曦是个乐子 -->
         <p class="profile-tagline">桑晨曦是个<strong>乐子</strong>。</p>
 
         <!-- 社交链接区域 -->
         <div class="social" id="social-links">
-          <a href="https://space.bilibili.com/1470610997?spm_id_from=333.1387.0.0" target="_blank" rel="noopener" aria-label="Bilibili" title="Bilibili"><span class="icon icon-bilibili"></span></a>
-          <a href="https://github.com/zhaoyuecheng999" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><span class="icon icon-github"></span></a>
+          <a href="#" class="social-icon" id="bilibiliBtn" title="Bilibili">B</a>
+          <a href="#" class="social-icon" id="githubBtn" title="GitHub">⌨</a>
         </div>
 
-        <!-- 联系方式 -->
+        <!-- 联系方式：点击复制 -->
         <div class="contact">
-          <div class="contact-title">联系邮箱</div>
-          <ul class="contact-list">
-            <li><span class="icon-mail">✉</span> <a href="mailto:zhaoyuecheng999@outlool.com">zhaoyuecheng999@outlool.com</a></li>
-            <li><span class="icon-mail">✉</span> <a href="mailto:zhaoyuecheng999@126.com">zhaoyuecheng999@126.com</a></li>
-            <li><span class="icon-mail">✉</span> <a href="mailto:2205852364@qq.com">2205852364@qq.com</a></li>
+          <div class="contact-title">联系邮箱 · 点击复制</div>
+          <ul class="contact-list" id="contactList">
+            <li class="email-item" data-email="zhaoyuecheng999@outlool.com" title="点击复制">
+              <span class="icon-mail">✉</span>
+              <span class="mail-text">zhaoyuecheng999@outlool.com</span>
+            </li>
+            <li class="email-item" data-email="zhaoyuecheng999@126.com" title="点击复制">
+              <span class="icon-mail">✉</span>
+              <span class="mail-text">zhaoyuecheng999@126.com</span>
+            </li>
+            <li class="email-item" data-email="2205852364@qq.com" title="点击复制">
+              <span class="icon-mail">✉</span>
+              <span class="mail-text">2205852364@qq.com</span>
+            </li>
           </ul>
         </div>
       </div>
     </header>
 
+    <!-- 乐子列表 -->
+    <section class="fun-list-card" id="fun-list">
+      <div class="fun-list-title">乐子列表</div>
+      <ul class="fun-list">
+        <li class="fun-list-item" data-name="桑晨曦">
+          <div class="fun-list-avatar">桑</div>
+          <span class="fun-list-name">桑晨曦</span>
+          <span class="fun-list-tag">乐子 #1</span>
+        </li>
+        <li class="fun-list-item" data-name="刘轩廷">
+          <div class="fun-list-avatar">刘</div>
+          <span class="fun-list-name">刘轩廷</span>
+          <span class="fun-list-tag">乐子 #2</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 实用网页区域 -->
+    <section class="links-card" id="links">
+      <div class="links-title">实用网页 · 点击跳转</div>
+      <div class="links-grid" id="linksGrid"></div>
+    </section>
+
     <!-- 好玩区域 -->
     <div class="fun-zone">
-      <!-- 一言格言机 -->
       <div class="fun-card">
         <div class="fun-card-title">乐子格言机</div>
         <div class="quote-text" id="quoteText">点击下方按钮，随机生成一句乐子格言。</div>
         <button class="fun-btn" id="quoteBtn">换一句</button>
       </div>
 
-      <!-- 乐子骰子 -->
       <div class="fun-card">
         <div class="fun-card-title">乐子骰子</div>
         <div class="dice-display" id="diceDisplay">⚀</div>
         <button class="fun-btn" id="diceBtn">掷一下</button>
       </div>
 
-      <!-- 点击彩蛋 -->
       <div class="fun-card">
         <div class="fun-card-title">戳戳乐</div>
         <div class="egg-area">
@@ -822,21 +1124,256 @@
     </div>
 
     <!-- 页脚 -->
-    <div class="footer">
-      <span class="icon">©</span> 2025 ZYC1145 · 看到的都是给，乐子永不止
+    <div class="footer" id="footerText">MC世界第一</div>
+
+    <!-- 千万别点按钮（页面最下方） -->
+    <div class="danger-section">
+      <button class="danger-btn" id="dangerBtn">⚠ 千万别点 ⚠</button>
+      <div class="danger-hint">点了后果自负 · 每次效果不一样</div>
     </div>
   </div>
 
-  <!-- 返回顶部按钮 -->
   <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+  <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板</div>
 
-  <!-- 内联 JavaScript -->
   <script>
+    /* ============================================================
+       JavaScript 部分：所有按钮交互、状态管理、数据处理
+       ============================================================ */
     (function() {
       'use strict';
 
+      /* ---------- 通用工具函数 ---------- */
+      function clickFeedback(el) {
+        if (!el) return;
+        const orig = el.style.transform;
+        el.style.transform = 'scale(0.92)';
+        setTimeout(() => { el.style.transform = orig; }, 130);
+      }
+
+      const copyToast = document.getElementById('copyToast');
+      let toastTimer = null;
+      function showToast(msg) {
+        if (!copyToast) return;
+        copyToast.textContent = msg;
+        copyToast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          copyToast.classList.remove('show');
+        }, 2200);
+      }
+
       /* ============================================================
-         0. 主题切换（深色/浅色）
+         ⚠ 千万别点按钮 —— 三种效果轮换，保证每次不一样
+         ============================================================ */
+      const dangerBtn = document.getElementById('dangerBtn');
+
+      // 三种效果定义
+      const dangerEffects = [
+        {
+          name: 'bilibili',
+          run: function() {
+            showToast('😱 你居然点了！正在跳转 B 站…');
+            setTimeout(() => {
+              window.open('https://www.bilibili.com/video/BV1GJ411x7h7?spm_id_from=333.1387.favlist.content.click', '_blank', 'noopener');
+            }, 700);
+          }
+        },
+        {
+          name: 'fly',
+          run: function() {
+            showToast('🌀 完蛋了！所有按钮都飞走了！刷新页面才能恢复');
+            document.body.style.pointerEvents = 'none';
+
+            const allButtons = document.querySelectorAll(
+              'button, .nav-links a, .social a, .email-item, .fun-list-item, ' +
+              '.link-item, .fun-btn, .theme-toggle, .back-to-top, .danger-btn, .nav-brand'
+            );
+
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+
+            allButtons.forEach((btn, i) => {
+              const rect = btn.getBoundingClientRect();
+
+              btn.classList.add('flying-btn');
+              btn.style.left = rect.left + 'px';
+              btn.style.top = rect.top + 'px';
+              btn.style.width = rect.width + 'px';
+              btn.style.height = rect.height + 'px';
+              btn.style.margin = '0';
+
+              const flyX = (Math.random() - 0.5) * vw * 1.8;
+              const flyY = (Math.random() - 0.5) * vh * 1.8;
+              const rotate = (Math.random() - 0.5) * 1080;
+
+              setTimeout(() => {
+                btn.style.left = (rect.left + flyX) + 'px';
+                btn.style.top = (rect.top + flyY) + 'px';
+                btn.style.transform = 'rotate(' + rotate + 'deg) scale(' + (0.5 + Math.random()) + ')';
+                btn.style.opacity = '0.7';
+              }, i * 40);
+            });
+
+            setTimeout(() => {
+              document.body.style.pointerEvents = '';
+            }, 6000);
+          }
+        },
+        {
+          name: 'steam',
+          run: function() {
+            showToast('🚗 你居然点了！正在前往洛圣都…');
+            setTimeout(() => {
+              window.open('https://store.steampowered.com/app/3240220/Grand_Theft_Auto_V/', '_blank', 'noopener');
+            }, 700);
+          }
+        }
+      ];
+
+      // 状态：记录上次使用的效果索引 + 打乱后的执行队列
+      let lastDangerIdx = -1;      // 上次用的效果索引
+      let dangerQueue = [];         // 当前轮次剩余的效果索引
+
+      // 重置队列：随机打乱所有效果索引
+      function resetDangerQueue() {
+        dangerQueue = dangerEffects.map((_, idx) => idx);
+        // Fisher-Yates 洗牌
+        for (let i = dangerQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [dangerQueue[i], dangerQueue[j]] = [dangerQueue[j], dangerQueue[i]];
+        }
+      }
+
+      // 初始化队列
+      resetDangerQueue();
+
+      // 从队列中取下一个效果，保证不和上次重复
+      function getNextDangerIdx() {
+        // 如果队列为空，重新洗牌
+        if (dangerQueue.length === 0) {
+          resetDangerQueue();
+        }
+
+        // 从队首取
+        let nextIdx = dangerQueue.shift();
+
+        // 如果和上次重复（理论上只在极端情况出现），放回队尾再取一个
+        if (nextIdx === lastDangerIdx && dangerQueue.length > 0) {
+          dangerQueue.push(nextIdx);
+          nextIdx = dangerQueue.shift();
+        }
+
+        lastDangerIdx = nextIdx;
+        return nextIdx;
+      }
+
+      // 绑定点击 —— 每次取不同效果
+      if (dangerBtn) {
+        dangerBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+
+          // 按钮抖动反馈
+          dangerBtn.style.animation = 'none';
+          dangerBtn.style.transform = 'scale(0.9) rotate(-3deg)';
+          setTimeout(() => {
+            dangerBtn.style.transform = '';
+            // 恢复脉冲动画
+            dangerBtn.style.animation = '';
+          }, 150);
+
+          // 取出一个本次要执行的效果（保证和上次不同）
+          const idx = getNextDangerIdx();
+          const effect = dangerEffects[idx];
+
+          // 执行
+          if (effect && typeof effect.run === 'function') {
+            effect.run();
+          }
+
+          // 控制台记录本次效果（方便调试）
+          console.log('%c⚠ 千万别点 → 本次效果：' + effect.name, 'color: #d90429; font-weight: bold;');
+        });
+      }
+
+      /* ============================================================
+         实用网页数据 —— 全部平台
+         ============================================================ */
+      const usefulLinks = [
+        // 游戏平台
+        { name: 'Rockstar', icon: 'R', url: 'https://www.rockstargames.com/' },
+        { name: 'Roblox', icon: '◈', url: 'https://www.roblox.com/' },
+        { name: 'Steam', icon: '⛵', url: 'https://store.steampowered.com/' },
+        { name: 'Epic', icon: '◆', url: 'https://www.epicgames.com/' },
+        { name: '育碧', icon: '▲', url: 'https://www.ubisoft.com/' },
+        { name: 'EA', icon: '◉', url: 'https://www.ea.com/' },
+        // 开发 / 技术
+        { name: 'GitHub', icon: '⌨', url: 'https://github.com/zhaoyuecheng999' },
+        { name: 'Cloudflare', icon: '☁', url: 'https://www.cloudflare.com/' },
+        { name: 'DeepSeek', icon: '🐋', url: 'https://www.deepseek.com/' },
+        { name: '豆包', icon: '🫘', url: 'https://www.doubao.com/' },
+        { name: 'NVIDIA', icon: '▣', url: 'https://www.nvidia.com/' },
+        // 系统 / 办公
+        { name: 'Microsoft', icon: '⊞', url: 'https://www.microsoft.com/' },
+        { name: 'Google', icon: 'G', url: 'https://www.google.com/' },
+        { name: 'Google 翻译', icon: '文', url: 'https://translate.google.com/' },
+        // 国内常用
+        { name: '哔哩哔哩', icon: 'B', url: 'https://www.bilibili.com/' },
+        { name: '抖音', icon: '♪', url: 'https://www.douyin.com/' },
+        { name: '百度', icon: '百', url: 'https://www.baidu.com/' },
+        { name: '123云盘', icon: '☁', url: 'https://www.123pan.com/' },
+        // 软件下载
+        { name: '火绒安全', icon: '🛡', url: 'https://www.huorong.cn/' },
+        { name: 'QQ下载', icon: '🐧', url: 'https://im.qq.com/' },
+        { name: '微信下载', icon: '💬', url: 'https://weixin.qq.com/' },
+        // MC 相关
+        { name: 'MC官网', icon: '⛏', url: 'https://www.minecraft.net/' },
+        { name: 'MC Wiki', icon: '📖', url: 'https://minecraft.fandom.com/zh/wiki/Minecraft_Wiki' }
+      ];
+
+      /* ---------- 动态生成实用网页网格 ---------- */
+      const linksGrid = document.getElementById('linksGrid');
+      if (linksGrid) {
+        usefulLinks.forEach(link => {
+          const a = document.createElement('a');
+          a.href = '#';
+          a.className = 'link-item';
+          a.title = link.name;
+          a.setAttribute('data-url', link.url);
+          a.setAttribute('data-name', link.name);
+
+          const icon = document.createElement('span');
+          icon.className = 'link-icon';
+          icon.textContent = link.icon;
+
+          const name = document.createElement('span');
+          name.className = 'link-name';
+          name.textContent = link.name;
+
+          a.appendChild(icon);
+          a.appendChild(name);
+          linksGrid.appendChild(a);
+        });
+      }
+
+      /* ---------- 绑定实用网页点击事件 ---------- */
+      const linkItems = document.querySelectorAll('.link-item');
+      linkItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = item.getAttribute('data-url');
+          const name = item.getAttribute('data-name');
+          if (!url) return;
+          showToast('🔗 正在前往 ' + name);
+          clickFeedback(item);
+          setTimeout(() => {
+            window.open(url, '_blank', 'noopener');
+          }, 350);
+        });
+      });
+
+      /* ============================================================
+         按钮 1：主题切换
          ============================================================ */
       const themeToggle = document.getElementById('themeToggle');
       const htmlEl = document.documentElement;
@@ -855,10 +1392,16 @@
       function applyTheme(theme) {
         if (theme === 'dark') {
           htmlEl.classList.add('dark');
-          if (themeToggle) { themeToggle.textContent = '☀'; themeToggle.title = '切换到浅色模式'; }
+          if (themeToggle) {
+            themeToggle.textContent = '☀';
+            themeToggle.title = '切换到浅色模式';
+          }
         } else {
           htmlEl.classList.remove('dark');
-          if (themeToggle) { themeToggle.textContent = '☾'; themeToggle.title = '切换到深色模式'; }
+          if (themeToggle) {
+            themeToggle.textContent = '☾';
+            themeToggle.title = '切换到深色模式';
+          }
         }
         try { localStorage.setItem('zyc1145_theme', theme); } catch (e) {}
       }
@@ -870,6 +1413,7 @@
         themeToggle.addEventListener('click', () => {
           currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
           applyTheme(currentTheme);
+          clickFeedback(themeToggle);
         });
       }
 
@@ -885,29 +1429,144 @@
       }
 
       /* ============================================================
-         1. 实时时钟
+         按钮 2：导航
          ============================================================ */
-      const clockTime = document.getElementById('clockTime');
-      const clockDate = document.getElementById('clockDate');
-      const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
-
-      function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-      function updateClock() {
-        const now = new Date();
-        if (clockTime) {
-          clockTime.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-        }
-        if (clockDate) {
-          clockDate.textContent = now.getFullYear() + '年' + pad(now.getMonth() + 1) + '月' + pad(now.getDate()) + '日 星期' + weekDays[now.getDay()];
-        }
-      }
-
-      updateClock();
-      setInterval(updateClock, 1000);
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+          const targetId = this.getAttribute('data-target');
+          const target = document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
 
       /* ============================================================
-         2. 乐子格言机
+         按钮 3：品牌标识 —— 回到顶部
+         ============================================================ */
+      const brandLink = document.getElementById('brandLink');
+      if (brandLink) {
+        brandLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      /* ============================================================
+         按钮 4：头像 —— 切换表情
+         ============================================================ */
+      const avatarBtn = document.getElementById('avatarBtn');
+      const avatarFaces = ['ZYC', '乐子', '(≧▽≦)', 'MC', '嗨！', 'ZYC', '桑晨曦', '^_^'];
+      let avatarIdx = 0;
+
+      if (avatarBtn) {
+        avatarBtn.addEventListener('click', () => {
+          avatarIdx = (avatarIdx + 1) % avatarFaces.length;
+          avatarBtn.textContent = avatarFaces[avatarIdx];
+          clickFeedback(avatarBtn);
+          showToast('👋 你好，' + avatarFaces[avatarIdx]);
+        });
+      }
+
+      /* ============================================================
+         按钮 5：Bilibili 社交图标
+         ============================================================ */
+      const bilibiliBtn = document.getElementById('bilibiliBtn');
+      if (bilibiliBtn) {
+        bilibiliBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          clickFeedback(bilibiliBtn);
+          showToast('📺 打开 Bilibili 主页');
+          setTimeout(() => {
+            window.open('https://www.bilibili.com/', '_blank', 'noopener');
+          }, 300);
+        });
+      }
+
+      /* ============================================================
+         按钮 6：GitHub 社交图标
+         ============================================================ */
+      const githubBtn = document.getElementById('githubBtn');
+      if (githubBtn) {
+        githubBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          clickFeedback(githubBtn);
+          showToast('🐙 打开 GitHub 主页');
+          setTimeout(() => {
+            window.open('https://github.com/zhaoyuecheng999', '_blank', 'noopener');
+          }, 300);
+        });
+      }
+
+      /* ============================================================
+         按钮 7：邮箱 —— 点击复制
+         ============================================================ */
+      const emailItems = document.querySelectorAll('.email-item');
+      emailItems.forEach(item => {
+        item.addEventListener('click', async () => {
+          const email = item.getAttribute('data-email');
+          if (!email) return;
+
+          let copied = false;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            try {
+              await navigator.clipboard.writeText(email);
+              copied = true;
+            } catch (err) {
+              copied = false;
+            }
+          }
+
+          if (!copied) {
+            const ta = document.createElement('textarea');
+            ta.value = email;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              document.execCommand('copy');
+              copied = true;
+            } catch (err) {
+              copied = false;
+            }
+            document.body.removeChild(ta);
+          }
+
+          if (copied) {
+            showToast('✓ 已复制：' + email);
+          } else {
+            showToast('⚠ 复制失败，请手动复制');
+          }
+          clickFeedback(item);
+        });
+      });
+
+      /* ============================================================
+         按钮 8：乐子列表项 —— 点击弹出提示
+         ============================================================ */
+      const funListItems = document.querySelectorAll('.fun-list-item');
+      funListItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const name = item.getAttribute('data-name') || '乐子';
+          const msgs = [
+            '🎉 ' + name + ' 确认是个乐子！',
+            '😂 ' + name + '：乐子指数五颗星 ⭐⭐⭐⭐⭐',
+            '🤣 ' + name + ' 是今日最佳乐子！',
+            '😆 ' + name + '，乐子本乐！'
+          ];
+          const msg = msgs[Math.floor(Math.random() * msgs.length)];
+          showToast(msg);
+          clickFeedback(item);
+        });
+      });
+
+      /* ============================================================
+         按钮 9：乐子格言机
          ============================================================ */
       const quotes = [
         '看到的都是给，给出去的都是乐子。',
@@ -924,63 +1583,74 @@
         '生活就像一盒巧克力，你永远不知道下一颗是不是乐子。',
         '乐子人，乐子魂，乐子都是人上人。',
         '与其内耗自己，不如外耗别人。',
-        '摸鱼是对生活最基本的尊重。'
+        '摸鱼是对生活最基本的尊重。',
+        'MC 世界第一，不接受反驳。'
       ];
 
       const quoteText = document.getElementById('quoteText');
       const quoteBtn = document.getElementById('quoteBtn');
+      let lastQuoteIdx = -1;
 
       function randomQuote() {
         if (!quoteText) return;
-        const idx = Math.floor(Math.random() * quotes.length);
+        let idx;
+        do {
+          idx = Math.floor(Math.random() * quotes.length);
+        } while (idx === lastQuoteIdx && quotes.length > 1);
+        lastQuoteIdx = idx;
         quoteText.textContent = '「' + quotes[idx] + '」';
       }
 
       if (quoteBtn) {
         quoteBtn.addEventListener('click', () => {
           randomQuote();
-          quoteBtn.style.transform = 'scale(0.92)';
-          setTimeout(() => { quoteBtn.style.transform = ''; }, 120);
+          clickFeedback(quoteBtn);
         });
       }
-      // 首次加载随机显示一句
       randomQuote();
 
       /* ============================================================
-         3. 乐子骰子
+         按钮 10：乐子骰子
          ============================================================ */
       const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
       const diceDisplay = document.getElementById('diceDisplay');
       const diceBtn = document.getElementById('diceBtn');
+      let diceRolling = false;
 
       function rollDice() {
-        if (!diceDisplay) return;
+        if (!diceDisplay || diceRolling) return;
+        diceRolling = true;
         diceDisplay.classList.add('rolling');
-        // 滚动时快速切换面
+
         let count = 0;
+        const totalRolls = 9;
         const interval = setInterval(() => {
           const idx = Math.floor(Math.random() * 6);
           diceDisplay.textContent = diceFaces[idx];
           count++;
-          if (count > 8) {
+          if (count >= totalRolls) {
             clearInterval(interval);
-            // 最终结果
             const finalIdx = Math.floor(Math.random() * 6);
             diceDisplay.textContent = diceFaces[finalIdx];
             diceDisplay.classList.remove('rolling');
+            diceRolling = false;
+            showToast('🎲 掷出：' + (finalIdx + 1) + ' 点');
           }
         }, 60);
       }
 
       if (diceBtn) {
-        diceBtn.addEventListener('click', rollDice);
+        diceBtn.addEventListener('click', () => {
+          rollDice();
+          clickFeedback(diceBtn);
+        });
       }
       if (diceDisplay) {
         diceDisplay.addEventListener('click', rollDice);
       }
 
       /* ============================================================
-         4. 戳戳乐彩蛋
+         按钮 11：戳戳乐
          ============================================================ */
       const eggFaces = [
         '(≧▽≦)', '(๑•̀ㅂ•́)و✧', '( ͡° ͜ʖ ͡°)', '(╯°□°）╯︵ ┻━┻',
@@ -998,8 +1668,7 @@
         '乐子能量满格',
         '戳戳乐大师是你',
         '继续，别停',
-        '点这里会有好事发生',
-        '你已经戳了 ' 
+        '点这里会有好事发生'
       ];
 
       const eggFace = document.getElementById('eggFace');
@@ -1011,16 +1680,18 @@
         eggCount++;
         const idx = Math.floor(Math.random() * eggFaces.length);
         eggFace.textContent = eggFaces[idx];
+
         if (eggHint) {
           if (eggCount % 5 === 0) {
             eggHint.textContent = '你已经戳了 ' + eggCount + ' 次，乐子人实锤！';
           } else {
-            const hIdx = Math.floor(Math.random() * (eggHints.length - 1));
+            const hIdx = Math.floor(Math.random() * eggHints.length);
             eggHint.textContent = eggHints[hIdx];
           }
         }
+
         eggFace.style.transform = 'scale(0.85)';
-        setTimeout(() => { eggFace.style.transform = ''; }, 120);
+        setTimeout(() => { eggFace.style.transform = ''; }, 130);
       }
 
       if (eggFace) {
@@ -1028,35 +1699,22 @@
       }
 
       /* ============================================================
-         5. 乐子计数器
+         按钮 12：乐子计数器 —— 每次刷新后重置
          ============================================================ */
       const funCountEl = document.getElementById('funCount');
       const funBtn = document.getElementById('funBtn');
       const funReset = document.getElementById('funReset');
       let funCount = 0;
 
-      try {
-        const saved = localStorage.getItem('zyc1145_fun_count');
-        if (saved !== null) {
-          funCount = parseInt(saved, 10) || 0;
-        }
-      } catch (e) {}
-
       function updateFunDisplay() {
-        if (funCountEl) {
-          funCountEl.textContent = funCount;
-        }
-        try {
-          localStorage.setItem('zyc1145_fun_count', funCount);
-        } catch (e) {}
+        if (funCountEl) funCountEl.textContent = funCount;
       }
 
       if (funBtn) {
         funBtn.addEventListener('click', () => {
           funCount += 1;
           updateFunDisplay();
-          funBtn.style.transform = 'scale(0.92)';
-          setTimeout(() => { funBtn.style.transform = ''; }, 120);
+          clickFeedback(funBtn);
         });
       }
 
@@ -1064,37 +1722,37 @@
         funReset.addEventListener('click', () => {
           funCount = 0;
           updateFunDisplay();
-          funReset.style.transform = 'scale(0.92)';
-          setTimeout(() => { funReset.style.transform = ''; }, 120);
+          clickFeedback(funReset);
+          showToast('🔄 乐子指数已重置');
         });
       }
 
       updateFunDisplay();
 
       /* ============================================================
-         6. 导航高亮切换
+         按钮 13：页脚 —— 点击触发小彩蛋
          ============================================================ */
-      const navLinks = document.querySelectorAll('.nav-links a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
+      const footerText = document.getElementById('footerText');
+      const footerMessages = [
+        'MC世界第一',
+        'MC永远的神',
+        '方块世界，无限可能',
+        '苦力怕警告 ⚠',
+        '钻石镐在此 ⛏',
+        'MC世界第一，不接受反驳'
+      ];
+      let footerIdx = 0;
+
+      if (footerText) {
+        footerText.addEventListener('click', () => {
+          footerIdx = (footerIdx + 1) % footerMessages.length;
+          footerText.textContent = footerMessages[footerIdx];
+          showToast('⛏ ' + footerMessages[footerIdx]);
         });
-      });
+      }
 
       /* ============================================================
-         7. 社交链接视觉反馈
-         ============================================================ */
-      const socialLinks = document.querySelectorAll('.social a');
-      socialLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          link.style.transform = 'scale(0.9)';
-          setTimeout(() => { link.style.transform = ''; }, 150);
-        });
-      });
-
-      /* ============================================================
-         8. 返回顶部按钮
+         按钮 14：返回顶部
          ============================================================ */
       const backToTop = document.getElementById('backToTop');
       if (backToTop) {
@@ -1108,33 +1766,17 @@
 
         backToTop.addEventListener('click', () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          clickFeedback(backToTop);
         });
       }
 
       /* ============================================================
-         9. 平滑滚动（锚点）
-         ============================================================ */
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          const href = this.getAttribute('href');
-          if (href === '#') return;
-          const target = document.querySelector(href);
-          if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            history.pushState(null, null, href);
-          }
-        });
-      });
-
-      /* ============================================================
-         10. 控制台欢迎信息
+         控制台欢迎信息
          ============================================================ */
       console.log('%c🎉 ZYC1145 · 乐子博客已加载！', 'font-size: 16px; font-weight: bold; color: #1b4332;');
-      console.log('%c看到的都是给，乐子永不止。', 'font-size: 13px; color: #4e6b5e;');
-      console.log('%c🎲 所有按钮均已激活：主题切换 / 时钟 / 格言机 / 骰子 / 戳戳乐 / 计数器', 'font-size: 12px; color: #6b8a7a;');
-      console.log('%c🌗 主题跟随系统，点击右上角可手动切换。', 'font-size: 12px; color: #6b8a7a;');
-      console.log('%c📌 字体：Monocraft（Minecraft 风格开源字体）', 'font-size: 12px; color: #6b8a7a;');
+      console.log('%c欢迎来到乐子网站，世界上最乐子网站。', 'font-size: 13px; color: #4e6b5e;');
+      console.log('%c⚠️ 「千万别点」每次效果不同（B站 / 按钮乱飞 / Steam 轮换）', 'font-size: 12px; color: #d90429; font-weight: bold;');
+      console.log('%c✅ 实用网页共 ' + usefulLinks.length + ' 个（含 123 云盘），点击即可跳转', 'font-size: 12px; color: #6b8a7a;');
 
     })();
   </script>
