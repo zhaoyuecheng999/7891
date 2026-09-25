@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>ZYC1145 · 乐子博客</title>
+  <style>
+    /* ---------- Minecraft 字体引入 ---------- */
+    /* 使用 Monocraft（开源 Minecraft 风格字体），由 Idrees Inc 维护 [citation:7] */
+    @font-face {
+      font-family: 'Monocraft';
+      src: url('https://cdn.jsdelivr.net/gh/IdreesInc/Monocraft@main/dist/Monocraft-ttf/Monocraft.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ---------- 全局重置 & 字体系统 ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Monocraft', 'Courier New', monospace;
+      background: #f4faf7;
+      color: #1f2e28;
+      line-height: 1.6;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      transition: background 0.2s;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: unset;
+    }
+
+    /* 主容器 — 限制最大宽度，优雅居中 */
+    .blog {
+      max-width: 1000px;
+      width: 100%;
+      padding: 0 1.5rem 2rem;
+    }
+
+    /* ---------- 顶部导航栏 ---------- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0 1.2rem;
+      border-bottom: 2px solid #d9e8e0;
+      margin-bottom: 2.8rem;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.2rem;
+    }
+
+    .nav-brand {
+      font-family: 'Monocraft', 'Courier New', monospace;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: #1f3a30;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #3d5a4e;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.45rem 1rem;
+      border-radius: 0;
+      transition: all 0.2s ease;
+      background: transparent;
+      border: 2px solid transparent;
+      white-space: nowrap;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .nav-links a:hover {
+      background: #ffffff;
+      border-color: #2d6a4f;
+      color: #1f3a30;
+      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
+    }
+
+    /* 当前高亮项 */
+    .nav-links a.active {
+      background: #2d6a4f;
+      color: #ffffff;
+      border-color: #1b4332;
+      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.3);
+    }
+
+    .nav-links a.active:hover {
+      background: #1b4332;
+      border-color: #1b4332;
+      color: #ffffff;
+    }
+
+    /* ---------- 巨型标语区域 ---------- */
+    .hero {
+      text-align: center;
+      margin: 2rem 0 2.8rem;
+      padding: 1.8rem 0.8rem 2rem;
+      background: #ffffff;
+      border-radius: 0;
+      box-shadow: 6px 6px 0 rgba(45, 106, 79, 0.12);
+      border: 2px solid #2d6a4f;
+      transition: box-shadow 0.2s;
+    }
+
+    .hero:hover {
+      box-shadow: 8px 8px 0 rgba(45, 106, 79, 0.18);
+    }
+
+    .hero-big {
+      font-family: 'Monocraft', 'Courier New', monospace;
+      font-size: clamp(2.2rem, 10vw, 5rem);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      color: #1b4332;
+      margin-bottom: 0.6rem;
+      word-break: break-word;
+      transition: color 0.2s;
+    }
+
+    .hero-big:hover {
+      color: #2d6a4f;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 3vw, 1.15rem);
+      color: #4e6b5e;
+      font-weight: 400;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 0.5rem;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .hero-sub strong {
+      font-weight: 600;
+      color: #1b4332;
+      background: #d8f3e3;
+      padding: 0.1rem 0.6rem;
+      border-radius: 0;
+      border: 1px solid #2d6a4f;
+      white-space: nowrap;
+    }
+
+    /* ---------- 个人资料卡片 ---------- */
+    .profile {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      background: #ffffff;
+      padding: 2rem 2rem;
+      border-radius: 0;
+      box-shadow: 6px 6px 0 rgba(45, 106, 79, 0.1);
+      margin-bottom: 3.5rem;
+      border: 2px solid #2d6a4f;
+      transition: box-shadow 0.2s;
+    }
+
+    .profile:hover {
+      box-shadow: 8px 8px 0 rgba(45, 106, 79, 0.16);
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 0;
+      background: #b7e4c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 600;
+      color: #1b4332;
+      flex-shrink: 0;
+      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.2);
+      transition: transform 0.2s;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 2px solid #2d6a4f;
+    }
+
+    .avatar:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 rgba(45, 106, 79, 0.2);
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .profile-name {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+      color: #1b4332;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      text-transform: uppercase;
+    }
+
+    .profile-bio {
+      font-size: 0.95rem;
+      color: #3d5a4e;
+      margin-bottom: 1.2rem;
+      max-width: 520px;
+      line-height: 1.6;
+      font-weight: 400;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #e8f5ee;
+      border-radius: 0;
+      color: #2d6a4f;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 2px solid #2d6a4f;
+      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .social a:hover {
+      background: #2d6a4f;
+      color: #ffffff;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
+      border-color: #1b4332;
+    }
+
+    /* 专为 Bilibili 图标微调（文字图标） */
+    .social a .icon-bilibili::before {
+      content: "B";
+      font-weight: 700;
+      font-size: 1.1rem;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      letter-spacing: -0.5px;
+      display: inline-block;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    /* ---------- 联系方式区域 ---------- */
+    .contact {
+      margin-top: 0.2rem;
+    }
+
+    .contact-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b8a7a;
+      margin-bottom: 0.6rem;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.4rem;
+      list-style: none;
+    }
+
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.85rem;
+      color: #3d5a4e;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .contact-list li .icon-mail {
+      font-style: normal;
+      font-size: 0.95rem;
+      color: #2d6a4f;
+    }
+
+    .contact-list a {
+      color: #2d6a4f;
+      text-decoration: none;
+      border-bottom: 2px dashed #b7e4c7;
+      padding-bottom: 1px;
+      transition: all 0.2s;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .contact-list a:hover {
+      color: #1b4332;
+      border-bottom-color: #2d6a4f;
+    }
+
+    /* ---------- 乐子计数器 ---------- */
+    .fun-counter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 2rem;
+      padding: 1rem 1.5rem;
+      background: #ffffff;
+      border-radius: 0;
+      border: 2px solid #2d6a4f;
+      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .fun-counter .count-num {
+      font-size: 1.8rem;
+      font-weight: 600;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      color: #1b4332;
+      min-width: 3rem;
+      text-align: center;
+    }
+
+    .fun-counter button {
+      background: #e8f5ee;
+      border: 2px solid #2d6a4f;
+      border-radius: 0;
+      padding: 0.45rem 1.3rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #2d6a4f;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
+    }
+
+    .fun-counter button:hover {
+      background: #2d6a4f;
+      color: #ffffff;
+      border-color: #1b4332;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
+    }
+
+    .fun-counter button:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 rgba(45, 106, 79, 0.3);
+    }
+
+    .fun-counter .fun-label {
+      font-size: 0.9rem;
+      color: #4e6b5e;
+      font-weight: 400;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    /* ---------- 页脚 ---------- */
+    .footer {
+      margin-top: 3.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #8faa9d;
+      border-top: 2px solid #d9e8e0;
+      padding-top: 2rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .footer i {
+      margin-right: 0.3rem;
+    }
+
+    /* ---------- 响应式微调（手机） ---------- */
+    @media (max-width: 640px) {
+      .blog {
+        padding: 0 1rem 1.5rem;
+      }
+
+      .navbar {
+        padding: 1rem 0 0.8rem;
+        margin-bottom: 2rem;
+      }
+
+      .hero {
+        padding: 1.2rem 0.5rem 1.5rem;
+        margin: 1.5rem 0 2rem;
+      }
+
+      .hero-big {
+        font-size: clamp(1.8rem, 12vw, 3.2rem);
+      }
+
+      .profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.8rem 1.2rem;
+        gap: 1.2rem;
+      }
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 1.6rem;
+      }
+
+      .profile-name {
+        font-size: 1.6rem;
+      }
+
+      .profile-bio {
+        font-size: 0.85rem;
+      }
+
+      .social {
+        justify-content: center;
+      }
+
+      .contact-list {
+        justify-content: center;
+      }
+
+      .fun-counter {
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 1rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .nav-links a {
+        padding: 0.35rem 0.8rem;
+        font-size: 0.8rem;
+      }
+
+      .nav-brand {
+        font-size: 1.1rem;
+      }
+
+      .fun-counter button {
+        padding: 0.35rem 1rem;
+        font-size: 0.8rem;
+      }
+
+      .contact-list li {
+        font-size: 0.75rem;
+      }
+    }
+
+    /* 极简滚动与焦点 */
+    :focus-visible {
+      outline: 2px solid #2d6a4f;
+      outline-offset: 2px;
+    }
+
+    /* 模拟图标 */
+    .icon {
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    .icon-github::before { content: "⌨"; font-weight: 400; }
+
+    /* 返回顶部按钮 */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #2d6a4f;
+      color: #ffffff;
+      border: 2px solid #1b4332;
+      border-radius: 0;
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.3);
+      transition: all 0.25s ease;
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      font-family: 'Monocraft', 'Courier New', monospace;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .back-to-top:hover {
+      background: #1b4332;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
+    }
+
+    @media (max-width: 640px) {
+      .back-to-top {
+        bottom: 1.2rem;
+        right: 1.2rem;
+        width: 2.6rem;
+        height: 2.6rem;
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blog">
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+      <a href="#" class="nav-brand">ZYC1145·乐子</a>
+      <div class="nav-links">
+        <a href="#profile" class="active">个人</a>
+        <a href="#social-links">社交链接</a>
+      </div>
+    </nav>
+
+    <!-- 巨型标语区 -->
+    <section class="hero">
+      <div class="hero-big">看到的都是给</div>
+      <p class="hero-sub">刘轩廷是个<strong>乐子</strong>。</p>
+    </section>
+
+    <!-- 个人资料卡片 -->
+    <header class="profile" id="profile">
+      <div class="avatar" aria-label="头像">ZYC</div>
+      <div class="profile-info">
+        <h1 class="profile-name">ZYC1145</h1>
+        <p class="profile-bio">
+          职业乐子人，兼职生活观察者。分享日常脑洞、碎片思考和一切有趣的事物。
+        </p>
+
+        <!-- 社交链接区域：仅保留 B站 和 GitHub -->
+        <div class="social" id="social-links">
+          <a href="https://space.bilibili.com/1470610997?spm_id_from=333.1387.0.0" target="_blank" rel="noopener" aria-label="Bilibili" title="Bilibili"><span class="icon icon-bilibili"></span></a>
+          <a href="https://github.com/zhaoyuecheng999" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><span class="icon icon-github"></span></a>
+        </div>
+
+        <!-- 联系方式：三个邮箱 -->
+        <div class="contact">
+          <div class="contact-title">联系邮箱</div>
+          <ul class="contact-list">
+            <li><span class="icon-mail">✉</span> <a href="mailto:zhaoyuecheng999@outlool.com">zhaoyuecheng999@outlool.com</a></li>
+            <li><span class="icon-mail">✉</span> <a href="mailto:zhaoyuecheng999@126.com">zhaoyuecheng999@126.com</a></li>
+            <li><span class="icon-mail">✉</span> <a href="mailto:2205852364@qq.com">2205852364@qq.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <!-- 乐子计数器 -->
+    <div class="fun-counter">
+      <span class="fun-label">今日乐子指数</span>
+      <span class="count-num" id="funCount">0</span>
+      <button id="funBtn">+1 乐子</button>
+      <button id="funReset" style="background: transparent; border-color: #2d6a4f; color: #6b8a7a; box-shadow: none;">重置</button>
+    </div>
+
+    <!-- 页脚 -->
+    <div class="footer">
+      <span class="icon">©</span> 2025 ZYC1145 · 看到的都是给，乐子永不止
+    </div>
+  </div>
+
+  <!-- 返回顶部按钮 -->
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+
+  <!-- 内联 JavaScript -->
+  <script>
+    (function() {
+      'use strict';
+
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      const socialLinks = document.querySelectorAll('.social a');
+      socialLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          link.style.transform = 'scale(0.9)';
+          setTimeout(() => {
+            link.style.transform = '';
+          }, 150);
+        });
+      });
+
+      const funCountEl = document.getElementById('funCount');
+      const funBtn = document.getElementById('funBtn');
+      const funReset = document.getElementById('funReset');
+      let funCount = 0;
+
+      try {
+        const saved = localStorage.getItem('zyc1145_fun_count');
+        if (saved !== null) {
+          funCount = parseInt(saved, 10) || 0;
+        }
+      } catch (e) {}
+
+      function updateFunDisplay() {
+        if (funCountEl) {
+          funCountEl.textContent = funCount;
+        }
+        try {
+          localStorage.setItem('zyc1145_fun_count', funCount);
+        } catch (e) {}
+      }
+
+      if (funBtn) {
+        funBtn.addEventListener('click', () => {
+          funCount += 1;
+          updateFunDisplay();
+          funBtn.style.transform = 'scale(0.92)';
+          setTimeout(() => {
+            funBtn.style.transform = '';
+          }, 120);
+        });
+      }
+
+      if (funReset) {
+        funReset.addEventListener('click', () => {
+          funCount = 0;
+          updateFunDisplay();
+          funReset.style.transform = 'scale(0.92)';
+          setTimeout(() => {
+            funReset.style.transform = '';
+          }, 120);
+        });
+      }
+
+      updateFunDisplay();
+
+      const backToTop = document.getElementById('backToTop');
+      if (backToTop) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 400) {
+            backToTop.classList.add('show');
+          } else {
+            backToTop.classList.remove('show');
+          }
+        });
+
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === '#') return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            history.pushState(null, null, href);
+          }
+        });
+      });
+
+      console.log('%c🎉 ZYC1145 · 乐子博客已加载！', 'font-size: 16px; font-weight: bold; color: #1b4332;');
+      console.log('%c看到的都是给，乐子永不止。', 'font-size: 13px; color: #4e6b5e;');
+      console.log('%c📌 字体：Monocraft（Minecraft 风格开源字体）', 'font-size: 12px; color: #6b8a7a;');
+
+    })();
+  </script>
+</body>
+</html>
