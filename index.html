@@ -6,7 +6,6 @@
   <title>ZYC1145 · 乐子博客</title>
   <style>
     /* ---------- Minecraft 字体引入 ---------- */
-    /* 使用 Monocraft（开源 Minecraft 风格字体），由 Idrees Inc 维护 [citation:7] */
     @font-face {
       font-family: 'Monocraft';
       src: url('https://cdn.jsdelivr.net/gh/IdreesInc/Monocraft@main/dist/Monocraft-ttf/Monocraft.ttf') format('truetype');
@@ -15,7 +14,50 @@
       font-display: swap;
     }
 
-    /* ---------- 全局重置 & 字体系统 ---------- */
+    /* ---------- 主题变量：浅色模式 ---------- */
+    :root {
+      --bg-body: #f4faf7;
+      --bg-card: #ffffff;
+      --bg-subtle: #e8f5ee;
+      --bg-highlight: #d8f3e3;
+      --bg-avatar: #b7e4c7;
+      --text-primary: #1b4332;
+      --text-secondary: #3d5a4e;
+      --text-muted: #6b8a7a;
+      --text-faint: #8faa9d;
+      --border-color: #2d6a4f;
+      --border-soft: #d9e8e0;
+      --accent: #2d6a4f;
+      --accent-dark: #1b4332;
+      --shadow-color: rgba(45, 106, 79, 0.15);
+      --shadow-soft: rgba(45, 106, 79, 0.1);
+      --btn-reset-text: #6b8a7a;
+      --hero-bg: #ffffff;
+      --footer-border: #d9e8e0;
+    }
+
+    /* ---------- 主题变量：深色模式 ---------- */
+    html.dark {
+      --bg-body: #0f1a16;
+      --bg-card: #16241e;
+      --bg-subtle: #1e3329;
+      --bg-highlight: #2d6a4f;
+      --bg-avatar: #2d6a4f;
+      --text-primary: #d8f3e3;
+      --text-secondary: #b7e4c7;
+      --text-muted: #8fbfa8;
+      --text-faint: #5e8a75;
+      --border-color: #40916c;
+      --border-soft: #1e3329;
+      --accent: #40916c;
+      --accent-dark: #52b788;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --shadow-soft: rgba(0, 0, 0, 0.25);
+      --btn-reset-text: #8fbfa8;
+      --hero-bg: #16241e;
+      --footer-border: #1e3329;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -24,20 +66,19 @@
 
     body {
       font-family: 'Monocraft', 'Courier New', monospace;
-      background: #f4faf7;
-      color: #1f2e28;
+      background: var(--bg-body);
+      color: var(--text-secondary);
       line-height: 1.6;
       padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      transition: background 0.2s;
+      transition: background 0.3s ease, color 0.3s ease;
       -webkit-font-smoothing: none;
       -moz-osx-font-smoothing: unset;
     }
 
-    /* 主容器 — 限制最大宽度，优雅居中 */
     .blog {
       max-width: 1000px;
       width: 100%;
@@ -50,20 +91,28 @@
       justify-content: space-between;
       align-items: center;
       padding: 1.5rem 0 1.2rem;
-      border-bottom: 2px solid #d9e8e0;
+      border-bottom: 2px solid var(--border-soft);
       margin-bottom: 2.8rem;
       flex-wrap: wrap;
       gap: 0.8rem 1.2rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .nav-brand {
-      font-family: 'Monocraft', 'Courier New', monospace;
       font-size: 1.35rem;
       font-weight: 600;
       letter-spacing: 0.05em;
-      color: #1f3a30;
+      color: var(--text-primary);
       text-decoration: none;
       text-transform: uppercase;
+      transition: color 0.3s ease;
     }
 
     .nav-links {
@@ -74,7 +123,7 @@
 
     .nav-links a {
       text-decoration: none;
-      color: #3d5a4e;
+      color: var(--text-secondary);
       font-size: 0.95rem;
       font-weight: 500;
       padding: 0.45rem 1rem;
@@ -83,82 +132,151 @@
       background: transparent;
       border: 2px solid transparent;
       white-space: nowrap;
-      font-family: 'Monocraft', 'Courier New', monospace;
     }
 
     .nav-links a:hover {
-      background: #ffffff;
-      border-color: #2d6a4f;
-      color: #1f3a30;
-      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
+      background: var(--bg-card);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
-    /* 当前高亮项 */
     .nav-links a.active {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border-color: #1b4332;
-      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.3);
+      border-color: var(--accent-dark);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .nav-links a.active:hover {
-      background: #1b4332;
-      border-color: #1b4332;
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
       color: #ffffff;
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      border-radius: 0;
+      color: var(--accent);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0 var(--shadow-color);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: #ffffff;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
+    }
+
+    .theme-toggle:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--shadow-color);
+    }
+
+    /* ---------- 实时时钟条 ---------- */
+    .clock-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0.9rem 1.4rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px 0 var(--shadow-soft);
+      flex-wrap: wrap;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .clock-time {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.06em;
+      transition: color 0.3s ease;
+    }
+
+    .clock-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.3s ease;
+    }
+
+    .clock-sep {
+      width: 2px;
+      height: 1.4rem;
+      background: var(--border-color);
+      transition: background 0.3s ease;
     }
 
     /* ---------- 巨型标语区域 ---------- */
     .hero {
       text-align: center;
-      margin: 2rem 0 2.8rem;
+      margin: 0 0 2.8rem;
       padding: 1.8rem 0.8rem 2rem;
-      background: #ffffff;
+      background: var(--hero-bg);
       border-radius: 0;
-      box-shadow: 6px 6px 0 rgba(45, 106, 79, 0.12);
-      border: 2px solid #2d6a4f;
-      transition: box-shadow 0.2s;
+      box-shadow: 6px 6px 0 var(--shadow-soft);
+      border: 2px solid var(--border-color);
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
     .hero:hover {
-      box-shadow: 8px 8px 0 rgba(45, 106, 79, 0.18);
+      box-shadow: 8px 8px 0 var(--shadow-color);
     }
 
     .hero-big {
-      font-family: 'Monocraft', 'Courier New', monospace;
       font-size: clamp(2.2rem, 10vw, 5rem);
       font-weight: 600;
       line-height: 1.2;
       letter-spacing: 0.02em;
-      color: #1b4332;
+      color: var(--text-primary);
       margin-bottom: 0.6rem;
       word-break: break-word;
-      transition: color 0.2s;
+      transition: color 0.3s ease;
     }
 
     .hero-big:hover {
-      color: #2d6a4f;
+      color: var(--accent);
     }
 
     .hero-sub {
       font-size: clamp(0.9rem, 3vw, 1.15rem);
-      color: #4e6b5e;
+      color: var(--text-secondary);
       font-weight: 400;
       max-width: 500px;
       margin: 0 auto;
       padding: 0 0.5rem;
       letter-spacing: 0.02em;
       line-height: 1.5;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      transition: color 0.3s ease;
     }
 
     .hero-sub strong {
       font-weight: 600;
-      color: #1b4332;
-      background: #d8f3e3;
+      color: var(--text-primary);
+      background: var(--bg-highlight);
       padding: 0.1rem 0.6rem;
       border-radius: 0;
-      border: 1px solid #2d6a4f;
+      border: 1px solid var(--border-color);
       white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    html.dark .hero-sub strong {
+      color: #0f1a16;
+      background: #52b788;
     }
 
     /* ---------- 个人资料卡片 ---------- */
@@ -167,42 +285,45 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 2rem;
-      background: #ffffff;
+      background: var(--bg-card);
       padding: 2rem 2rem;
       border-radius: 0;
-      box-shadow: 6px 6px 0 rgba(45, 106, 79, 0.1);
-      margin-bottom: 3.5rem;
-      border: 2px solid #2d6a4f;
-      transition: box-shadow 0.2s;
+      box-shadow: 6px 6px 0 var(--shadow-soft);
+      margin-bottom: 2rem;
+      border: 2px solid var(--border-color);
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
     .profile:hover {
-      box-shadow: 8px 8px 0 rgba(45, 106, 79, 0.16);
+      box-shadow: 8px 8px 0 var(--shadow-color);
     }
 
     .avatar {
       width: 120px;
       height: 120px;
       border-radius: 0;
-      background: #b7e4c7;
+      background: var(--bg-avatar);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
       font-weight: 600;
-      color: #1b4332;
+      color: var(--text-primary);
       flex-shrink: 0;
-      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.2);
-      transition: transform 0.2s;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      box-shadow: 4px 4px 0 var(--shadow-color);
+      transition: transform 0.2s, background 0.3s ease, color 0.3s ease;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      border: 2px solid #2d6a4f;
+      border: 2px solid var(--border-color);
+    }
+
+    html.dark .avatar {
+      color: #d8f3e3;
     }
 
     .avatar:hover {
       transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 rgba(45, 106, 79, 0.2);
+      box-shadow: 2px 2px 0 var(--shadow-color);
     }
 
     .profile-info {
@@ -215,20 +336,35 @@
       font-weight: 600;
       letter-spacing: 0.05em;
       line-height: 1.2;
-      margin-bottom: 0.25rem;
-      color: #1b4332;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      margin-bottom: 0.4rem;
+      color: var(--text-primary);
       text-transform: uppercase;
+      transition: color 0.3s ease;
     }
 
-    .profile-bio {
-      font-size: 0.95rem;
-      color: #3d5a4e;
-      margin-bottom: 1.2rem;
-      max-width: 520px;
+    /* 桑晨曦是个乐子 —— 替换了原个人简介 */
+    .profile-tagline {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.3rem;
       line-height: 1.6;
       font-weight: 400;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      transition: color 0.3s ease;
+    }
+
+    .profile-tagline strong {
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-highlight);
+      padding: 0.1rem 0.6rem;
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    html.dark .profile-tagline strong {
+      color: #0f1a16;
+      background: #52b788;
     }
 
     .social {
@@ -244,38 +380,35 @@
       justify-content: center;
       width: 2.5rem;
       height: 2.5rem;
-      background: #e8f5ee;
+      background: var(--bg-subtle);
       border-radius: 0;
-      color: #2d6a4f;
+      color: var(--accent);
       font-size: 1.1rem;
       text-decoration: none;
       transition: all 0.2s ease;
-      border: 2px solid #2d6a4f;
-      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
-      font-family: 'Monocraft', 'Courier New', monospace;
+      border: 2px solid var(--border-color);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .social a:hover {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
       transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
-      border-color: #1b4332;
+      box-shadow: 1px 1px 0 var(--shadow-color);
+      border-color: var(--accent-dark);
     }
 
-    /* 专为 Bilibili 图标微调（文字图标） */
     .social a .icon-bilibili::before {
       content: "B";
       font-weight: 700;
       font-size: 1.1rem;
-      font-family: 'Monocraft', 'Courier New', monospace;
       letter-spacing: -0.5px;
       display: inline-block;
       line-height: 1;
       text-transform: uppercase;
     }
 
-    /* ---------- 联系方式区域 ---------- */
+    /* ---------- 联系方式 ---------- */
     .contact {
       margin-top: 0.2rem;
     }
@@ -285,9 +418,9 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #6b8a7a;
+      color: var(--text-muted);
       margin-bottom: 0.6rem;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      transition: color 0.3s ease;
     }
 
     .contact-list {
@@ -302,28 +435,163 @@
       align-items: center;
       gap: 0.45rem;
       font-size: 0.85rem;
-      color: #3d5a4e;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
     }
 
     .contact-list li .icon-mail {
       font-style: normal;
       font-size: 0.95rem;
-      color: #2d6a4f;
+      color: var(--accent);
+      transition: color 0.3s ease;
     }
 
     .contact-list a {
-      color: #2d6a4f;
+      color: var(--accent);
       text-decoration: none;
-      border-bottom: 2px dashed #b7e4c7;
+      border-bottom: 2px dashed var(--bg-avatar);
       padding-bottom: 1px;
       transition: all 0.2s;
-      font-family: 'Monocraft', 'Courier New', monospace;
     }
 
     .contact-list a:hover {
-      color: #1b4332;
-      border-bottom-color: #2d6a4f;
+      color: var(--text-primary);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ---------- 好玩区域网格 ---------- */
+    .fun-zone {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .fun-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 5px 5px 0 var(--shadow-soft);
+      padding: 1.5rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .fun-card:hover {
+      box-shadow: 7px 7px 0 var(--shadow-color);
+    }
+
+    .fun-card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .fun-card-title::before {
+      content: "▸";
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    /* 一言机 */
+    .quote-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+      margin-bottom: 1.2rem;
+      flex: 1;
+      min-height: 3.4rem;
+      transition: color 0.3s ease;
+    }
+
+    /* 乐子骰子 */
+    .dice-display {
+      font-size: 3.5rem;
+      text-align: center;
+      margin: 0.5rem 0 1.2rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      transition: color 0.3s ease, transform 0.15s;
+      line-height: 1;
+    }
+
+    .dice-display.rolling {
+      animation: diceRoll 0.4s ease;
+    }
+
+    @keyframes diceRoll {
+      0%   { transform: rotate(0deg) scale(1); }
+      25%  { transform: rotate(-18deg) scale(1.15); }
+      50%  { transform: rotate(14deg) scale(0.95); }
+      75%  { transform: rotate(-8deg) scale(1.08); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    /* 点击彩蛋 */
+    .egg-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 0.8rem;
+    }
+
+    .egg-face {
+      font-size: 3.2rem;
+      line-height: 1;
+      transition: transform 0.15s;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .egg-face:active {
+      transform: scale(0.88);
+    }
+
+    .egg-hint {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      transition: color 0.3s ease;
+    }
+
+    /* 通用小按钮 */
+    .fun-btn {
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      padding: 0.45rem 1.1rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0 var(--shadow-color);
+      font-family: 'Monocraft', 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .fun-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent-dark);
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
+    }
+
+    .fun-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--shadow-color);
     }
 
     /* ---------- 乐子计数器 ---------- */
@@ -332,57 +600,68 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      margin-top: 0.5rem;
       margin-bottom: 2rem;
       padding: 1rem 1.5rem;
-      background: #ffffff;
-      border-radius: 0;
-      border: 2px solid #2d6a4f;
-      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.1);
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px 0 var(--shadow-soft);
       flex-wrap: wrap;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .fun-counter .count-num {
       font-size: 1.8rem;
       font-weight: 600;
-      font-family: 'Monocraft', 'Courier New', monospace;
-      color: #1b4332;
+      color: var(--text-primary);
       min-width: 3rem;
       text-align: center;
+      transition: color 0.3s ease;
     }
 
     .fun-counter button {
-      background: #e8f5ee;
-      border: 2px solid #2d6a4f;
-      border-radius: 0;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
       padding: 0.45rem 1.3rem;
       font-size: 0.95rem;
       font-weight: 500;
-      color: #2d6a4f;
+      color: var(--accent);
       cursor: pointer;
       transition: all 0.2s ease;
       font-family: 'Monocraft', 'Courier New', monospace;
-      box-shadow: 3px 3px 0 rgba(45, 106, 79, 0.15);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .fun-counter button:hover {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border-color: #1b4332;
+      border-color: var(--accent-dark);
       transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
+      box-shadow: 1px 1px 0 var(--shadow-color);
     }
 
     .fun-counter button:active {
       transform: translate(3px, 3px);
-      box-shadow: 0 0 0 rgba(45, 106, 79, 0.3);
+      box-shadow: 0 0 0 var(--shadow-color);
     }
 
     .fun-counter .fun-label {
       font-size: 0.9rem;
-      color: #4e6b5e;
+      color: var(--text-secondary);
       font-weight: 400;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      transition: color 0.3s ease;
+    }
+
+    #funReset {
+      background: transparent;
+      color: var(--btn-reset-text);
+      box-shadow: none;
+    }
+
+    #funReset:hover {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: none;
+      transform: translate(2px, 2px);
     }
 
     /* ---------- 页脚 ---------- */
@@ -390,19 +669,15 @@
       margin-top: 3.5rem;
       text-align: center;
       font-size: 0.8rem;
-      color: #8faa9d;
-      border-top: 2px solid #d9e8e0;
+      color: var(--text-faint);
+      border-top: 2px solid var(--footer-border);
       padding-top: 2rem;
       font-weight: 400;
       letter-spacing: 0.02em;
-      font-family: 'Monocraft', 'Courier New', monospace;
+      transition: color 0.3s ease, border-color 0.3s ease;
     }
 
-    .footer i {
-      margin-right: 0.3rem;
-    }
-
-    /* ---------- 响应式微调（手机） ---------- */
+    /* ---------- 响应式 ---------- */
     @media (max-width: 640px) {
       .blog {
         padding: 0 1rem 1.5rem;
@@ -415,11 +690,15 @@
 
       .hero {
         padding: 1.2rem 0.5rem 1.5rem;
-        margin: 1.5rem 0 2rem;
+        margin-bottom: 2rem;
       }
 
       .hero-big {
         font-size: clamp(1.8rem, 12vw, 3.2rem);
+      }
+
+      .clock-time {
+        font-size: 1.2rem;
       }
 
       .profile {
@@ -439,10 +718,6 @@
         font-size: 1.6rem;
       }
 
-      .profile-bio {
-        font-size: 0.85rem;
-      }
-
       .social {
         justify-content: center;
       }
@@ -455,6 +730,10 @@
         flex-direction: column;
         gap: 0.7rem;
         padding: 1rem 1.2rem;
+      }
+
+      .fun-zone {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -476,15 +755,22 @@
       .contact-list li {
         font-size: 0.75rem;
       }
+
+      .clock-bar {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .clock-sep {
+        display: none;
+      }
     }
 
-    /* 极简滚动与焦点 */
     :focus-visible {
-      outline: 2px solid #2d6a4f;
+      outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
 
-    /* 模拟图标 */
     .icon {
       font-style: normal;
       display: inline-block;
@@ -493,20 +779,19 @@
 
     .icon-github::before { content: "⌨"; font-weight: 400; }
 
-    /* 返回顶部按钮 */
+    /* 返回顶部 */
     .back-to-top {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border: 2px solid #1b4332;
-      border-radius: 0;
+      border: 2px solid var(--accent-dark);
       width: 3rem;
       height: 3rem;
       font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 4px 4px 0 rgba(45, 106, 79, 0.3);
+      box-shadow: 4px 4px 0 var(--shadow-color);
       transition: all 0.25s ease;
       opacity: 0;
       visibility: hidden;
@@ -514,7 +799,6 @@
       align-items: center;
       justify-content: center;
       z-index: 100;
-      font-family: 'Monocraft', 'Courier New', monospace;
     }
 
     .back-to-top.show {
@@ -523,9 +807,9 @@
     }
 
     .back-to-top:hover {
-      background: #1b4332;
+      background: var(--accent-dark);
       transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 rgba(45, 106, 79, 0.3);
+      box-shadow: 1px 1px 0 var(--shadow-color);
     }
 
     @media (max-width: 640px) {
@@ -543,12 +827,22 @@
   <div class="blog">
     <!-- 顶部导航栏 -->
     <nav class="navbar">
-      <a href="#" class="nav-brand">ZYC1145·乐子</a>
-      <div class="nav-links">
-        <a href="#profile" class="active">个人</a>
-        <a href="#social-links">社交链接</a>
+      <div class="nav-left">
+        <a href="#" class="nav-brand">ZYC1145·乐子</a>
+        <div class="nav-links">
+          <a href="#profile" class="active">个人</a>
+          <a href="#social-links">社交链接</a>
+        </div>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">☾</button>
     </nav>
+
+    <!-- 实时时钟条 -->
+    <div class="clock-bar">
+      <span class="clock-time" id="clockTime">--:--:--</span>
+      <span class="clock-sep"></span>
+      <span class="clock-date" id="clockDate">----年--月--日 星期-</span>
+    </div>
 
     <!-- 巨型标语区 -->
     <section class="hero">
@@ -561,17 +855,16 @@
       <div class="avatar" aria-label="头像">ZYC</div>
       <div class="profile-info">
         <h1 class="profile-name">ZYC1145</h1>
-        <p class="profile-bio">
-          职业乐子人，兼职生活观察者。分享日常脑洞、碎片思考和一切有趣的事物。
-        </p>
+        <!-- 原简介已移除，替换为桑晨曦是个乐子 -->
+        <p class="profile-tagline">桑晨曦是个<strong>乐子</strong>。</p>
 
-        <!-- 社交链接区域：仅保留 B站 和 GitHub -->
+        <!-- 社交链接区域 -->
         <div class="social" id="social-links">
           <a href="https://space.bilibili.com/1470610997?spm_id_from=333.1387.0.0" target="_blank" rel="noopener" aria-label="Bilibili" title="Bilibili"><span class="icon icon-bilibili"></span></a>
           <a href="https://github.com/zhaoyuecheng999" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><span class="icon icon-github"></span></a>
         </div>
 
-        <!-- 联系方式：三个邮箱 -->
+        <!-- 联系方式 -->
         <div class="contact">
           <div class="contact-title">联系邮箱</div>
           <ul class="contact-list">
@@ -583,12 +876,38 @@
       </div>
     </header>
 
+    <!-- 好玩区域 -->
+    <div class="fun-zone">
+      <!-- 一言格言机 -->
+      <div class="fun-card">
+        <div class="fun-card-title">乐子格言机</div>
+        <div class="quote-text" id="quoteText">点击下方按钮，随机生成一句乐子格言。</div>
+        <button class="fun-btn" id="quoteBtn">换一句</button>
+      </div>
+
+      <!-- 乐子骰子 -->
+      <div class="fun-card">
+        <div class="fun-card-title">乐子骰子</div>
+        <div class="dice-display" id="diceDisplay">⚀</div>
+        <button class="fun-btn" id="diceBtn">掷一下</button>
+      </div>
+
+      <!-- 点击彩蛋 -->
+      <div class="fun-card">
+        <div class="fun-card-title">戳戳乐</div>
+        <div class="egg-area">
+          <div class="egg-face" id="eggFace">(≧▽≦)</div>
+          <div class="egg-hint" id="eggHint">点我试试，看看会变什么脸</div>
+        </div>
+      </div>
+    </div>
+
     <!-- 乐子计数器 -->
     <div class="fun-counter">
       <span class="fun-label">今日乐子指数</span>
       <span class="count-num" id="funCount">0</span>
       <button id="funBtn">+1 乐子</button>
-      <button id="funReset" style="background: transparent; border-color: #2d6a4f; color: #6b8a7a; box-shadow: none;">重置</button>
+      <button id="funReset">重置</button>
     </div>
 
     <!-- 页脚 -->
@@ -605,108 +924,106 @@
     (function() {
       'use strict';
 
-      const navLinks = document.querySelectorAll('.nav-links a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
+      /* ---------- 0. 主题切换 ---------- */
+      const themeToggle = document.getElementById('themeToggle');
+      const htmlEl = document.documentElement;
 
-      const socialLinks = document.querySelectorAll('.social a');
-      socialLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          link.style.transform = 'scale(0.9)';
-          setTimeout(() => {
-            link.style.transform = '';
-          }, 150);
-        });
-      });
-
-      const funCountEl = document.getElementById('funCount');
-      const funBtn = document.getElementById('funBtn');
-      const funReset = document.getElementById('funReset');
-      let funCount = 0;
-
-      try {
-        const saved = localStorage.getItem('zyc1145_fun_count');
-        if (saved !== null) {
-          funCount = parseInt(saved, 10) || 0;
-        }
-      } catch (e) {}
-
-      function updateFunDisplay() {
-        if (funCountEl) {
-          funCountEl.textContent = funCount;
-        }
+      function getInitialTheme() {
         try {
-          localStorage.setItem('zyc1145_fun_count', funCount);
+          const saved = localStorage.getItem('zyc1145_theme');
+          if (saved === 'dark' || saved === 'light') return saved;
         } catch (e) {}
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
       }
 
-      if (funBtn) {
-        funBtn.addEventListener('click', () => {
-          funCount += 1;
-          updateFunDisplay();
-          funBtn.style.transform = 'scale(0.92)';
-          setTimeout(() => {
-            funBtn.style.transform = '';
-          }, 120);
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          htmlEl.classList.add('dark');
+          if (themeToggle) { themeToggle.textContent = '☀'; themeToggle.title = '切换到浅色模式'; }
+        } else {
+          htmlEl.classList.remove('dark');
+          if (themeToggle) { themeToggle.textContent = '☾'; themeToggle.title = '切换到深色模式'; }
+        }
+        try { localStorage.setItem('zyc1145_theme', theme); } catch (e) {}
+      }
+
+      let currentTheme = getInitialTheme();
+      applyTheme(currentTheme);
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          applyTheme(currentTheme);
         });
       }
 
-      if (funReset) {
-        funReset.addEventListener('click', () => {
-          funCount = 0;
-          updateFunDisplay();
-          funReset.style.transform = 'scale(0.92)';
-          setTimeout(() => {
-            funReset.style.transform = '';
-          }, 120);
-        });
-      }
-
-      updateFunDisplay();
-
-      const backToTop = document.getElementById('backToTop');
-      if (backToTop) {
-        window.addEventListener('scroll', () => {
-          if (window.scrollY > 400) {
-            backToTop.classList.add('show');
-          } else {
-            backToTop.classList.remove('show');
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          let saved = null;
+          try { saved = localStorage.getItem('zyc1145_theme'); } catch (err) {}
+          if (!saved) {
+            currentTheme = e.matches ? 'dark' : 'light';
+            applyTheme(currentTheme);
           }
         });
-
-        backToTop.addEventListener('click', () => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
-        });
       }
 
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          const href = this.getAttribute('href');
-          if (href === '#') return;
-          const target = document.querySelector(href);
-          if (target) {
-            e.preventDefault();
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-            history.pushState(null, null, href);
-          }
+      /* ---------- 1. 实时时钟 ---------- */
+      const clockTime = document.getElementById('clockTime');
+      const clockDate = document.getElementById('clockDate');
+      const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+      function updateClock() {
+        const now = new Date();
+        if (clockTime) {
+          clockTime.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+        }
+        if (clockDate) {
+          clockDate.textContent = now.getFullYear() + '年' + pad(now.getMonth() + 1) + '月' + pad(now.getDate()) + '日 星期' + weekDays[now.getDay()];
+        }
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      /* ---------- 2. 乐子格言机 ---------- */
+      const quotes = [
+        '看到的都是给，给出去的都是乐子。',
+        '人生苦短，及时行乐，但别乐过头。',
+        '乐子不是找来的，是撞上来的。',
+        '别人笑我太疯癫，我笑别人看不穿。',
+        '世界上只有一种英雄主义，就是看清生活后依然乐呵。',
+        '快乐是免费的，但乐子可能需要一点创意。',
+        '如果你觉得生活无聊，那一定是你还没开始整活。',
+        '每一个乐子背后，都藏着一个认真的灵魂。',
+        '桑晨曦是个乐子，刘轩廷也是，大家都是。',
+        '不要问乐子能给你什么，要问你能给乐子什么。',
+        '今日事今日毕，今日乐子今日笑。',
+        '生活就像一盒巧克力，你永远不知道下一颗是不是乐子。'
+      ];
+
+      const quoteText = document.getElementById('quoteText');
+      const quoteBtn = document.getElementById('quoteBtn');
+
+      function randomQuote() {
+        if (!quoteText) return;
+        const idx = Math.floor(Math.random() * quotes.length);
+        quoteText.textContent = '「' + quotes[idx] + '」';
+      }
+
+      if (quoteBtn) {
+        quoteBtn.addEventListener('click', () => {
+          randomQuote();
+          quoteBtn.style.transform = 'scale(0.92)';
+          setTimeout(() => { quoteBtn.style.transform = ''; }, 120);
         });
-      });
+      }
+      randomQuote();
 
-      console.log('%c🎉 ZYC1145 · 乐子博客已加载！', 'font-size: 16px; font-weight: bold; color: #1b4332;');
-      console.log('%c看到的都是给，乐子永不止。', 'font-size: 13px; color: #4e6b5e;');
-      console.log('%c📌 字体：Monocraft（Minecraft 风格开源字体）', 'font-size: 12px; color: #6b8a7a;');
-
-    })();
-  </script>
-</body>
-</html>
+      /* ---------- 3. 乐子骰子 ---------- */
+      const diceFaces = ['
