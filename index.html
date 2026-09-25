@@ -5,7 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
   <title>ZYC1145 · 乐子博客</title>
   <style>
-    /* ---------- 全局重置 & 字体系统 ---------- */
+    /* ---------- Minecraft 字体 ---------- */
+    @font-face {
+      font-family: 'Monocraft';
+      src: url('https://cdn.jsdelivr.net/gh/IdreesInc/Monocraft@main/dist/Monocraft-ttf/Monocraft.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ---------- 主题变量：浅色 ---------- */
+    :root {
+      --bg-body: #f4faf7;
+      --bg-card: #ffffff;
+      --bg-subtle: #e8f5ee;
+      --bg-highlight: #d8f3e3;
+      --bg-avatar: #b7e4c7;
+      --text-primary: #1b4332;
+      --text-secondary: #3d5a4e;
+      --text-muted: #6b8a7a;
+      --text-faint: #8faa9d;
+      --border-color: #2d6a4f;
+      --border-soft: #d9e8e0;
+      --accent: #2d6a4f;
+      --accent-dark: #1b4332;
+      --shadow-color: rgba(45, 106, 79, 0.15);
+      --shadow-soft: rgba(45, 106, 79, 0.1);
+      --btn-reset-text: #6b8a7a;
+      --hero-bg: #ffffff;
+      --footer-border: #d9e8e0;
+    }
+
+    /* ---------- 主题变量：深色 ---------- */
+    html.dark {
+      --bg-body: #0f1a16;
+      --bg-card: #16241e;
+      --bg-subtle: #1e3329;
+      --bg-highlight: #2d6a4f;
+      --bg-avatar: #2d6a4f;
+      --text-primary: #d8f3e3;
+      --text-secondary: #b7e4c7;
+      --text-muted: #8fbfa8;
+      --text-faint: #5e8a75;
+      --border-color: #40916c;
+      --border-soft: #1e3329;
+      --accent: #40916c;
+      --accent-dark: #52b788;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --shadow-soft: rgba(0, 0, 0, 0.25);
+      --btn-reset-text: #8fbfa8;
+      --hero-bg: #16241e;
+      --footer-border: #1e3329;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -13,19 +65,20 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-      background: #f4faf7;
-      color: #1f2e28;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      background: var(--bg-body);
+      color: var(--text-secondary);
       line-height: 1.6;
       padding: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      transition: background 0.2s;
+      transition: background 0.3s ease, color 0.3s ease;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: unset;
     }
 
-    /* 主容器 — 限制最大宽度，优雅居中 */
     .blog {
       max-width: 1000px;
       width: 100%;
@@ -38,20 +91,28 @@
       justify-content: space-between;
       align-items: center;
       padding: 1.5rem 0 1.2rem;
-      border-bottom: 1px solid #d9e8e0;
+      border-bottom: 2px solid var(--border-soft);
       margin-bottom: 2.8rem;
       flex-wrap: wrap;
       gap: 0.8rem 1.2rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .nav-brand {
-      font-family: 'Georgia', 'Times New Roman', serif;
       font-size: 1.35rem;
       font-weight: 600;
-      letter-spacing: 0.02em;
-      color: #1f3a30;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
       text-decoration: none;
       text-transform: uppercase;
+      transition: color 0.3s ease;
     }
 
     .nav-links {
@@ -62,87 +123,160 @@
 
     .nav-links a {
       text-decoration: none;
-      color: #3d5a4e;
+      color: var(--text-secondary);
       font-size: 0.95rem;
-      font-weight: 450;
+      font-weight: 500;
       padding: 0.45rem 1rem;
-      border-radius: 2rem;
+      border-radius: 0;
       transition: all 0.2s ease;
       background: transparent;
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       white-space: nowrap;
     }
 
     .nav-links a:hover {
-      background: #ffffff;
-      border-color: #d9e8e0;
-      color: #1f3a30;
-      box-shadow: 0 2px 8px rgba(120, 180, 150, 0.08);
+      background: var(--bg-card);
+      border-color: var(--border-color);
+      color: var(--text-primary);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
-    /* 当前高亮项 */
     .nav-links a.active {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border-color: #2d6a4f;
+      border-color: var(--accent-dark);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .nav-links a.active:hover {
-      background: #1b4332;
-      border-color: #1b4332;
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
       color: #ffffff;
     }
 
-    /* ---------- 巨型标语区域 ---------- */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      border-radius: 0;
+      color: var(--accent);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0 var(--shadow-color);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: #ffffff;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
+    }
+
+    .theme-toggle:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--shadow-color);
+    }
+
+    /* ---------- 实时时钟条 ---------- */
+    .clock-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 0.9rem 1.4rem;
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px 0 var(--shadow-soft);
+      flex-wrap: wrap;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .clock-time {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.06em;
+      transition: color 0.3s ease;
+    }
+
+    .clock-date {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.3s ease;
+    }
+
+    .clock-sep {
+      width: 2px;
+      height: 1.4rem;
+      background: var(--border-color);
+      transition: background 0.3s ease;
+    }
+
+    /* ---------- 巨型标语 ---------- */
     .hero {
       text-align: center;
-      margin: 2rem 0 2.8rem;
+      margin: 0 0 2.8rem;
       padding: 1.8rem 0.8rem 2rem;
-      background: #ffffff;
-      border-radius: 2.5rem;
-      box-shadow: 0 12px 30px -12px rgba(45, 106, 79, 0.08);
-      border: 1px solid #e2f0e9;
-      transition: box-shadow 0.2s;
+      background: var(--hero-bg);
+      border-radius: 0;
+      box-shadow: 6px 6px 0 var(--shadow-soft);
+      border: 2px solid var(--border-color);
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
     .hero:hover {
-      box-shadow: 0 16px 36px -12px rgba(45, 106, 79, 0.12);
+      box-shadow: 8px 8px 0 var(--shadow-color);
     }
 
     .hero-big {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: clamp(3.2rem, 14vw, 7rem);
+      font-size: clamp(2.2rem, 10vw, 5rem);
       font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      color: #1b4332;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+      color: var(--text-primary);
       margin-bottom: 0.6rem;
       word-break: break-word;
-      transition: color 0.2s;
+      transition: color 0.3s ease;
     }
 
     .hero-big:hover {
-      color: #2d6a4f;
+      color: var(--accent);
     }
 
     .hero-sub {
-      font-size: clamp(1rem, 3.5vw, 1.35rem);
-      color: #4e6b5e;
-      font-weight: 380;
+      font-size: clamp(0.9rem, 3vw, 1.15rem);
+      color: var(--text-secondary);
+      font-weight: 400;
       max-width: 500px;
       margin: 0 auto;
       padding: 0 0.5rem;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       line-height: 1.5;
+      transition: color 0.3s ease;
     }
 
     .hero-sub strong {
-      font-weight: 550;
-      color: #1b4332;
-      background: #d8f3e3;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-highlight);
       padding: 0.1rem 0.6rem;
-      border-radius: 2rem;
+      border-radius: 0;
+      border: 1px solid var(--border-color);
       white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    html.dark .hero-sub strong {
+      color: #0f1a16;
+      background: #52b788;
     }
 
     /* ---------- 个人资料卡片 ---------- */
@@ -151,40 +285,45 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 2rem;
-      background: #ffffff;
+      background: var(--bg-card);
       padding: 2rem 2rem;
-      border-radius: 2rem;
-      box-shadow: 0 12px 28px -8px rgba(45, 106, 79, 0.06);
-      margin-bottom: 3.5rem;
-      border: 1px solid #e2f0e9;
-      transition: box-shadow 0.2s;
+      border-radius: 0;
+      box-shadow: 6px 6px 0 var(--shadow-soft);
+      margin-bottom: 2rem;
+      border: 2px solid var(--border-color);
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
 
     .profile:hover {
-      box-shadow: 0 18px 36px -12px rgba(45, 106, 79, 0.1);
+      box-shadow: 8px 8px 0 var(--shadow-color);
     }
 
     .avatar {
       width: 120px;
       height: 120px;
-      border-radius: 50%;
-      background: #b7e4c7;
+      border-radius: 0;
+      background: var(--bg-avatar);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 600;
-      color: #1b4332;
+      color: var(--text-primary);
       flex-shrink: 0;
-      box-shadow: 0 8px 16px -4px rgba(45, 106, 79, 0.1);
-      transition: transform 0.2s;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      letter-spacing: 0.02em;
+      box-shadow: 4px 4px 0 var(--shadow-color);
+      transition: transform 0.2s, background 0.3s ease, color 0.3s ease;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
+      border: 2px solid var(--border-color);
+    }
+
+    html.dark .avatar {
+      color: #d8f3e3;
     }
 
     .avatar:hover {
-      transform: scale(1.02);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--shadow-color);
     }
 
     .profile-info {
@@ -193,23 +332,38 @@
     }
 
     .profile-name {
-      font-size: 2.4rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       line-height: 1.2;
-      margin-bottom: 0.25rem;
-      color: #1b4332;
-      font-family: 'Georgia', 'Times New Roman', serif;
+      margin-bottom: 0.4rem;
+      color: var(--text-primary);
       text-transform: uppercase;
+      transition: color 0.3s ease;
     }
 
-    .profile-bio {
+    .profile-tagline {
       font-size: 1rem;
-      color: #3d5a4e;
-      margin-bottom: 1.2rem;
-      max-width: 520px;
+      color: var(--text-secondary);
+      margin-bottom: 1.3rem;
       line-height: 1.6;
-      font-weight: 350;
+      font-weight: 400;
+      transition: color 0.3s ease;
+    }
+
+    .profile-tagline strong {
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-highlight);
+      padding: 0.1rem 0.6rem;
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    html.dark .profile-tagline strong {
+      color: #0f1a16;
+      background: #52b788;
     }
 
     .social {
@@ -225,35 +379,35 @@
       justify-content: center;
       width: 2.5rem;
       height: 2.5rem;
-      background: #e8f5ee;
-      border-radius: 50%;
-      color: #2d6a4f;
+      background: var(--bg-subtle);
+      border-radius: 0;
+      color: var(--accent);
       font-size: 1.1rem;
       text-decoration: none;
       transition: all 0.2s ease;
-      border: 1px solid #d0e8dc;
+      border: 2px solid var(--border-color);
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .social a:hover {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      transform: translateY(-3px);
-      border-color: #2d6a4f;
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
+      border-color: var(--accent-dark);
     }
 
-    /* 专为 Bilibili 图标微调（文字图标） */
     .social a .icon-bilibili::before {
       content: "B";
       font-weight: 700;
       font-size: 1.1rem;
-      font-family: 'Georgia', 'Times New Roman', serif;
       letter-spacing: -0.5px;
       display: inline-block;
       line-height: 1;
       text-transform: uppercase;
     }
 
-    /* ---------- 联系方式区域 ---------- */
+    /* ---------- 联系方式 ---------- */
     .contact {
       margin-top: 0.2rem;
     }
@@ -263,8 +417,9 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #6b8a7a;
+      color: var(--text-muted);
       margin-bottom: 0.6rem;
+      transition: color 0.3s ease;
     }
 
     .contact-list {
@@ -278,27 +433,162 @@
       display: flex;
       align-items: center;
       gap: 0.45rem;
-      font-size: 0.9rem;
-      color: #3d5a4e;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
     }
 
     .contact-list li .icon-mail {
       font-style: normal;
       font-size: 0.95rem;
-      color: #2d6a4f;
+      color: var(--accent);
+      transition: color 0.3s ease;
     }
 
     .contact-list a {
-      color: #2d6a4f;
+      color: var(--accent);
       text-decoration: none;
-      border-bottom: 1px dashed #b7e4c7;
+      border-bottom: 2px dashed var(--bg-avatar);
       padding-bottom: 1px;
       transition: all 0.2s;
     }
 
     .contact-list a:hover {
-      color: #1b4332;
-      border-bottom-color: #2d6a4f;
+      color: var(--text-primary);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ---------- 好玩区域 ---------- */
+    .fun-zone {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .fun-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 5px 5px 0 var(--shadow-soft);
+      padding: 1.5rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .fun-card:hover {
+      box-shadow: 7px 7px 0 var(--shadow-color);
+    }
+
+    .fun-card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .fun-card-title::before {
+      content: "▸";
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .quote-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-primary);
+      margin-bottom: 1.2rem;
+      flex: 1;
+      min-height: 3.4rem;
+      transition: color 0.3s ease;
+    }
+
+    .dice-display {
+      font-size: 3.5rem;
+      text-align: center;
+      margin: 0.5rem 0 1.2rem;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      transition: color 0.3s ease, transform 0.15s;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .dice-display.rolling {
+      animation: diceRoll 0.4s ease;
+    }
+
+    @keyframes diceRoll {
+      0%   { transform: rotate(0deg) scale(1); }
+      25%  { transform: rotate(-18deg) scale(1.15); }
+      50%  { transform: rotate(14deg) scale(0.95); }
+      75%  { transform: rotate(-8deg) scale(1.08); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    .egg-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 0.8rem;
+    }
+
+    .egg-face {
+      font-size: 3.2rem;
+      line-height: 1;
+      transition: transform 0.15s;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .egg-face:active {
+      transform: scale(0.88);
+    }
+
+    .egg-hint {
+      font-size: 0.78rem;
+      color: var(--text-faint);
+      transition: color 0.3s ease;
+      text-align: center;
+    }
+
+    .fun-btn {
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      padding: 0.45rem 1.1rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 3px 3px 0 var(--shadow-color);
+      font-family: 'Monocraft', 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .fun-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent-dark);
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
+    }
+
+    .fun-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--shadow-color);
     }
 
     /* ---------- 乐子计数器 ---------- */
@@ -307,53 +597,68 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      margin-top: 0.5rem;
       margin-bottom: 2rem;
       padding: 1rem 1.5rem;
-      background: #ffffff;
-      border-radius: 3rem;
-      border: 1px solid #e2f0e9;
-      box-shadow: 0 4px 12px rgba(45, 106, 79, 0.04);
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      box-shadow: 4px 4px 0 var(--shadow-soft);
       flex-wrap: wrap;
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
 
     .fun-counter .count-num {
       font-size: 1.8rem;
       font-weight: 600;
-      font-family: 'Georgia', 'Times New Roman', serif;
-      color: #1b4332;
+      color: var(--text-primary);
       min-width: 3rem;
       text-align: center;
+      transition: color 0.3s ease;
     }
 
     .fun-counter button {
-      background: #e8f5ee;
-      border: 1px solid #d0e8dc;
-      border-radius: 2rem;
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
       padding: 0.45rem 1.3rem;
       font-size: 0.95rem;
       font-weight: 500;
-      color: #2d6a4f;
+      color: var(--accent);
       cursor: pointer;
       transition: all 0.2s ease;
-      font-family: inherit;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      box-shadow: 3px 3px 0 var(--shadow-color);
     }
 
     .fun-counter button:hover {
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border-color: #2d6a4f;
-      transform: translateY(-2px);
+      border-color: var(--accent-dark);
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--shadow-color);
     }
 
     .fun-counter button:active {
-      transform: translateY(0);
+      transform: translate(3px, 3px);
+      box-shadow: 0 0 0 var(--shadow-color);
     }
 
     .fun-counter .fun-label {
       font-size: 0.9rem;
-      color: #4e6b5e;
+      color: var(--text-secondary);
       font-weight: 400;
+      transition: color 0.3s ease;
+    }
+
+    #funReset {
+      background: transparent;
+      color: var(--btn-reset-text);
+      box-shadow: none;
+    }
+
+    #funReset:hover {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: none;
+      transform: translate(2px, 2px);
     }
 
     /* ---------- 页脚 ---------- */
@@ -361,124 +666,57 @@
       margin-top: 3.5rem;
       text-align: center;
       font-size: 0.8rem;
-      color: #8faa9d;
-      border-top: 1px solid #d9e8e0;
+      color: var(--text-faint);
+      border-top: 2px solid var(--footer-border);
       padding-top: 2rem;
-      font-weight: 350;
-      letter-spacing: 0.01em;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.3s ease, border-color 0.3s ease;
     }
 
-    .footer i {
-      margin-right: 0.3rem;
-    }
-
-    /* ---------- 响应式微调（手机） ---------- */
+    /* ---------- 响应式 ---------- */
     @media (max-width: 640px) {
-      .blog {
-        padding: 0 1rem 1.5rem;
-      }
-
-      .navbar {
-        padding: 1rem 0 0.8rem;
-        margin-bottom: 2rem;
-      }
-
-      .hero {
-        padding: 1.2rem 0.5rem 1.5rem;
-        margin: 1.5rem 0 2rem;
-        border-radius: 2rem;
-      }
-
-      .hero-big {
-        font-size: clamp(2.8rem, 16vw, 4.5rem);
-      }
-
-      .profile {
-        flex-direction: column;
-        text-align: center;
-        padding: 1.8rem 1.2rem;
-        gap: 1.2rem;
-      }
-
-      .avatar {
-        width: 100px;
-        height: 100px;
-        font-size: 2rem;
-      }
-
-      .profile-name {
-        font-size: 2rem;
-      }
-
-      .profile-bio {
-        font-size: 0.95rem;
-      }
-
-      .social {
-        justify-content: center;
-      }
-
-      .contact-list {
-        justify-content: center;
-      }
-
-      .fun-counter {
-        flex-direction: column;
-        gap: 0.7rem;
-        padding: 1rem 1.2rem;
-      }
+      .blog { padding: 0 1rem 1.5rem; }
+      .navbar { padding: 1rem 0 0.8rem; margin-bottom: 2rem; }
+      .hero { padding: 1.2rem 0.5rem 1.5rem; margin-bottom: 2rem; }
+      .hero-big { font-size: clamp(1.8rem, 12vw, 3.2rem); }
+      .clock-time { font-size: 1.2rem; }
+      .profile { flex-direction: column; text-align: center; padding: 1.8rem 1.2rem; gap: 1.2rem; }
+      .avatar { width: 100px; height: 100px; font-size: 1.6rem; }
+      .profile-name { font-size: 1.6rem; }
+      .social { justify-content: center; }
+      .contact-list { justify-content: center; }
+      .fun-counter { flex-direction: column; gap: 0.7rem; padding: 1rem 1.2rem; }
+      .fun-zone { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 420px) {
-      .nav-links a {
-        padding: 0.35rem 0.8rem;
-        font-size: 0.85rem;
-      }
-
-      .nav-brand {
-        font-size: 1.2rem;
-      }
-
-      .fun-counter button {
-        padding: 0.35rem 1rem;
-        font-size: 0.85rem;
-      }
-
-      .contact-list li {
-        font-size: 0.82rem;
-      }
+      .nav-links a { padding: 0.35rem 0.8rem; font-size: 0.8rem; }
+      .nav-brand { font-size: 1.1rem; }
+      .fun-counter button { padding: 0.35rem 1rem; font-size: 0.8rem; }
+      .contact-list li { font-size: 0.75rem; }
+      .clock-bar { flex-direction: column; gap: 0.4rem; }
+      .clock-sep { display: none; }
     }
 
-    /* 极简滚动与焦点 */
-    :focus-visible {
-      outline: 2px solid #2d6a4f;
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* 模拟图标 */
-    .icon {
-      font-style: normal;
-      display: inline-block;
-      line-height: 1;
-    }
-
+    .icon { font-style: normal; display: inline-block; line-height: 1; }
     .icon-github::before { content: "⌨"; font-weight: 400; }
 
-    /* 返回顶部按钮 */
+    /* 返回顶部 */
     .back-to-top {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: #2d6a4f;
+      background: var(--accent);
       color: #ffffff;
-      border: none;
-      border-radius: 50%;
+      border: 2px solid var(--accent-dark);
       width: 3rem;
       height: 3rem;
       font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(45, 106, 79, 0.25);
+      box-shadow: 4px 4px 0 var(--shadow-color);
       transition: all 0.25s ease;
       opacity: 0;
       visibility: hidden;
@@ -488,25 +726,11 @@
       z-index: 100;
     }
 
-    .back-to-top.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-to-top:hover {
-      background: #1b4332;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 28px rgba(45, 106, 79, 0.35);
-    }
+    .back-to-top.show { opacity: 1; visibility: visible; }
+    .back-to-top:hover { background: var(--accent-dark); transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow-color); }
 
     @media (max-width: 640px) {
-      .back-to-top {
-        bottom: 1.2rem;
-        right: 1.2rem;
-        width: 2.6rem;
-        height: 2.6rem;
-        font-size: 1.1rem;
-      }
+      .back-to-top { bottom: 1.2rem; right: 1.2rem; width: 2.6rem; height: 2.6rem; font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -514,14 +738,24 @@
   <div class="blog">
     <!-- 顶部导航栏 -->
     <nav class="navbar">
-      <a href="#" class="nav-brand">ZYC1145·乐子</a>
-      <div class="nav-links">
-        <a href="#profile" class="active">个人</a>
-        <a href="#social-links">社交链接</a>
+      <div class="nav-left">
+        <a href="#" class="nav-brand">ZYC1145·乐子</a>
+        <div class="nav-links">
+          <a href="#profile" class="active">个人</a>
+          <a href="#social-links">社交链接</a>
+        </div>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">☾</button>
     </nav>
 
-    <!-- 巨型标语区：刘轩廷是个乐子 仅作标题出现 -->
+    <!-- 实时时钟条 -->
+    <div class="clock-bar">
+      <span class="clock-time" id="clockTime">--:--:--</span>
+      <span class="clock-sep"></span>
+      <span class="clock-date" id="clockDate">----年--月--日 星期-</span>
+    </div>
+
+    <!-- 巨型标语 -->
     <section class="hero">
       <div class="hero-big">看到的都是给</div>
       <p class="hero-sub">刘轩廷是个<strong>乐子</strong>。</p>
@@ -532,19 +766,16 @@
       <div class="avatar" aria-label="头像">ZYC</div>
       <div class="profile-info">
         <h1 class="profile-name">ZYC1145</h1>
-        <p class="profile-bio">
-          职业乐子人，兼职生活观察者。分享日常脑洞、碎片思考和一切有趣的事物。
-        </p>
+        <!-- 原简介已移除，替换为桑晨曦是个乐子 -->
+        <p class="profile-tagline">桑晨曦是个<strong>乐子</strong>。</p>
 
-        <!-- 社交链接区域：仅保留 B站 和 GitHub -->
+        <!-- 社交链接区域 -->
         <div class="social" id="social-links">
-          <!-- B站（真实链接） -->
           <a href="https://space.bilibili.com/1470610997?spm_id_from=333.1387.0.0" target="_blank" rel="noopener" aria-label="Bilibili" title="Bilibili"><span class="icon icon-bilibili"></span></a>
-          <!-- GitHub（真实链接） -->
           <a href="https://github.com/zhaoyuecheng999" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><span class="icon icon-github"></span></a>
         </div>
 
-        <!-- 联系方式：三个邮箱 -->
+        <!-- 联系方式 -->
         <div class="contact">
           <div class="contact-title">联系邮箱</div>
           <ul class="contact-list">
@@ -556,12 +787,38 @@
       </div>
     </header>
 
+    <!-- 好玩区域 -->
+    <div class="fun-zone">
+      <!-- 一言格言机 -->
+      <div class="fun-card">
+        <div class="fun-card-title">乐子格言机</div>
+        <div class="quote-text" id="quoteText">点击下方按钮，随机生成一句乐子格言。</div>
+        <button class="fun-btn" id="quoteBtn">换一句</button>
+      </div>
+
+      <!-- 乐子骰子 -->
+      <div class="fun-card">
+        <div class="fun-card-title">乐子骰子</div>
+        <div class="dice-display" id="diceDisplay">⚀</div>
+        <button class="fun-btn" id="diceBtn">掷一下</button>
+      </div>
+
+      <!-- 点击彩蛋 -->
+      <div class="fun-card">
+        <div class="fun-card-title">戳戳乐</div>
+        <div class="egg-area">
+          <div class="egg-face" id="eggFace">(≧▽≦)</div>
+          <div class="egg-hint" id="eggHint">点我试试，看看会变什么脸</div>
+        </div>
+      </div>
+    </div>
+
     <!-- 乐子计数器 -->
     <div class="fun-counter">
       <span class="fun-label">今日乐子指数</span>
       <span class="count-num" id="funCount">0</span>
       <button id="funBtn">+1 乐子</button>
-      <button id="funReset" style="background: transparent; border: 1px solid #d0e8dc; color: #6b8a7a;">重置</button>
+      <button id="funReset">重置</button>
     </div>
 
     <!-- 页脚 -->
@@ -573,34 +830,206 @@
   <!-- 返回顶部按钮 -->
   <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
 
-  <!-- 内联 JavaScript：完整交互逻辑 -->
+  <!-- 内联 JavaScript -->
   <script>
     (function() {
       'use strict';
 
-      /* ---------- 1. 导航高亮切换 ---------- */
-      const navLinks = document.querySelectorAll('.nav-links a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
-      });
+      /* ============================================================
+         0. 主题切换（深色/浅色）
+         ============================================================ */
+      const themeToggle = document.getElementById('themeToggle');
+      const htmlEl = document.documentElement;
 
-      /* ---------- 2. 社交链接处理 ---------- */
-      const socialLinks = document.querySelectorAll('.social a');
-      socialLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          // 当前社交链接均为真实链接，保留正常跳转
-          // 仅做轻微的视觉反馈
-          link.style.transform = 'scale(0.9)';
-          setTimeout(() => {
-            link.style.transform = '';
-          }, 150);
-        });
-      });
+      function getInitialTheme() {
+        try {
+          const saved = localStorage.getItem('zyc1145_theme');
+          if (saved === 'dark' || saved === 'light') return saved;
+        } catch (e) {}
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          return 'dark';
+        }
+        return 'light';
+      }
 
-      /* ---------- 3. 乐子计数器 ---------- */
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          htmlEl.classList.add('dark');
+          if (themeToggle) { themeToggle.textContent = '☀'; themeToggle.title = '切换到浅色模式'; }
+        } else {
+          htmlEl.classList.remove('dark');
+          if (themeToggle) { themeToggle.textContent = '☾'; themeToggle.title = '切换到深色模式'; }
+        }
+        try { localStorage.setItem('zyc1145_theme', theme); } catch (e) {}
+      }
+
+      let currentTheme = getInitialTheme();
+      applyTheme(currentTheme);
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          applyTheme(currentTheme);
+        });
+      }
+
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          let saved = null;
+          try { saved = localStorage.getItem('zyc1145_theme'); } catch (err) {}
+          if (!saved) {
+            currentTheme = e.matches ? 'dark' : 'light';
+            applyTheme(currentTheme);
+          }
+        });
+      }
+
+      /* ============================================================
+         1. 实时时钟
+         ============================================================ */
+      const clockTime = document.getElementById('clockTime');
+      const clockDate = document.getElementById('clockDate');
+      const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+      function updateClock() {
+        const now = new Date();
+        if (clockTime) {
+          clockTime.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+        }
+        if (clockDate) {
+          clockDate.textContent = now.getFullYear() + '年' + pad(now.getMonth() + 1) + '月' + pad(now.getDate()) + '日 星期' + weekDays[now.getDay()];
+        }
+      }
+
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      /* ============================================================
+         2. 乐子格言机
+         ============================================================ */
+      const quotes = [
+        '看到的都是给，给出去的都是乐子。',
+        '人生苦短，及时行乐，但别乐过头。',
+        '乐子不是找来的，是撞上来的。',
+        '别人笑我太疯癫，我笑别人看不穿。',
+        '世界上只有一种英雄主义，就是看清生活后依然乐呵。',
+        '快乐是免费的，但乐子可能需要一点创意。',
+        '如果你觉得生活无聊，那一定是你还没开始整活。',
+        '每一个乐子背后，都藏着一个认真的灵魂。',
+        '桑晨曦是个乐子，刘轩廷也是，大家都是。',
+        '不要问乐子能给你什么，要问你能给乐子什么。',
+        '今日事今日毕，今日乐子今日笑。',
+        '生活就像一盒巧克力，你永远不知道下一颗是不是乐子。',
+        '乐子人，乐子魂，乐子都是人上人。',
+        '与其内耗自己，不如外耗别人。',
+        '摸鱼是对生活最基本的尊重。'
+      ];
+
+      const quoteText = document.getElementById('quoteText');
+      const quoteBtn = document.getElementById('quoteBtn');
+
+      function randomQuote() {
+        if (!quoteText) return;
+        const idx = Math.floor(Math.random() * quotes.length);
+        quoteText.textContent = '「' + quotes[idx] + '」';
+      }
+
+      if (quoteBtn) {
+        quoteBtn.addEventListener('click', () => {
+          randomQuote();
+          quoteBtn.style.transform = 'scale(0.92)';
+          setTimeout(() => { quoteBtn.style.transform = ''; }, 120);
+        });
+      }
+      // 首次加载随机显示一句
+      randomQuote();
+
+      /* ============================================================
+         3. 乐子骰子
+         ============================================================ */
+      const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+      const diceDisplay = document.getElementById('diceDisplay');
+      const diceBtn = document.getElementById('diceBtn');
+
+      function rollDice() {
+        if (!diceDisplay) return;
+        diceDisplay.classList.add('rolling');
+        // 滚动时快速切换面
+        let count = 0;
+        const interval = setInterval(() => {
+          const idx = Math.floor(Math.random() * 6);
+          diceDisplay.textContent = diceFaces[idx];
+          count++;
+          if (count > 8) {
+            clearInterval(interval);
+            // 最终结果
+            const finalIdx = Math.floor(Math.random() * 6);
+            diceDisplay.textContent = diceFaces[finalIdx];
+            diceDisplay.classList.remove('rolling');
+          }
+        }, 60);
+      }
+
+      if (diceBtn) {
+        diceBtn.addEventListener('click', rollDice);
+      }
+      if (diceDisplay) {
+        diceDisplay.addEventListener('click', rollDice);
+      }
+
+      /* ============================================================
+         4. 戳戳乐彩蛋
+         ============================================================ */
+      const eggFaces = [
+        '(≧▽≦)', '(๑•̀ㅂ•́)و✧', '( ͡° ͜ʖ ͡°)', '(╯°□°）╯︵ ┻━┻',
+        '(づ｡◕‿‿◕｡)づ', '٩(◕‿◕｡)۶', '(⌐■_■)', '(ᵔᴥᵔ)',
+        '(ಥ﹏ಥ)', '(っ˘̩╭╮˘̩)っ', 'ᕕ( ᐛ )ᕗ', '(๑˃̵ᴗ˂̵)و'
+      ];
+      const eggHints = [
+        '嘿嘿，被你戳到了！',
+        '再戳一下试试？',
+        '乐子 +1',
+        '桑晨曦看到了会笑',
+        '刘轩廷表示很赞',
+        '你戳得真准',
+        '这个脸不错吧',
+        '乐子能量满格',
+        '戳戳乐大师是你',
+        '继续，别停',
+        '点这里会有好事发生',
+        '你已经戳了 ' 
+      ];
+
+      const eggFace = document.getElementById('eggFace');
+      const eggHint = document.getElementById('eggHint');
+      let eggCount = 0;
+
+      function changeEggFace() {
+        if (!eggFace) return;
+        eggCount++;
+        const idx = Math.floor(Math.random() * eggFaces.length);
+        eggFace.textContent = eggFaces[idx];
+        if (eggHint) {
+          if (eggCount % 5 === 0) {
+            eggHint.textContent = '你已经戳了 ' + eggCount + ' 次，乐子人实锤！';
+          } else {
+            const hIdx = Math.floor(Math.random() * (eggHints.length - 1));
+            eggHint.textContent = eggHints[hIdx];
+          }
+        }
+        eggFace.style.transform = 'scale(0.85)';
+        setTimeout(() => { eggFace.style.transform = ''; }, 120);
+      }
+
+      if (eggFace) {
+        eggFace.addEventListener('click', changeEggFace);
+      }
+
+      /* ============================================================
+         5. 乐子计数器
+         ============================================================ */
       const funCountEl = document.getElementById('funCount');
       const funBtn = document.getElementById('funBtn');
       const funReset = document.getElementById('funReset');
@@ -611,9 +1040,7 @@
         if (saved !== null) {
           funCount = parseInt(saved, 10) || 0;
         }
-      } catch (e) {
-        // localStorage 不可用
-      }
+      } catch (e) {}
 
       function updateFunDisplay() {
         if (funCountEl) {
@@ -621,9 +1048,7 @@
         }
         try {
           localStorage.setItem('zyc1145_fun_count', funCount);
-        } catch (e) {
-          // 忽略
-        }
+        } catch (e) {}
       }
 
       if (funBtn) {
@@ -631,9 +1056,7 @@
           funCount += 1;
           updateFunDisplay();
           funBtn.style.transform = 'scale(0.92)';
-          setTimeout(() => {
-            funBtn.style.transform = '';
-          }, 120);
+          setTimeout(() => { funBtn.style.transform = ''; }, 120);
         });
       }
 
@@ -642,15 +1065,37 @@
           funCount = 0;
           updateFunDisplay();
           funReset.style.transform = 'scale(0.92)';
-          setTimeout(() => {
-            funReset.style.transform = '';
-          }, 120);
+          setTimeout(() => { funReset.style.transform = ''; }, 120);
         });
       }
 
       updateFunDisplay();
 
-      /* ---------- 4. 返回顶部按钮 ---------- */
+      /* ============================================================
+         6. 导航高亮切换
+         ============================================================ */
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      /* ============================================================
+         7. 社交链接视觉反馈
+         ============================================================ */
+      const socialLinks = document.querySelectorAll('.social a');
+      socialLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          link.style.transform = 'scale(0.9)';
+          setTimeout(() => { link.style.transform = ''; }, 150);
+        });
+      });
+
+      /* ============================================================
+         8. 返回顶部按钮
+         ============================================================ */
       const backToTop = document.getElementById('backToTop');
       if (backToTop) {
         window.addEventListener('scroll', () => {
@@ -662,14 +1107,13 @@
         });
 
         backToTop.addEventListener('click', () => {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
 
-      /* ---------- 5. 平滑滚动 ---------- */
+      /* ============================================================
+         9. 平滑滚动（锚点）
+         ============================================================ */
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           const href = this.getAttribute('href');
@@ -677,20 +1121,20 @@
           const target = document.querySelector(href);
           if (target) {
             e.preventDefault();
-            target.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             history.pushState(null, null, href);
           }
         });
       });
 
-      /* ---------- 6. 控制台欢迎信息 ---------- */
+      /* ============================================================
+         10. 控制台欢迎信息
+         ============================================================ */
       console.log('%c🎉 ZYC1145 · 乐子博客已加载！', 'font-size: 16px; font-weight: bold; color: #1b4332;');
       console.log('%c看到的都是给，乐子永不止。', 'font-size: 13px; color: #4e6b5e;');
-      console.log('%c📌 B站与GitHub链接已就绪。', 'font-size: 12px; color: #6b8a7a;');
-      console.log('%c📧 联系邮箱：zhaoyuecheng999@outlool.com / zhaoyuecheng999@126.com / 2205852364@qq.com', 'font-size: 12px; color: #6b8a7a;');
+      console.log('%c🎲 所有按钮均已激活：主题切换 / 时钟 / 格言机 / 骰子 / 戳戳乐 / 计数器', 'font-size: 12px; color: #6b8a7a;');
+      console.log('%c🌗 主题跟随系统，点击右上角可手动切换。', 'font-size: 12px; color: #6b8a7a;');
+      console.log('%c📌 字体：Monocraft（Minecraft 风格开源字体）', 'font-size: 12px; color: #6b8a7a;');
 
     })();
   </script>
