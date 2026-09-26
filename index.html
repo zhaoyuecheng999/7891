@@ -1,17 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <meta name="theme-color" content="#2d6a4f">
   <title>ZYC1145 · 乐子博客</title>
   <link rel="icon" type="image/png" href="https://www.favicon.cc/avatar/680928/680928.png">
   <link rel="apple-touch-icon" href="https://www.favicon.cc/avatar/680928/680928.png">
-
   <style>
     /* ============================================================
        CSS 部分：字体、主题变量、布局、样式、动画、响应式
        ============================================================ */
-
     /* ---------- Minecraft 字体 ---------- */
     @font-face {
       font-family: 'Monocraft';
@@ -20,7 +19,6 @@
       font-style: normal;
       font-display: swap;
     }
-
     /* ---------- 主题变量：浅色 ---------- */
     :root {
       --bg-card: rgba(255, 255, 255, 0.86);
@@ -45,7 +43,6 @@
       --danger: #d90429;
       --danger-dark: #8d0801;
     }
-
     /* ---------- 主题变量：深色 ---------- */
     html.dark {
       --bg-card: rgba(22, 36, 30, 0.88);
@@ -70,14 +67,21 @@
       --danger: #ef476f;
       --danger-dark: #9d0208;
     }
-
     /* ---------- 全局重置 ---------- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-
+    html {
+      background-color: #d8e8df;
+      transition: background-color 0.3s ease;
+      scroll-behavior: smooth;
+    }
+    html.dark {
+      background-color: #0a1410;
+    }
     body {
       font-family: 'Monocraft', 'Courier New', monospace;
       color: var(--text-secondary);
@@ -87,13 +91,12 @@
       align-items: center;
       min-height: 100vh;
       transition: color 0.3s ease;
-      -webkit-font-smoothing: none;
-      -moz-osx-font-smoothing: unset;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       position: relative;
       background: transparent;
       overflow-x: hidden;
     }
-
     /* ---------- 风景背景图 ---------- */
     .bg-layer {
       position: fixed;
@@ -106,10 +109,8 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed;
-      transition: filter 0.3s ease;
+      transition: filter 0.3s ease, background-image 0.5s ease;
     }
-
     .bg-layer::after {
       content: '';
       position: absolute;
@@ -117,11 +118,9 @@
       background: rgba(244, 250, 247, 0.35);
       transition: background 0.3s ease;
     }
-
     html.dark .bg-layer::after {
       background: rgba(15, 26, 22, 0.72);
     }
-
     .blog {
       max-width: 1100px;
       width: 100%;
@@ -129,7 +128,6 @@
       position: relative;
       z-index: 1;
     }
-
     /* ---------- 顶部导航栏 ---------- */
     .navbar {
       display: flex;
@@ -146,15 +144,18 @@
       gap: 0.8rem 1.2rem;
       transition: background 0.3s ease, border-color 0.3s ease;
       box-shadow: 0 6px 0 var(--shadow-soft);
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
     }
-
     .nav-left {
       display: flex;
       align-items: center;
       gap: 1rem;
       flex-wrap: wrap;
+      flex: 1;
+      min-width: 0;
     }
-
     .nav-brand {
       font-size: 1.35rem;
       font-weight: 600;
@@ -165,18 +166,23 @@
       transition: color 0.2s ease;
       cursor: pointer;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+      flex-shrink: 0;
     }
-
     .nav-brand:hover {
       color: var(--accent);
     }
-
     .nav-links {
       display: flex;
       gap: 0.5rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 2px;
     }
-
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
     .nav-links a {
       text-decoration: none;
       color: var(--text-secondary);
@@ -189,34 +195,41 @@
       border: 2px solid transparent;
       white-space: nowrap;
       cursor: pointer;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
     }
-
     .nav-links a:hover {
       background: var(--bg-card-solid);
       border-color: var(--border-color);
       color: var(--text-primary);
       box-shadow: 0 3px 0 var(--shadow-color);
     }
-
     .nav-links a.active {
       background: var(--accent);
       color: #ffffff;
       border-color: var(--accent-dark);
       box-shadow: 0 3px 0 var(--shadow-color);
     }
-
     .nav-links a.active:hover {
       background: var(--accent-dark);
       border-color: var(--accent-dark);
       color: #ffffff;
     }
-
-    .theme-toggle {
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+    /* 通用小圆按钮 */
+    .icon-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.6rem;
-      height: 2.6rem;
+      width: 2.8rem;
+      height: 2.8rem;
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
       border-radius: 50%;
@@ -229,14 +242,169 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
     }
-
-    .theme-toggle:hover {
+    .icon-btn:hover {
       background: var(--accent);
       color: #ffffff;
       transform: translateY(2px);
       box-shadow: 0 1px 0 var(--shadow-color);
     }
-
+    .icon-btn:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+    /* ---------- 壁纸选择面板 ---------- */
+    .wallpaper-panel {
+      position: fixed;
+      top: 5rem;
+      right: 1.5rem;
+      background: var(--bg-card-solid);
+      border: 3px solid var(--border-color);
+      border-radius: 1.8rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+      padding: 1.2rem 1.2rem 1rem;
+      z-index: 300;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.95);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      width: 420px;
+      max-width: calc(100vw - 2rem);
+      max-height: 75vh;
+      overflow-y: auto;
+      transform-origin: top right;
+    }
+    .wallpaper-panel.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+    .wallpaper-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 2px solid var(--border-soft);
+      position: sticky;
+      top: 0;
+      background: var(--bg-card-solid);
+      z-index: 1;
+    }
+    .wallpaper-panel-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .wallpaper-panel-title::before {
+      content: "🖼";
+      font-size: 1rem;
+    }
+    .wallpaper-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      background: transparent;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Monocraft', 'Courier New', monospace;
+      flex-shrink: 0;
+    }
+    .wallpaper-close:hover {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger-dark);
+      transform: rotate(90deg);
+    }
+    /* 缩略图网格 */
+    .wallpaper-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+    .wallpaper-item {
+      aspect-ratio: 16 / 10;
+      border-radius: 1rem;
+      background-size: cover;
+      background-position: center;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 0 var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      min-height: 80px;
+    }
+    .wallpaper-item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .wallpaper-item:hover::before {
+      opacity: 1;
+    }
+    .wallpaper-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 0 var(--shadow-color);
+      border-color: var(--accent);
+    }
+    .wallpaper-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent), 0 4px 0 var(--shadow-color);
+    }
+    .wallpaper-item.active::after {
+      content: "✓";
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: var(--accent);
+      color: #ffffff;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .wallpaper-item-name {
+      position: absolute;
+      bottom: 7px;
+      left: 9px;
+      right: 30px;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wallpaper-item:hover .wallpaper-item-name,
+    .wallpaper-item.active .wallpaper-item-name {
+      opacity: 1;
+    }
     /* ---------- 巨型标语 ---------- */
     .hero {
       text-align: center;
@@ -250,7 +418,6 @@
       border: 2px solid var(--border-color);
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
-
     .hero-big {
       font-size: clamp(1.6rem, 7.5vw, 3.8rem);
       font-weight: 600;
@@ -261,8 +428,8 @@
       word-break: break-word;
       transition: color 0.3s ease;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      min-height: 1.2em;
     }
-
     .hero-sub {
       font-size: clamp(0.9rem, 3vw, 1.15rem);
       color: var(--text-secondary);
@@ -274,7 +441,6 @@
       line-height: 1.5;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
-
     /* ---------- 个人资料卡片 ---------- */
     .profile {
       display: flex;
@@ -291,7 +457,6 @@
       border: 2px solid var(--border-color);
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
-
     .avatar {
       width: 120px;
       height: 120px;
@@ -311,21 +476,17 @@
       border: 2px solid var(--border-color);
       cursor: pointer;
     }
-
     html.dark .avatar {
       color: #d8f3e3;
     }
-
     .avatar:hover {
       transform: translateY(2px);
       box-shadow: 0 2px 0 var(--shadow-color);
     }
-
     .profile-info {
       flex: 1;
       min-width: 200px;
     }
-
     .profile-name {
       font-size: 2.2rem;
       font-weight: 600;
@@ -335,7 +496,6 @@
       color: var(--text-primary);
       text-transform: uppercase;
     }
-
     .profile-tagline {
       font-size: 1rem;
       color: var(--text-secondary);
@@ -343,7 +503,6 @@
       line-height: 1.6;
       font-weight: 400;
     }
-
     .profile-tagline strong {
       font-weight: 600;
       color: var(--text-primary);
@@ -354,12 +513,10 @@
       white-space: nowrap;
       transition: all 0.3s ease;
     }
-
     html.dark .profile-tagline strong {
       color: #0f1a16;
       background: #52b788;
     }
-
     /* ---------- 社交图标 ---------- */
     .social {
       display: flex;
@@ -367,13 +524,12 @@
       gap: 0.8rem;
       margin-bottom: 1.6rem;
     }
-
     .social a {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 2.7rem;
-      height: 2.7rem;
+      width: 2.8rem;
+      height: 2.8rem;
       background: var(--bg-subtle);
       border-radius: 50%;
       color: var(--accent);
@@ -386,7 +542,6 @@
       cursor: pointer;
       font-family: 'Monocraft', 'Courier New', monospace;
     }
-
     .social a:hover {
       background: var(--accent);
       color: #ffffff;
@@ -394,12 +549,10 @@
       box-shadow: 0 1px 0 var(--shadow-color);
       border-color: var(--accent-dark);
     }
-
-    /* ---------- 联系方式（点击复制） ---------- */
+    /* ---------- 联系方式 ---------- */
     .contact {
       margin-top: 0.2rem;
     }
-
     .contact-title {
       font-size: 0.85rem;
       font-weight: 600;
@@ -408,14 +561,12 @@
       color: var(--text-muted);
       margin-bottom: 0.8rem;
     }
-
     .contact-list {
       display: flex;
       flex-wrap: wrap;
       gap: 0.7rem 1rem;
       list-style: none;
     }
-
     .contact-list li {
       display: flex;
       align-items: center;
@@ -430,8 +581,8 @@
       user-select: none;
       box-shadow: 0 3px 0 var(--shadow-soft);
       transition: all 0.2s ease;
+      min-height: 40px;
     }
-
     .contact-list li:hover {
       background: var(--accent);
       color: #ffffff;
@@ -439,18 +590,15 @@
       box-shadow: 0 1px 0 var(--shadow-soft);
       border-color: var(--accent-dark);
     }
-
     .contact-list li:hover .icon-mail {
       color: #ffffff;
     }
-
     .contact-list li .icon-mail {
       font-style: normal;
       font-size: 0.95rem;
       color: var(--accent);
       transition: color 0.2s ease;
     }
-
     /* ---------- 乐子列表 ---------- */
     .fun-list-card {
       background: var(--bg-card);
@@ -463,7 +611,6 @@
       margin-bottom: 2rem;
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
-
     .fun-list-title {
       font-size: 0.85rem;
       font-weight: 600;
@@ -475,20 +622,17 @@
       align-items: center;
       gap: 0.5rem;
     }
-
     .fun-list-title::before {
       content: "▸";
       color: var(--accent);
       font-size: 1rem;
     }
-
     .fun-list {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       list-style: none;
     }
-
     .fun-list-item {
       display: flex;
       align-items: center;
@@ -501,9 +645,9 @@
       cursor: pointer;
       transition: all 0.2s ease;
       flex: 1;
-      min-width: 180px;
+      min-width: 160px;
+      min-height: 48px;
     }
-
     .fun-list-item:hover {
       background: var(--accent);
       color: #ffffff;
@@ -511,7 +655,6 @@
       box-shadow: 0 1px 0 var(--shadow-soft);
       border-color: var(--accent-dark);
     }
-
     .fun-list-avatar {
       width: 2.4rem;
       height: 2.4rem;
@@ -527,12 +670,10 @@
       flex-shrink: 0;
       transition: all 0.2s ease;
     }
-
     .fun-list-item:hover .fun-list-avatar {
       background: #ffffff;
       color: var(--accent);
     }
-
     .fun-list-name {
       font-size: 1rem;
       font-weight: 600;
@@ -540,11 +681,9 @@
       color: var(--text-primary);
       transition: color 0.2s ease;
     }
-
     .fun-list-item:hover .fun-list-name {
       color: #ffffff;
     }
-
     .fun-list-tag {
       font-size: 0.7rem;
       color: var(--text-muted);
@@ -553,12 +692,10 @@
       text-transform: uppercase;
       transition: color 0.2s ease;
     }
-
     .fun-list-item:hover .fun-list-tag {
       color: rgba(255, 255, 255, 0.85);
     }
-
-    /* ---------- 实用网页区域 ---------- */
+    /* ---------- 乐子网页区域 ---------- */
     .links-card {
       background: var(--bg-card);
       backdrop-filter: blur(14px);
@@ -570,7 +707,6 @@
       margin-bottom: 2rem;
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
-
     .links-title {
       font-size: 0.85rem;
       font-weight: 600;
@@ -582,29 +718,65 @@
       align-items: center;
       gap: 0.5rem;
     }
-
     .links-title::before {
       content: "▸";
       color: var(--accent);
       font-size: 1rem;
     }
-
+    .links-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .link-section {
+      background: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      border-radius: 1.8rem;
+      padding: 1.4rem 1.4rem 1.2rem;
+      box-shadow: 0 3px 0 var(--shadow-soft);
+      transition: all 0.2s ease;
+    }
+    .link-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .link-section-title::before {
+      content: "";
+      width: 4px;
+      height: 1rem;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .link-section-desc {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      margin-left: auto;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
     .links-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 0.8rem;
     }
-
     .link-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      background: var(--bg-subtle);
+      background: var(--bg-card-solid);
       border: 2px solid var(--border-color);
-      border-radius: 1.4rem;
-      padding: 0.9rem 0.5rem;
+      border-radius: 1.3rem;
+      padding: 0.85rem 0.4rem;
       box-shadow: 0 3px 0 var(--shadow-soft);
       cursor: pointer;
       transition: all 0.2s ease;
@@ -612,24 +784,24 @@
       text-align: center;
       min-height: 5rem;
     }
-
     .link-item:hover {
       background: var(--accent);
       transform: translateY(2px);
       box-shadow: 0 1px 0 var(--shadow-soft);
       border-color: var(--accent-dark);
     }
-
+    .link-item:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
     .link-icon {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       line-height: 1;
       transition: transform 0.2s;
     }
-
     .link-item:hover .link-icon {
       transform: scale(1.15);
     }
-
     .link-name {
       font-size: 0.68rem;
       font-weight: 600;
@@ -640,11 +812,9 @@
       transition: color 0.2s ease;
       word-break: break-word;
     }
-
     .link-item:hover .link-name {
       color: #ffffff;
     }
-
     /* 复制成功提示 */
     .copy-toast {
       position: fixed;
@@ -665,22 +835,21 @@
       z-index: 200;
       letter-spacing: 0.03em;
       pointer-events: none;
+      max-width: 90vw;
+      text-align: center;
     }
-
     .copy-toast.show {
       opacity: 1;
       visibility: visible;
       transform: translateX(-50%) translateY(0);
     }
-
-    /* ---------- 好玩区域 ---------- */
+    /* ---------- 好玩的区域 ---------- */
     .fun-zone {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
-
     .fun-card {
       background: var(--bg-card);
       backdrop-filter: blur(14px);
@@ -693,7 +862,6 @@
       flex-direction: column;
       transition: box-shadow 0.2s, background 0.3s ease, border-color 0.3s ease;
     }
-
     .fun-card-title {
       font-size: 0.8rem;
       font-weight: 600;
@@ -705,13 +873,11 @@
       align-items: center;
       gap: 0.5rem;
     }
-
     .fun-card-title::before {
       content: "▸";
       color: var(--accent);
       font-size: 0.9rem;
     }
-
     .quote-text {
       font-size: 1rem;
       line-height: 1.7;
@@ -720,7 +886,6 @@
       flex: 1;
       min-height: 3.4rem;
     }
-
     .dice-display {
       font-size: 3.5rem;
       text-align: center;
@@ -734,12 +899,11 @@
       line-height: 1;
       user-select: none;
       cursor: pointer;
+      min-height: 80px;
     }
-
     .dice-display.rolling {
       animation: diceRoll 0.4s ease;
     }
-
     @keyframes diceRoll {
       0%   { transform: rotate(0deg) scale(1); }
       25%  { transform: rotate(-18deg) scale(1.15); }
@@ -747,7 +911,6 @@
       75%  { transform: rotate(-8deg) scale(1.08); }
       100% { transform: rotate(0deg) scale(1); }
     }
-
     .egg-area {
       display: flex;
       flex-direction: column;
@@ -756,21 +919,21 @@
       flex: 1;
       gap: 0.8rem;
     }
-
     .egg-face {
       font-size: 3.2rem;
       line-height: 1;
       transition: transform 0.15s;
       cursor: pointer;
       user-select: none;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
     }
-
     .egg-hint {
       font-size: 0.78rem;
       color: var(--text-faint);
       text-align: center;
     }
-
     .fun-btn {
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
@@ -785,8 +948,9 @@
       font-family: 'Monocraft', 'Courier New', monospace;
       text-transform: uppercase;
       letter-spacing: 0.04em;
+      min-height: 40px;
+      align-self: center;
     }
-
     .fun-btn:hover {
       background: var(--accent);
       color: #ffffff;
@@ -794,7 +958,36 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 var(--shadow-color);
     }
-
+    .fun-btn:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
+    /* ---------- 幸运抽签 ---------- */
+    .fortune-result {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-primary);
+      margin-bottom: 1.2rem;
+      min-height: 3.5rem;
+      padding: 0 0.5rem;
+      transition: color 0.3s ease;
+    }
+    .fortune-result.big {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      animation: fortunePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes fortunePop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
     /* ---------- 乐子计数器 ---------- */
     .fun-counter {
       display: flex;
@@ -811,7 +1004,6 @@
       box-shadow: 0 4px 0 var(--shadow-soft);
       flex-wrap: wrap;
     }
-
     .fun-counter .count-num {
       font-size: 1.8rem;
       font-weight: 600;
@@ -819,7 +1011,6 @@
       min-width: 3rem;
       text-align: center;
     }
-
     .fun-counter button {
       background: var(--bg-subtle);
       border: 2px solid var(--border-color);
@@ -832,8 +1023,8 @@
       transition: all 0.2s ease;
       font-family: 'Monocraft', 'Courier New', monospace;
       box-shadow: 0 3px 0 var(--shadow-color);
+      min-height: 40px;
     }
-
     .fun-counter button:hover {
       background: var(--accent);
       color: #ffffff;
@@ -841,26 +1032,26 @@
       transform: translateY(2px);
       box-shadow: 0 1px 0 var(--shadow-color);
     }
-
+    .fun-counter button:active {
+      transform: translateY(3px);
+      box-shadow: none;
+    }
     .fun-counter .fun-label {
       font-size: 0.9rem;
       color: var(--text-secondary);
       font-weight: 400;
     }
-
     #funReset {
       background: transparent;
       color: var(--btn-reset-text);
       box-shadow: none;
     }
-
     #funReset:hover {
       background: var(--accent);
       color: #ffffff;
       box-shadow: none;
       transform: translateY(2px);
     }
-
     /* ---------- 页脚 ---------- */
     .footer {
       margin-top: 3.5rem;
@@ -876,18 +1067,15 @@
       transition: color 0.2s ease;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
-
     .footer:hover {
       color: var(--accent);
     }
-
-    /* ---------- 千万别点区域（页面最下方） ---------- */
+    /* ---------- 千万别点区域 ---------- */
     .danger-section {
       margin-top: 3rem;
       margin-bottom: 2rem;
       text-align: center;
     }
-
     .danger-btn {
       display: inline-flex;
       align-items: center;
@@ -907,25 +1095,23 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       animation: dangerPulse 2s ease-in-out infinite;
+      min-height: 52px;
+      white-space: nowrap;
     }
-
     @keyframes dangerPulse {
       0%, 100% { transform: scale(1); box-shadow: 0 6px 0 var(--danger-dark); }
       50% { transform: scale(1.04); box-shadow: 0 8px 0 var(--danger-dark); }
     }
-
     .danger-btn:hover {
       background: var(--danger-dark);
       transform: translateY(3px);
       box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
       animation: none;
     }
-
     .danger-btn:active {
       transform: translateY(6px);
       box-shadow: 0 0 0 rgba(0, 0, 0, 0.3);
     }
-
     .danger-hint {
       font-size: 0.75rem;
       color: var(--text-faint);
@@ -933,7 +1119,6 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-
     /* 按钮乱飞动画 */
     .flying-btn {
       position: fixed !important;
@@ -942,44 +1127,7 @@
       pointer-events: none;
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
     }
-
-    /* ---------- 响应式 ---------- */
-    @media (max-width: 640px) {
-      .blog { padding: 0 1rem 1.5rem; }
-      .navbar { padding: 1rem 1.2rem; margin: 1rem 0 2rem; border-radius: 2rem; }
-      .hero { padding: 1.4rem 0.8rem 1.6rem; margin-bottom: 2rem; border-radius: 2rem; }
-      .hero-big { font-size: clamp(1.4rem, 10vw, 2.6rem); }
-      .danger-btn { padding: 0.85rem 2rem; font-size: 1rem; }
-      .profile { flex-direction: column; text-align: center; padding: 1.8rem 1.2rem; gap: 1.2rem; border-radius: 2rem; }
-      .avatar { width: 100px; height: 100px; font-size: 1.6rem; }
-      .profile-name { font-size: 1.6rem; }
-      .social { justify-content: center; }
-      .contact-list { justify-content: center; }
-      .fun-list-card, .links-card { padding: 1.5rem 1.2rem; border-radius: 2rem; }
-      .fun-list { flex-direction: column; }
-      .fun-list-item { min-width: auto; }
-      .links-grid { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 0.7rem; }
-      .link-icon { font-size: 1.2rem; }
-      .link-name { font-size: 0.6rem; }
-      .fun-counter { flex-direction: column; gap: 0.7rem; padding: 1.1rem 1.3rem; border-radius: 2rem; }
-      .fun-zone { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 420px) {
-      .nav-links a { padding: 0.4rem 0.85rem; font-size: 0.8rem; border-radius: 1.5rem; }
-      .nav-brand { font-size: 1.1rem; }
-      .fun-counter button { padding: 0.4rem 1.1rem; font-size: 0.8rem; }
-      .contact-list li { font-size: 0.75rem; padding: 0.4rem 0.85rem; }
-      .copy-toast { font-size: 0.8rem; padding: 0.65rem 1.4rem; }
-      .links-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 0.6rem; }
-      .link-item { padding: 0.7rem 0.4rem; min-height: 4.2rem; border-radius: 1.1rem; }
-      .link-name { font-size: 0.55rem; }
-      .danger-btn { padding: 0.75rem 1.6rem; font-size: 0.9rem; }
-    }
-
-    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1rem; }
-
-    /* 返回顶部 */
+    /* ---------- 返回顶部 ---------- */
     .back-to-top {
       position: fixed;
       bottom: 2rem;
@@ -1001,19 +1149,387 @@
       justify-content: center;
       z-index: 100;
     }
-
     .back-to-top.show { opacity: 1; visibility: visible; }
     .back-to-top:hover { background: var(--accent-dark); transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow-color); }
 
-    @media (max-width: 640px) {
-      .back-to-top { bottom: 1.2rem; right: 1.2rem; width: 2.7rem; height: 2.7rem; font-size: 1.1rem; }
+    /* ---------- 平板响应式 ---------- */
+    @media (max-width: 900px) {
+      .wallpaper-panel {
+        width: 380px;
+      }
     }
+    /* ---------- 手机响应式 ---------- */
+    @media (max-width: 640px) {
+      .blog {
+        padding: 0 0.8rem 1.5rem;
+      }
+      .navbar {
+        padding: 0.9rem 1rem;
+        margin: 0.8rem 0 1.6rem;
+        border-radius: 1.8rem;
+        gap: 0.6rem;
+        position: relative;
+        top: 0;
+      }
+      .nav-left {
+        gap: 0.6rem;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        font-size: 1.1rem;
+      }
+      .nav-links {
+        gap: 0.35rem;
+        width: 100%;
+        order: 3;
+        margin-top: 0.2rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .nav-links a {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.75rem;
+        border-radius: 1.4rem;
+        min-height: 36px;
+      }
+      .nav-right {
+        gap: 0.5rem;
+      }
+      .icon-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+      }
+      /* 壁纸面板手机端适配 */
+      .wallpaper-panel {
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        max-width: none;
+        padding: 1.2rem 1rem 1.5rem;
+        border-radius: 1.5rem 1.5rem 0 0;
+        max-height: 80vh;
+        transform: translateY(100%) scale(1);
+        transform-origin: bottom center;
+      }
+      .wallpaper-panel.show {
+        transform: translateY(0) scale(1);
+      }
+      .wallpaper-panel-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+      }
+      .wallpaper-panel-title {
+        font-size: 0.85rem;
+      }
+      .wallpaper-close {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.85rem;
+      }
+      .wallpaper-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.7rem;
+      }
+      .wallpaper-item {
+        border-radius: 1rem;
+        min-height: 90px;
+      }
+      .wallpaper-item-name {
+        font-size: 0.75rem;
+        opacity: 1;
+        bottom: 6px;
+        left: 8px;
+      }
+      .wallpaper-item.active::after {
+        width: 1.3rem;
+        height: 1.3rem;
+        font-size: 0.7rem;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .hero {
+        padding: 1.3rem 0.8rem 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 1.8rem;
+      }
+      .hero-big {
+        font-size: clamp(1.3rem, 9vw, 2.2rem);
+      }
+      .hero-sub {
+        font-size: 0.85rem;
+      }
+      .profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.6rem 1rem;
+        gap: 1rem;
+        border-radius: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .avatar {
+        width: 88px;
+        height: 88px;
+        font-size: 1.5rem;
+      }
+      .profile-name {
+        font-size: 1.5rem;
+      }
+      .profile-tagline {
+        font-size: 0.9rem;
+      }
+      .social {
+        justify-content: center;
+        gap: 0.65rem;
+      }
+      .social a {
+        width: 2.6rem;
+        height: 2.6rem;
+      }
+      .contact-list {
+        justify-content: center;
+        gap: 0.6rem;
+      }
+      .contact-list li {
+        font-size: 0.72rem;
+        padding: 0.45rem 0.8rem;
+        min-height: 38px;
+      }
+      .fun-list-card,
+      .links-card {
+        padding: 1.3rem 1rem;
+        border-radius: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .fun-list {
+        flex-direction: column;
+        gap: 0.7rem;
+      }
+      .fun-list-item {
+        min-width: auto;
+        padding: 0.65rem 1rem;
+        min-height: 48px;
+      }
+      .links-sections {
+        gap: 1.2rem;
+      }
+      .link-section {
+        padding: 1rem 0.9rem 0.9rem;
+        border-radius: 1.4rem;
+      }
+      .link-section-title {
+        font-size: 0.75rem;
+        margin-bottom: 0.8rem;
+      }
+      .link-section-desc {
+        font-size: 0.6rem;
+      }
+      .links-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.6rem;
+      }
+      .link-item {
+        padding: 0.75rem 0.3rem;
+        min-height: 4.5rem;
+        border-radius: 1.1rem;
+        gap: 0.4rem;
+      }
+      .link-icon {
+        font-size: 1.35rem;
+      }
+      .link-name {
+        font-size: 0.6rem;
+      }
+      .fun-zone {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .fun-card {
+        padding: 1.3rem 1.1rem;
+        border-radius: 1.8rem;
+      }
+      .fun-counter {
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: 1rem 1.2rem;
+        border-radius: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .fun-counter .count-num {
+        font-size: 1.6rem;
+      }
+      .fun-counter button {
+        padding: 0.45rem 1.2rem;
+        font-size: 0.88rem;
+        min-height: 38px;
+      }
+      .footer {
+        margin-top: 2.5rem;
+        font-size: 0.8rem;
+        padding-top: 1.5rem;
+      }
+      .danger-section {
+        margin-top: 2.2rem;
+        margin-bottom: 1.5rem;
+      }
+      .danger-btn {
+        padding: 0.85rem 1.8rem;
+        font-size: 0.95rem;
+        min-height: 48px;
+      }
+      .danger-hint {
+        font-size: 0.68rem;
+      }
+      .copy-toast {
+        font-size: 0.8rem;
+        padding: 0.65rem 1.4rem;
+        bottom: 1.5rem;
+        max-width: 90%;
+      }
+      .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 2.6rem;
+        height: 2.6rem;
+        font-size: 1.05rem;
+      }
+    }
+    /* ---------- 小屏手机进一步优化 ---------- */
+    @media (max-width: 420px) {
+      .blog {
+        padding: 0 0.7rem 1.2rem;
+      }
+      .navbar {
+        padding: 0.8rem 0.9rem;
+        border-radius: 1.6rem;
+      }
+      .nav-brand {
+        font-size: 1rem;
+      }
+      .nav-links a {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.7rem;
+      }
+      .icon-btn {
+        width: 2.3rem;
+        height: 2.3rem;
+        font-size: 0.9rem;
+      }
+      .wallpaper-panel {
+        padding: 1rem 0.8rem 1.2rem;
+        border-radius: 1.3rem 1.3rem 0 0;
+      }
+      .wallpaper-grid {
+        gap: 0.6rem;
+      }
+      .wallpaper-item {
+        min-height: 80px;
+        border-radius: 0.9rem;
+      }
+      .wallpaper-item-name {
+        font-size: 0.7rem;
+      }
+      .hero {
+        padding: 1.1rem 0.7rem 1.3rem;
+      }
+      .hero-big {
+        font-size: clamp(1.2rem, 8.5vw, 1.9rem);
+      }
+      .hero-sub {
+        font-size: 0.78rem;
+      }
+      .avatar {
+        width: 78px;
+        height: 78px;
+        font-size: 1.3rem;
+      }
+      .profile-name {
+        font-size: 1.3rem;
+      }
+      .profile-tagline {
+        font-size: 0.82rem;
+      }
+      .contact-list li {
+        font-size: 0.68rem;
+        padding: 0.4rem 0.7rem;
+      }
+      .links-grid {
+        grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+        gap: 0.5rem;
+      }
+      .link-item {
+        padding: 0.65rem 0.25rem;
+        min-height: 4.2rem;
+        border-radius: 1rem;
+      }
+      .link-icon {
+        font-size: 1.2rem;
+      }
+      .link-name {
+        font-size: 0.58rem;
+      }
+      .link-section {
+        padding: 0.85rem 0.75rem 0.75rem;
+        border-radius: 1.2rem;
+      }
+      .link-section-title {
+        font-size: 0.7rem;
+        margin-bottom: 0.8rem;
+      }
+      .link-section-desc {
+        display: none;
+      }
+      .fun-card {
+        padding: 1.1rem 0.95rem;
+      }
+      .fun-card-title {
+        font-size: 0.75rem;
+      }
+      .quote-text {
+        font-size: 0.88rem;
+        min-height: 3rem;
+      }
+      .dice-display {
+        font-size: 3rem;
+        min-height: 70px;
+      }
+      .egg-face {
+        font-size: 2.8rem;
+      }
+      .fun-btn {
+        padding: 0.45rem 1.1rem;
+        font-size: 0.8rem;
+      }
+      .fun-counter button {
+        padding: 0.4rem 1rem;
+        font-size: 0.82rem;
+      }
+      .danger-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.88rem;
+      }
+      .copy-toast {
+        font-size: 0.75rem;
+        padding: 0.6rem 1.2rem;
+      }
+    }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 1rem; }
   </style>
 </head>
 <body>
   <!-- 风景背景层 -->
-  <div class="bg-layer" aria-hidden="true"></div>
-
+  <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
+  <!-- 壁纸选择面板 -->
+  <div class="wallpaper-panel" id="wallpaperPanel">
+    <div class="wallpaper-panel-header">
+      <div class="wallpaper-panel-title">选择壁纸</div>
+      <button class="wallpaper-close" id="wallpaperClose" aria-label="关闭">✕</button>
+    </div>
+    <div class="wallpaper-grid" id="wallpaperGrid"></div>
+  </div>
   <div class="blog">
     <!-- 顶部导航栏 -->
     <nav class="navbar">
@@ -1021,33 +1537,33 @@
         <a href="#" class="nav-brand" id="brandLink">ZYC1145·乐子</a>
         <div class="nav-links">
           <a href="#profile" class="nav-link active" data-target="profile">个人</a>
-          <a href="#social-links" class="nav-link" data-target="social-links">社交链接</a>
+          <a href="#social-links" class="nav-link" data-target="social-links">社交</a>
           <a href="#fun-list" class="nav-link" data-target="fun-list">乐子列表</a>
-          <a href="#links" class="nav-link" data-target="links">实用网页</a>
+          <a href="#links" class="nav-link" data-target="links">乐子网页</a>
+          <a href="#fun-zone" class="nav-link" data-target="fun-zone">好玩的</a>
         </div>
       </div>
-      <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">☾</button>
+      <div class="nav-right">
+        <button class="icon-btn" id="wallpaperBtn" aria-label="更换壁纸" title="更换壁纸">🖼</button>
+        <button class="icon-btn" id="themeToggle" aria-label="切换深色/浅色模式" title="切换主题">☾</button>
+      </div>
     </nav>
-
     <!-- 巨型标语 -->
     <section class="hero">
       <div class="hero-big">欢迎来到乐子网站</div>
       <p class="hero-sub">世界上最乐子网站</p>
     </section>
-
     <!-- 个人资料卡片 -->
     <header class="profile" id="profile">
       <div class="avatar" id="avatarBtn" aria-label="头像">ZYC</div>
       <div class="profile-info">
         <h1 class="profile-name">ZYC1145</h1>
         <p class="profile-tagline">桑晨曦是个<strong>乐子</strong>。</p>
-
         <!-- 社交链接区域 -->
         <div class="social" id="social-links">
           <a href="#" class="social-icon" id="bilibiliBtn" title="Bilibili">B</a>
           <a href="#" class="social-icon" id="githubBtn" title="GitHub">⌨</a>
         </div>
-
         <!-- 联系方式：点击复制 -->
         <div class="contact">
           <div class="contact-title">联系邮箱 · 点击复制</div>
@@ -1068,7 +1584,6 @@
         </div>
       </div>
     </header>
-
     <!-- 乐子列表 -->
     <section class="fun-list-card" id="fun-list">
       <div class="fun-list-title">乐子列表</div>
@@ -1085,27 +1600,26 @@
         </li>
       </ul>
     </section>
-
-    <!-- 实用网页区域 -->
+    <!-- 乐子网页区域（分区展示） -->
     <section class="links-card" id="links">
-      <div class="links-title">实用网页 · 点击跳转</div>
-      <div class="links-grid" id="linksGrid"></div>
+      <div class="links-title">乐子网页 · 分区导航</div>
+      <div class="links-sections" id="linksSections"></div>
     </section>
-
-    <!-- 好玩区域 -->
-    <div class="fun-zone">
+    <!-- 好玩的区域 -->
+    <div class="fun-zone" id="fun-zone">
+      <!-- 乐子格言机 -->
       <div class="fun-card">
         <div class="fun-card-title">乐子格言机</div>
         <div class="quote-text" id="quoteText">点击下方按钮，随机生成一句乐子格言。</div>
         <button class="fun-btn" id="quoteBtn">换一句</button>
       </div>
-
+      <!-- 乐子骰子 -->
       <div class="fun-card">
         <div class="fun-card-title">乐子骰子</div>
         <div class="dice-display" id="diceDisplay">⚀</div>
         <button class="fun-btn" id="diceBtn">掷一下</button>
       </div>
-
+      <!-- 戳戳乐 -->
       <div class="fun-card">
         <div class="fun-card-title">戳戳乐</div>
         <div class="egg-area">
@@ -1113,8 +1627,13 @@
           <div class="egg-hint" id="eggHint">点我试试，看看会变什么脸</div>
         </div>
       </div>
+      <!-- 幸运抽签 -->
+      <div class="fun-card">
+        <div class="fun-card-title">幸运抽签</div>
+        <div class="fortune-result" id="fortuneResult">点击下方按钮，测测今天的运势</div>
+        <button class="fun-btn" id="fortuneBtn">抽一签</button>
+      </div>
     </div>
-
     <!-- 乐子计数器 -->
     <div class="fun-counter">
       <span class="fun-label">今日乐子指数</span>
@@ -1122,27 +1641,20 @@
       <button id="funBtn">+1 乐子</button>
       <button id="funReset">重置</button>
     </div>
-
     <!-- 页脚 -->
     <div class="footer" id="footerText">MC世界第一</div>
-
-    <!-- 千万别点按钮（页面最下方） -->
+    <!-- 千万别点按钮 -->
     <div class="danger-section">
       <button class="danger-btn" id="dangerBtn">⚠ 千万别点 ⚠</button>
       <div class="danger-hint">点了后果自负 · 每次效果不一样</div>
     </div>
   </div>
-
   <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
   <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板</div>
 
   <script>
-    /* ============================================================
-       JavaScript 部分：所有按钮交互、状态管理、数据处理
-       ============================================================ */
     (function() {
       'use strict';
-
       /* ---------- 通用工具函数 ---------- */
       function clickFeedback(el) {
         if (!el) return;
@@ -1150,7 +1662,6 @@
         el.style.transform = 'scale(0.92)';
         setTimeout(() => { el.style.transform = orig; }, 130);
       }
-
       const copyToast = document.getElementById('copyToast');
       let toastTimer = null;
       function showToast(msg) {
@@ -1164,11 +1675,208 @@
       }
 
       /* ============================================================
-         ⚠ 千万别点按钮 —— 三种效果轮换，保证每次不一样
+         壁纸切换功能 - 每次打开自动更换
+         ============================================================ */
+      const wallpapers = [
+        { name: '山脉湖泊', url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1920&q=80' },
+        { name: '森林晨雾', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80' },
+        { name: '海边日落', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80' },
+        { name: '星空银河', url: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1920&q=80' },
+        { name: '雪山', url: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1920&q=80' },
+        { name: '草原', url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80' },
+        { name: '城市夜景', url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=1920&q=80' },
+        { name: '沙漠', url: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1920&q=80' },
+        { name: '樱花', url: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1920&q=80' },
+        { name: '极光', url: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1920&q=80' },
+        { name: '热带海滩', url: 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=1920&q=80' },
+        { name: '富士山', url: 'https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?auto=format&fit=crop&w=1920&q=80' }
+      ];
+      const bgLayer = document.getElementById('bgLayer');
+      const wallpaperBtn = document.getElementById('wallpaperBtn');
+      const wallpaperClose = document.getElementById('wallpaperClose');
+      const wallpaperPanel = document.getElementById('wallpaperPanel');
+      const wallpaperGrid = document.getElementById('wallpaperGrid');
+      let currentWallpaperIdx = 0;
+
+      // 随机获取壁纸索引（避免和当前重复）
+      function getRandomWallpaperIdx() {
+        if (wallpapers.length <= 1) return 0;
+        let idx;
+        do {
+          idx = Math.floor(Math.random() * wallpapers.length);
+        } while (idx === currentWallpaperIdx);
+        return idx;
+      }
+
+      function applyWallpaper(idx) {
+        if (idx < 0 || idx >= wallpapers.length) return;
+        currentWallpaperIdx = idx;
+        if (bgLayer) {
+          bgLayer.style.backgroundImage = `url('${wallpapers[idx].url}')`;
+        }
+        const items = wallpaperGrid.querySelectorAll('.wallpaper-item');
+        items.forEach((item, i) => {
+          item.classList.toggle('active', i === idx);
+        });
+        try {
+          localStorage.setItem('zyc1145_wallpaper', idx);
+        } catch (e) {}
+      }
+
+      // 生成壁纸缩略图
+      if (wallpaperGrid) {
+        wallpapers.forEach((wp, i) => {
+          const item = document.createElement('div');
+          item.className = 'wallpaper-item';
+          item.style.backgroundImage = `url('${wp.url}')`;
+          item.title = wp.name;
+          if (i === currentWallpaperIdx) item.classList.add('active');
+          const nameEl = document.createElement('span');
+          nameEl.className = 'wallpaper-item-name';
+          nameEl.textContent = wp.name;
+          item.appendChild(nameEl);
+          item.addEventListener('click', () => {
+            applyWallpaper(i);
+            showToast('🖼 壁纸已切换：' + wp.name);
+            clickFeedback(item);
+          });
+          wallpaperGrid.appendChild(item);
+        });
+      }
+
+      // ✨ 页面加载自动随机更换壁纸
+      currentWallpaperIdx = getRandomWallpaperIdx();
+      applyWallpaper(currentWallpaperIdx);
+
+      // 打开/关闭面板
+      function openWallpaperPanel() {
+        wallpaperPanel.classList.add('show');
+      }
+      function closeWallpaperPanel() {
+        wallpaperPanel.classList.remove('show');
+      }
+      if (wallpaperBtn) {
+        wallpaperBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (wallpaperPanel.classList.contains('show')) {
+            closeWallpaperPanel();
+          } else {
+            openWallpaperPanel();
+          }
+          clickFeedback(wallpaperBtn);
+        });
+      }
+      if (wallpaperClose) {
+        wallpaperClose.addEventListener('click', closeWallpaperPanel);
+      }
+      // 点击面板外部关闭
+      document.addEventListener('click', (e) => {
+        if (wallpaperPanel.classList.contains('show') &&
+            !wallpaperPanel.contains(e.target) &&
+            e.target !== wallpaperBtn &&
+            !wallpaperBtn.contains(e.target)) {
+          closeWallpaperPanel();
+        }
+      });
+      // ESC 关闭
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && wallpaperPanel.classList.contains('show')) {
+          closeWallpaperPanel();
+        }
+      });
+
+      /* ============================================================
+         鼠标拖尾 —— 仅桌面端
+         ============================================================ */
+      let lastTrailTime = 0;
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (!isTouchDevice) {
+        document.addEventListener('mousemove', (e) => {
+          const now = Date.now();
+          if (now - lastTrailTime < 60) return;
+          lastTrailTime = now;
+          const particle = document.createElement('div');
+          particle.className = 'trail-particle';
+          const size = 4 + Math.floor(Math.random() * 5);
+          particle.style.cssText = `
+            position: fixed;
+            left: ${e.clientX}px;
+            top: ${e.clientY}px;
+            width: ${size}px;
+            height: ${size}px;
+            background: var(--accent);
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 9998;
+            border-radius: 1px;
+            transform: translate(-50%, -50%);
+            animation: trailFade 0.7s ease-out forwards;
+          `;
+          document.body.appendChild(particle);
+          setTimeout(() => {
+            if (particle.parentNode) particle.parentNode.removeChild(particle);
+          }, 700);
+        });
+      }
+      if (!document.getElementById('trailStyle')) {
+        const style = document.createElement('style');
+        style.id = 'trailStyle';
+        style.textContent = `
+          @keyframes trailFade {
+            0% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) translateY(-10px); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      /* ============================================================
+         幸运抽签
+         ============================================================ */
+      const fortuneBtn = document.getElementById('fortuneBtn');
+      const fortuneResult = document.getElementById('fortuneResult');
+      const fortunes = [
+        { text: '🌟 大吉：今天会有好事发生！', big: true },
+        { text: '✨ 中吉：适合摸鱼，效率奇高', big: false },
+        { text: '🍀 小吉：会遇到一个乐子', big: false },
+        { text: '😎 吉：MC 世界第一，你也第一', big: false },
+        { text: '🎮 游戏吉：适合打游戏，上分顺利', big: false },
+        { text: '☕ 摸鱼吉：今天适合多喝热水', big: false },
+        { text: '⛏ 挖矿吉：今天挖矿必出钻石', big: false },
+        { text: '🤣 乐子吉：你会笑到停不下来', big: false },
+        { text: '😐 平平：今天平平无奇，但乐子多', big: false },
+        { text: '🐱 猫猫吉：会遇到一只可爱的猫', big: false },
+        { text: '😱 凶：今天不宜点「千万别点」', big: false },
+        { text: '🌧 小凶：记得带伞，乐子不减', big: false }
+      ];
+      if (fortuneBtn) {
+        fortuneBtn.addEventListener('click', () => {
+          if (!fortuneResult) return;
+          fortuneResult.textContent = '🔮 正在抽取…';
+          fortuneResult.classList.remove('big');
+          let count = 0;
+          const interval = setInterval(() => {
+            const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+            fortuneResult.textContent = randomFortune.text;
+            count++;
+            if (count >= 8) {
+              clearInterval(interval);
+              const finalFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+              fortuneResult.textContent = finalFortune.text;
+              if (finalFortune.big) {
+                fortuneResult.classList.add('big');
+              }
+              showToast('🔮 抽签结果：' + finalFortune.text.slice(0, 12) + '…');
+            }
+          }, 80);
+          clickFeedback(fortuneBtn);
+        });
+      }
+
+      /* ============================================================
+         ⚠ 千万别点按钮 —— 三种效果轮换
          ============================================================ */
       const dangerBtn = document.getElementById('dangerBtn');
-
-      // 三种效果定义
       const dangerEffects = [
         {
           name: 'bilibili',
@@ -1184,29 +1892,23 @@
           run: function() {
             showToast('🌀 完蛋了！所有按钮都飞走了！刷新页面才能恢复');
             document.body.style.pointerEvents = 'none';
-
             const allButtons = document.querySelectorAll(
               'button, .nav-links a, .social a, .email-item, .fun-list-item, ' +
-              '.link-item, .fun-btn, .theme-toggle, .back-to-top, .danger-btn, .nav-brand'
+              '.link-item, .fun-btn, .icon-btn, .back-to-top, .danger-btn, .nav-brand, .wallpaper-item'
             );
-
             const vw = window.innerWidth;
             const vh = window.innerHeight;
-
             allButtons.forEach((btn, i) => {
               const rect = btn.getBoundingClientRect();
-
               btn.classList.add('flying-btn');
               btn.style.left = rect.left + 'px';
               btn.style.top = rect.top + 'px';
               btn.style.width = rect.width + 'px';
               btn.style.height = rect.height + 'px';
               btn.style.margin = '0';
-
               const flyX = (Math.random() - 0.5) * vw * 1.8;
               const flyY = (Math.random() - 0.5) * vh * 1.8;
               const rotate = (Math.random() - 0.5) * 1080;
-
               setTimeout(() => {
                 btn.style.left = (rect.left + flyX) + 'px';
                 btn.style.top = (rect.top + flyY) + 'px';
@@ -1214,7 +1916,6 @@
                 btn.style.opacity = '0.7';
               }, i * 40);
             });
-
             setTimeout(() => {
               document.body.style.pointerEvents = '';
             }, 6000);
@@ -1230,133 +1931,185 @@
           }
         }
       ];
-
-      // 状态：记录上次使用的效果索引 + 打乱后的执行队列
-      let lastDangerIdx = -1;      // 上次用的效果索引
-      let dangerQueue = [];         // 当前轮次剩余的效果索引
-
-      // 重置队列：随机打乱所有效果索引
+      let lastDangerIdx = -1;
+      let dangerQueue = [];
       function resetDangerQueue() {
         dangerQueue = dangerEffects.map((_, idx) => idx);
-        // Fisher-Yates 洗牌
         for (let i = dangerQueue.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [dangerQueue[i], dangerQueue[j]] = [dangerQueue[j], dangerQueue[i]];
         }
       }
-
-      // 初始化队列
       resetDangerQueue();
-
-      // 从队列中取下一个效果，保证不和上次重复
       function getNextDangerIdx() {
-        // 如果队列为空，重新洗牌
-        if (dangerQueue.length === 0) {
-          resetDangerQueue();
-        }
-
-        // 从队首取
+        if (dangerQueue.length === 0) resetDangerQueue();
         let nextIdx = dangerQueue.shift();
-
-        // 如果和上次重复（理论上只在极端情况出现），放回队尾再取一个
         if (nextIdx === lastDangerIdx && dangerQueue.length > 0) {
           dangerQueue.push(nextIdx);
           nextIdx = dangerQueue.shift();
         }
-
         lastDangerIdx = nextIdx;
         return nextIdx;
       }
-
-      // 绑定点击 —— 每次取不同效果
       if (dangerBtn) {
         dangerBtn.addEventListener('click', (e) => {
           e.preventDefault();
-
-          // 按钮抖动反馈
           dangerBtn.style.animation = 'none';
           dangerBtn.style.transform = 'scale(0.9) rotate(-3deg)';
           setTimeout(() => {
             dangerBtn.style.transform = '';
-            // 恢复脉冲动画
             dangerBtn.style.animation = '';
           }, 150);
-
-          // 取出一个本次要执行的效果（保证和上次不同）
           const idx = getNextDangerIdx();
           const effect = dangerEffects[idx];
-
-          // 执行
           if (effect && typeof effect.run === 'function') {
             effect.run();
           }
-
-          // 控制台记录本次效果（方便调试）
           console.log('%c⚠ 千万别点 → 本次效果：' + effect.name, 'color: #d90429; font-weight: bold;');
         });
       }
 
       /* ============================================================
-         实用网页数据 —— 全部平台
+         乐子网页数据
          ============================================================ */
-      const usefulLinks = [
-        // 游戏平台
-        { name: 'Rockstar', icon: 'R', url: 'https://www.rockstargames.com/' },
-        { name: 'Roblox', icon: '◈', url: 'https://www.roblox.com/' },
-        { name: 'Steam', icon: '⛵', url: 'https://store.steampowered.com/' },
-        { name: 'Epic', icon: '◆', url: 'https://www.epicgames.com/' },
-        { name: '育碧', icon: '▲', url: 'https://www.ubisoft.com/' },
-        { name: 'EA', icon: '◉', url: 'https://www.ea.com/' },
-        // 开发 / 技术
-        { name: 'GitHub', icon: '⌨', url: 'https://github.com/zhaoyuecheng999' },
-        { name: 'Cloudflare', icon: '☁', url: 'https://www.cloudflare.com/' },
-        { name: 'DeepSeek', icon: '🐋', url: 'https://www.deepseek.com/' },
-        { name: '豆包', icon: '🫘', url: 'https://www.doubao.com/' },
-        { name: 'NVIDIA', icon: '▣', url: 'https://www.nvidia.com/' },
-        // 系统 / 办公
-        { name: 'Microsoft', icon: '⊞', url: 'https://www.microsoft.com/' },
-        { name: 'Google', icon: 'G', url: 'https://www.google.com/' },
-        { name: 'Google 翻译', icon: '文', url: 'https://translate.google.com/' },
-        // 国内常用
-        { name: '哔哩哔哩', icon: 'B', url: 'https://www.bilibili.com/' },
-        { name: '抖音', icon: '♪', url: 'https://www.douyin.com/' },
-        { name: '百度', icon: '百', url: 'https://www.baidu.com/' },
-        { name: '123云盘', icon: '☁', url: 'https://www.123pan.com/' },
-        // 软件下载
-        { name: '火绒安全', icon: '🛡', url: 'https://www.huorong.cn/' },
-        { name: 'QQ下载', icon: '🐧', url: 'https://im.qq.com/' },
-        { name: '微信下载', icon: '💬', url: 'https://weixin.qq.com/' },
-        // MC 相关
-        { name: 'MC官网', icon: '⛏', url: 'https://www.minecraft.net/' },
-        { name: 'MC Wiki', icon: '📖', url: 'https://minecraft.fandom.com/zh/wiki/Minecraft_Wiki' }
+      const linkSections = [
+        {
+          title: '🎮 游戏平台',
+          desc: '摸鱼好去处',
+          links: [
+            { name: 'Poki', icon: '🕹', url: 'https://poki.com/zh' },
+            { name: 'Steam', icon: '🎮', url: 'https://store.steampowered.com/' },
+            { name: 'PlayStation', icon: '🎯', url: 'https://www.playstation.com/zh-hans-cn/' },
+            { name: '任天堂', icon: '🍄', url: 'https://www.nintendo.com/' },
+            { name: 'WeGame', icon: '👾', url: 'https://www.wegame.com.cn/' },
+            { name: 'Epic', icon: '⚡', url: 'https://www.epicgames.com/' },
+            { name: '4399', icon: '🎲', url: 'https://www.4399.com/' },
+            { name: '7k7k', icon: '🎪', url: 'https://www.7k7k.com/' }
+          ]
+        },
+        {
+          title: '🤖 AI 助手',
+          desc: '智能问答',
+          links: [
+            { name: 'DeepSeek', icon: '🐋', url: 'https://www.deepseek.com/' },
+            { name: '豆包', icon: '🫘', url: 'https://www.doubao.com/' },
+            { name: '通义千问', icon: '💭', url: 'https://tongyi.aliyun.com/' },
+            { name: '文心一言', icon: '🧠', url: 'https://yiyan.baidu.com/' },
+            { name: 'Kimi', icon: '🌙', url: 'https://kimi.moonshot.cn/' }
+          ]
+        },
+        {
+          title: '📺 视频音乐',
+          desc: '影视音乐',
+          links: [
+            { name: '哔哩哔哩', icon: '📺', url: 'https://www.bilibili.com/' },
+            { name: '抖音', icon: '🎵', url: 'https://www.douyin.com/' },
+            { name: '腾讯视频', icon: '▶', url: 'https://v.qq.com/' },
+            { name: '爱奇艺', icon: '🎬', url: 'https://www.iqiyi.com/' },
+            { name: '优酷', icon: '🎥', url: 'https://www.youku.com/' },
+            { name: '芒果TV', icon: '🥭', url: 'https://www.mgtv.com/' },
+            { name: '网易云', icon: '🎧', url: 'https://music.163.com/' },
+            { name: 'QQ音乐', icon: '🎶', url: 'https://y.qq.com/' },
+            { name: '斗鱼', icon: '🐟', url: 'https://www.douyu.com/' },
+            { name: '虎牙', icon: '🐅', url: 'https://www.huya.com/' }
+          ]
+        },
+        {
+          title: '💬 社交社区',
+          desc: '唠嗑冲浪',
+          links: [
+            { name: 'QQ', icon: '🐧', url: 'https://im.qq.com/' },
+            { name: '微信', icon: '💬', url: 'https://weixin.qq.com/' },
+            { name: '微博', icon: '🌐', url: 'https://weibo.com/' },
+            { name: '知乎', icon: '❓', url: 'https://www.zhihu.com/' },
+            { name: '小红书', icon: '📕', url: 'https://www.xiaohongshu.com/' },
+            { name: '豆瓣', icon: '🌱', url: 'https://www.douban.com/' },
+            { name: '贴吧', icon: '💬', url: 'https://tieba.baidu.com/' }
+          ]
+        },
+        {
+          title: '🛒 购物生活',
+          desc: '吃穿住行',
+          links: [
+            { name: '淘宝', icon: '🛒', url: 'https://www.taobao.com/' },
+            { name: '京东', icon: '🛍', url: 'https://www.jd.com/' },
+            { name: '拼多多', icon: '📦', url: 'https://www.pinduoduo.com/' },
+            { name: '饿了么', icon: '🍔', url: 'https://www.ele.me/' },
+            { name: '美团', icon: '🍱', url: 'https://www.meituan.com/' },
+            { name: '携程', icon: '✈', url: 'https://www.ctrip.com/' },
+            { name: '12306', icon: '🚄', url: 'https://www.12306.cn/' },
+            { name: '高德地图', icon: '🗺', url: 'https://www.amap.com/' }
+          ]
+        },
+        {
+          title: '🔧 工具网盘',
+          desc: '实用工具',
+          links: [
+            { name: '百度', icon: '🔍', url: 'https://www.baidu.com/' },
+            { name: '123云盘', icon: '☁', url: 'https://www.123pan.com/' },
+            { name: '百度网盘', icon: '💾', url: 'https://pan.baidu.com/' },
+            { name: '阿里云盘', icon: '📁', url: 'https://www.alipan.com/' },
+            { name: '火绒安全', icon: '🛡', url: 'https://www.huorong.cn/' },
+            { name: 'QQ下载', icon: '⬇', url: 'https://qqdl.gtimg.cn/qqfile/QQNTV2/9.9.36/release/e8e54bbb/QQ_9.9.36_260924_x64_01.exe' },
+            { name: '微信下载', icon: '⬇', url: 'https://dldir1v6.qq.com/weixin/Universal/Windows/WeChatWin_4.1.15.exe' }
+          ]
+        },
+        {
+          title: '💻 开发学习',
+          desc: '代码人生',
+          links: [
+            { name: 'GitHub', icon: '🐙', url: 'https://github.com/zhaoyuecheng999' },
+            { name: 'Gitee', icon: '🐴', url: 'https://gitee.com/' },
+            { name: '掘金', icon: '💎', url: 'https://juejin.cn/' },
+            { name: 'CSDN', icon: '📝', url: 'https://www.csdn.net/' },
+            { name: '博客园', icon: '📔', url: 'https://www.cnblogs.com/' }
+          ]
+        },
+        {
+          title: '⛏ MC 世界',
+          desc: '方块世界',
+          links: [
+            { name: 'MC官网', icon: '⛏', url: 'https://www.minecraft.net/' },
+            { name: 'MC Wiki', icon: '📖', url: 'https://minecraft.fandom.com/zh/wiki/Minecraft_Wiki' }
+          ]
+        }
       ];
-
-      /* ---------- 动态生成实用网页网格 ---------- */
-      const linksGrid = document.getElementById('linksGrid');
-      if (linksGrid) {
-        usefulLinks.forEach(link => {
-          const a = document.createElement('a');
-          a.href = '#';
-          a.className = 'link-item';
-          a.title = link.name;
-          a.setAttribute('data-url', link.url);
-          a.setAttribute('data-name', link.name);
-
-          const icon = document.createElement('span');
-          icon.className = 'link-icon';
-          icon.textContent = link.icon;
-
-          const name = document.createElement('span');
-          name.className = 'link-name';
-          name.textContent = link.name;
-
-          a.appendChild(icon);
-          a.appendChild(name);
-          linksGrid.appendChild(a);
+      const linksSections = document.getElementById('linksSections');
+      if (linksSections) {
+        linkSections.forEach(section => {
+          const sectionEl = document.createElement('div');
+          sectionEl.className = 'link-section';
+          const titleEl = document.createElement('div');
+          titleEl.className = 'link-section-title';
+          titleEl.textContent = section.title;
+          const descEl = document.createElement('span');
+          descEl.className = 'link-section-desc';
+          descEl.textContent = section.desc;
+          titleEl.appendChild(descEl);
+          const gridEl = document.createElement('div');
+          gridEl.className = 'links-grid';
+          section.links.forEach(link => {
+            const a = document.createElement('a');
+            a.href = '#';
+            a.className = 'link-item';
+            a.title = link.name;
+            a.setAttribute('data-url', link.url);
+            a.setAttribute('data-name', link.name);
+            const icon = document.createElement('span');
+            icon.className = 'link-icon';
+            icon.textContent = link.icon;
+            const name = document.createElement('span');
+            name.className = 'link-name';
+            name.textContent = link.name;
+            a.appendChild(icon);
+            a.appendChild(name);
+            gridEl.appendChild(a);
+          });
+          sectionEl.appendChild(titleEl);
+          sectionEl.appendChild(gridEl);
+          linksSections.appendChild(sectionEl);
         });
       }
-
-      /* ---------- 绑定实用网页点击事件 ---------- */
       const linkItems = document.querySelectorAll('.link-item');
       linkItems.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -1373,11 +2126,10 @@
       });
 
       /* ============================================================
-         按钮 1：主题切换
+         主题切换
          ============================================================ */
       const themeToggle = document.getElementById('themeToggle');
       const htmlEl = document.documentElement;
-
       function getInitialTheme() {
         try {
           const saved = localStorage.getItem('zyc1145_theme');
@@ -1388,7 +2140,6 @@
         }
         return 'light';
       }
-
       function applyTheme(theme) {
         if (theme === 'dark') {
           htmlEl.classList.add('dark');
@@ -1405,10 +2156,8 @@
         }
         try { localStorage.setItem('zyc1145_theme', theme); } catch (e) {}
       }
-
       let currentTheme = getInitialTheme();
       applyTheme(currentTheme);
-
       if (themeToggle) {
         themeToggle.addEventListener('click', () => {
           currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1416,7 +2165,6 @@
           clickFeedback(themeToggle);
         });
       }
-
       if (window.matchMedia) {
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
           let saved = null;
@@ -1429,7 +2177,7 @@
       }
 
       /* ============================================================
-         按钮 2：导航
+         导航
          ============================================================ */
       const navLinks = document.querySelectorAll('.nav-link');
       navLinks.forEach(link => {
@@ -1446,7 +2194,7 @@
       });
 
       /* ============================================================
-         按钮 3：品牌标识 —— 回到顶部
+         品牌标识 —— 回到顶部
          ============================================================ */
       const brandLink = document.getElementById('brandLink');
       if (brandLink) {
@@ -1457,12 +2205,11 @@
       }
 
       /* ============================================================
-         按钮 4：头像 —— 切换表情
+         头像 —— 切换表情
          ============================================================ */
       const avatarBtn = document.getElementById('avatarBtn');
       const avatarFaces = ['ZYC', '乐子', '(≧▽≦)', 'MC', '嗨！', 'ZYC', '桑晨曦', '^_^'];
       let avatarIdx = 0;
-
       if (avatarBtn) {
         avatarBtn.addEventListener('click', () => {
           avatarIdx = (avatarIdx + 1) % avatarFaces.length;
@@ -1473,7 +2220,7 @@
       }
 
       /* ============================================================
-         按钮 5：Bilibili 社交图标
+         Bilibili 社交图标
          ============================================================ */
       const bilibiliBtn = document.getElementById('bilibiliBtn');
       if (bilibiliBtn) {
@@ -1488,7 +2235,7 @@
       }
 
       /* ============================================================
-         按钮 6：GitHub 社交图标
+         GitHub 社交图标
          ============================================================ */
       const githubBtn = document.getElementById('githubBtn');
       if (githubBtn) {
@@ -1503,14 +2250,13 @@
       }
 
       /* ============================================================
-         按钮 7：邮箱 —— 点击复制
+         邮箱 —— 点击复制
          ============================================================ */
       const emailItems = document.querySelectorAll('.email-item');
       emailItems.forEach(item => {
         item.addEventListener('click', async () => {
           const email = item.getAttribute('data-email');
           if (!email) return;
-
           let copied = false;
           if (navigator.clipboard && navigator.clipboard.writeText) {
             try {
@@ -1520,7 +2266,6 @@
               copied = false;
             }
           }
-
           if (!copied) {
             const ta = document.createElement('textarea');
             ta.value = email;
@@ -1536,7 +2281,6 @@
             }
             document.body.removeChild(ta);
           }
-
           if (copied) {
             showToast('✓ 已复制：' + email);
           } else {
@@ -1547,7 +2291,7 @@
       });
 
       /* ============================================================
-         按钮 8：乐子列表项 —— 点击弹出提示
+         乐子列表项
          ============================================================ */
       const funListItems = document.querySelectorAll('.fun-list-item');
       funListItems.forEach(item => {
@@ -1566,7 +2310,7 @@
       });
 
       /* ============================================================
-         按钮 9：乐子格言机
+         乐子格言机
          ============================================================ */
       const quotes = [
         '看到的都是给，给出去的都是乐子。',
@@ -1586,11 +2330,9 @@
         '摸鱼是对生活最基本的尊重。',
         'MC 世界第一，不接受反驳。'
       ];
-
       const quoteText = document.getElementById('quoteText');
       const quoteBtn = document.getElementById('quoteBtn');
       let lastQuoteIdx = -1;
-
       function randomQuote() {
         if (!quoteText) return;
         let idx;
@@ -1600,7 +2342,6 @@
         lastQuoteIdx = idx;
         quoteText.textContent = '「' + quotes[idx] + '」';
       }
-
       if (quoteBtn) {
         quoteBtn.addEventListener('click', () => {
           randomQuote();
@@ -1610,18 +2351,16 @@
       randomQuote();
 
       /* ============================================================
-         按钮 10：乐子骰子
+         乐子骰子
          ============================================================ */
       const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
       const diceDisplay = document.getElementById('diceDisplay');
       const diceBtn = document.getElementById('diceBtn');
       let diceRolling = false;
-
       function rollDice() {
         if (!diceDisplay || diceRolling) return;
         diceRolling = true;
         diceDisplay.classList.add('rolling');
-
         let count = 0;
         const totalRolls = 9;
         const interval = setInterval(() => {
@@ -1638,7 +2377,6 @@
           }
         }, 60);
       }
-
       if (diceBtn) {
         diceBtn.addEventListener('click', () => {
           rollDice();
@@ -1650,7 +2388,7 @@
       }
 
       /* ============================================================
-         按钮 11：戳戳乐
+         戳戳乐
          ============================================================ */
       const eggFaces = [
         '(≧▽≦)', '(๑•̀ㅂ•́)و✧', '( ͡° ͜ʖ ͡°)', '(╯°□°）╯︵ ┻━┻',
@@ -1670,17 +2408,14 @@
         '继续，别停',
         '点这里会有好事发生'
       ];
-
       const eggFace = document.getElementById('eggFace');
       const eggHint = document.getElementById('eggHint');
       let eggCount = 0;
-
       function changeEggFace() {
         if (!eggFace) return;
         eggCount++;
         const idx = Math.floor(Math.random() * eggFaces.length);
         eggFace.textContent = eggFaces[idx];
-
         if (eggHint) {
           if (eggCount % 5 === 0) {
             eggHint.textContent = '你已经戳了 ' + eggCount + ' 次，乐子人实锤！';
@@ -1689,27 +2424,23 @@
             eggHint.textContent = eggHints[hIdx];
           }
         }
-
         eggFace.style.transform = 'scale(0.85)';
         setTimeout(() => { eggFace.style.transform = ''; }, 130);
       }
-
       if (eggFace) {
         eggFace.addEventListener('click', changeEggFace);
       }
 
       /* ============================================================
-         按钮 12：乐子计数器 —— 每次刷新后重置
+         乐子计数器
          ============================================================ */
       const funCountEl = document.getElementById('funCount');
       const funBtn = document.getElementById('funBtn');
       const funReset = document.getElementById('funReset');
       let funCount = 0;
-
       function updateFunDisplay() {
         if (funCountEl) funCountEl.textContent = funCount;
       }
-
       if (funBtn) {
         funBtn.addEventListener('click', () => {
           funCount += 1;
@@ -1717,7 +2448,6 @@
           clickFeedback(funBtn);
         });
       }
-
       if (funReset) {
         funReset.addEventListener('click', () => {
           funCount = 0;
@@ -1726,11 +2456,10 @@
           showToast('🔄 乐子指数已重置');
         });
       }
-
       updateFunDisplay();
 
       /* ============================================================
-         按钮 13：页脚 —— 点击触发小彩蛋
+         页脚 —— 点击触发小彩蛋
          ============================================================ */
       const footerText = document.getElementById('footerText');
       const footerMessages = [
@@ -1742,7 +2471,6 @@
         'MC世界第一，不接受反驳'
       ];
       let footerIdx = 0;
-
       if (footerText) {
         footerText.addEventListener('click', () => {
           footerIdx = (footerIdx + 1) % footerMessages.length;
@@ -1752,7 +2480,7 @@
       }
 
       /* ============================================================
-         按钮 14：返回顶部
+         返回顶部
          ============================================================ */
       const backToTop = document.getElementById('backToTop');
       if (backToTop) {
@@ -1763,7 +2491,6 @@
             backToTop.classList.remove('show');
           }
         });
-
         backToTop.addEventListener('click', () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
           clickFeedback(backToTop);
@@ -1775,10 +2502,13 @@
          ============================================================ */
       console.log('%c🎉 ZYC1145 · 乐子博客已加载！', 'font-size: 16px; font-weight: bold; color: #1b4332;');
       console.log('%c欢迎来到乐子网站，世界上最乐子网站。', 'font-size: 13px; color: #4e6b5e;');
+      console.log('%c🌐 乐子网页已分区展示，共 ' + linkSections.length + ' 个分区', 'font-size: 12px; color: #40916c; font-weight: bold;');
+      console.log('%c🎮 游戏平台新增：PlayStation / 任天堂', 'font-size: 12px; color: #40916c; font-weight: bold;');
+      console.log('%c🖼 每次打开自动更换壁纸', 'font-size: 12px; color: #40916c; font-weight: bold;');
+      console.log('%c📱 手机端已深度优化', 'font-size: 12px; color: #40916c; font-weight: bold;');
       console.log('%c⚠️ 「千万别点」每次效果不同（B站 / 按钮乱飞 / Steam 轮换）', 'font-size: 12px; color: #d90429; font-weight: bold;');
-      console.log('%c✅ 实用网页共 ' + usefulLinks.length + ' 个（含 123 云盘），点击即可跳转', 'font-size: 12px; color: #6b8a7a;');
-
     })();
   </script>
 </body>
 </html>
+<!-- （注：内容由AI生成） -->
