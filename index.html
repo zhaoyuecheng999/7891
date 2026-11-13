@@ -345,8 +345,7 @@ html.dark{color-scheme:dark}
   --glass-inset-border:rgba(255,255,255,.54);
   --glass-shadow:0 24px 64px rgba(18,48,33,.16),0 3px 14px rgba(18,48,33,.08);
   --glass-inner:inset 0 1px 0 rgba(255,255,255,.96),inset 0 -1px 0 rgba(255,255,255,.20),inset 0 0 42px rgba(255,255,255,.08);
-  --glass-blur:blur(34px) saturate(185%);
-  --glass-blur-small:blur(16px) saturate(160%);
+  --glass-blur:blur(26px) saturate(175%);
 }
 html.dark{
   --glass-bg:linear-gradient(145deg,rgba(22,42,33,.76) 0%,rgba(18,34,28,.44) 48%,rgba(22,42,33,.64) 100%);
@@ -358,13 +357,6 @@ html.dark{
   --glass-inset-border:rgba(150,230,190,.20);
   --glass-shadow:0 24px 64px rgba(0,0,0,.48),0 3px 14px rgba(0,0,0,.28);
   --glass-inner:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.30),inset 0 0 42px rgba(82,183,136,.05);
-}
-
-/* The fixed noise layer adds the slightly frosted texture of acrylic. */
-body::before{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.16;
-  background-image:radial-gradient(rgba(255,255,255,.45) .45px,transparent .55px);
-  background-size:4px 4px;mix-blend-mode:soft-light;
 }
 
 .navbar,.hero,.profile,.tools-card,.links-card,.fun-card,.fun-counter,.wallpaper-panel{
@@ -382,8 +374,6 @@ body::before{
   background:var(--glass-inset-bg);
   border:1px solid var(--glass-inset-border);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 8px 24px rgba(18,48,33,.07);
-  backdrop-filter:var(--glass-blur-small);
-  -webkit-backdrop-filter:var(--glass-blur-small);
 }
 html.dark .tool-card,html.dark .link-section{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 24px rgba(0,0,0,.20);
@@ -393,9 +383,8 @@ html.dark .tool-card,html.dark .link-section{
   background:var(--glass-button-bg);
   border-color:var(--glass-border);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 4px 12px rgba(18,48,33,.10);
-  backdrop-filter:blur(12px) saturate(150%);
-  -webkit-backdrop-filter:blur(12px) saturate(150%);
 }
+.icon-btn.bili-btn{animation:none}
 .tool-input{
   background:var(--glass-input-bg);
   border-color:var(--glass-border);
@@ -444,30 +433,32 @@ html.dark .tool-input{box-shadow:inset 0 1px 2px rgba(0,0,0,.25),inset 0 1px 0 r
   .brand-text{font-size:.9rem}
 }
 
-/* New utility cards */
-.tool-textarea{
-  resize:vertical;min-height:5.4rem;line-height:1.55;padding:.6rem .9rem;
-}
-.tool-inline{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
-.tool-inline-label{display:inline-flex;align-items:center;gap:.5rem;font-size:.76rem;font-weight:700;color:var(--text-muted)}
-.tool-input-short{width:5.6rem;padding:.42rem .55rem;text-align:center}
-.code-output{
-  white-space:pre-wrap;word-break:break-word;overflow:auto;max-height:13rem;
-  background:rgba(255,255,255,.32);border:1px solid rgba(255,255,255,.42);
-  border-radius:.8rem;padding:.6rem;font-size:.76rem;line-height:1.55;
-}
-html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,.16)}
-.code-output:empty{display:none}
-.result-code{word-break:break-all;font-size:.8rem}
 .error-text{color:var(--danger)!important}
-.password-value{
-  font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-size:.92rem;
-  letter-spacing:.03em;cursor:pointer;user-select:all;
+#utf8Result strong{word-break:break-all}
+
+/* Shuffle prank: the layout is moved with composited transforms, never with
+   left/top, and it deliberately persists until the page is refreshed. */
+.flying-btn{
+  position:relative!important;
+  z-index:2!important;
+  transition:transform .85s cubic-bezier(.34,1.56,.64,1)!important,opacity .45s ease!important;
+  pointer-events:none!important;
+  filter:none!important;
 }
-.password-value:empty{display:none}
+.prank-banner{
+  display:none;position:fixed;left:50%;bottom:2rem;z-index:10001;
+  transform:translateX(-50%);align-items:center;gap:.7rem;
+  max-width:calc(100vw - 2rem);padding:.85rem 1.35rem;border-radius:999px;
+  background:rgba(10,25,18,.94);border:1px solid rgba(149,213,178,.55);
+  color:#f0fdf4;box-shadow:0 16px 40px rgba(0,0,0,.35);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  pointer-events:none;text-align:center;white-space:nowrap;
+}
+.prank-banner strong{font-size:.9rem;letter-spacing:.04em}
+.prank-banner span{font-size:.78rem;color:#b7e4c7}
+body.prank-mode .prank-banner{display:flex}
 @media (max-width:640px){
-  .code-output{max-height:10rem}
-  .tool-input-short{width:5rem}
+  .prank-banner{flex-direction:column;gap:.2rem;white-space:normal;bottom:1rem;padding:.8rem 1.1rem}
 }
 
 </style>
@@ -530,11 +521,6 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
 <svg class="icon icon-mail" aria-hidden="true" focusable="false"><use href="#i-envelope"></use></svg>
 <span class="mail-text">leikamnodine@gmail.com</span>
 </li>
-<li class="email-item" data-email="2205852364@qq.com" title="点击复制">
-<svg class="icon icon-mail" aria-hidden="true" focusable="false"><use href="#i-envelope"></use></svg>
-<span class="mail-text">leikamnodine@gmail.com</span>
-
-</li>
 </ul>
 </div>
 </div>
@@ -571,55 +557,14 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
 <div class="tool-hint">自动识别：SOS ↔ ... --- ...</div>
 </div>
 <div class="tool-card">
-<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-right-left"></use></svg> 文本反转（双向）</div>
-<input type="text" class="tool-input" id="reverseInput" placeholder="输入任意文字" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="要反转的文字">
-<button type="button" class="tool-btn" id="reverseBtn">反转文字</button>
-<div class="tool-result" id="reverseResult" role="status" aria-live="polite"></div>
-<div class="tool-hint">再点一次可反转回来</div>
-</div>
-<div class="tool-card">
-<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg> URL 编码 / 解码</div>
-<input type="text" class="tool-input" id="urlInput" placeholder="网址 / 中文 / 编码字符串" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="要编码或解码的 URL 文本">
+<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-language"></use></svg> UTF-8 转换</div>
+<input type="text" class="tool-input" id="utf8Input" placeholder="输入文字，或 E4 B9 90 字节" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="要编码或解码的 UTF-8 内容">
 <div class="tool-btn-row">
-<button type="button" class="tool-btn" id="urlEncodeBtn">编码</button>
-<button type="button" class="tool-btn" id="urlDecodeBtn">解码</button>
+<button type="button" class="tool-btn" id="utf8EncodeBtn">文字 → UTF-8</button>
+<button type="button" class="tool-btn" id="utf8DecodeBtn">UTF-8 → 文字</button>
 </div>
-<div class="tool-result" id="urlResult" role="status" aria-live="polite"></div>
-<div class="tool-hint">适合中文链接、搜索参数和表单内容</div>
-</div>
-<div class="tool-card">
-<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg> 时间戳转换</div>
-<input type="text" class="tool-input" id="tsInput" placeholder="时间戳 / 日期时间" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="要转换的 Unix 时间戳或日期">
-<div class="tool-btn-row">
-<button type="button" class="tool-btn" id="tsConvertBtn">转换时间</button>
-<button type="button" class="tool-btn" id="tsNowBtn">当前时间</button>
-</div>
-<div class="tool-result" id="tsResult" role="status" aria-live="polite"></div>
-<div class="tool-hint">支持 10 位秒级 / 13 位毫秒级时间戳和日期</div>
-</div>
-<div class="tool-card">
-<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"></use></svg> JSON 格式化</div>
-<textarea class="tool-input tool-textarea" id="jsonInput" rows="4" placeholder='{"name":"乐子","ok":true}' spellcheck="false" aria-label="要格式化或压缩的 JSON"></textarea>
-<div class="tool-btn-row">
-<button type="button" class="tool-btn" id="jsonFormatBtn">格式化</button>
-<button type="button" class="tool-btn" id="jsonMinifyBtn">压缩</button>
-</div>
-<pre class="tool-result code-output" id="jsonResult" role="status" aria-live="polite"></pre>
-<div class="tool-hint">本地解析，不会上传任何内容</div>
-</div>
-<div class="tool-card">
-<div class="tool-label"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-fingerprint"></use></svg> 密码 / UUID</div>
-<div class="tool-inline">
-<label class="tool-inline-label" for="passwordLength">长度
-<input type="number" class="tool-input tool-input-short" id="passwordLength" min="8" max="64" value="20" inputmode="numeric" aria-label="密码长度">
-</label>
-</div>
-<div class="tool-btn-row">
-<button type="button" class="tool-btn" id="passwordBtn">生成密码</button>
-<button type="button" class="tool-btn" id="uuidBtn">生成 UUID</button>
-</div>
-<div class="tool-result password-value" id="passwordResult" role="status" aria-live="polite" title="点击复制">点击生成，结果可点击复制</div>
-<div class="tool-hint">使用浏览器安全随机数，密码不会上传</div>
+<div class="tool-result" id="utf8Result" role="status" aria-live="polite"></div>
+<div class="tool-hint">十六进制字节，如“乐” → E4 B9 90；支持空格 / 0x / \x</div>
 </div>
 </div>
 </section>
@@ -661,10 +606,11 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
 <div class="footer" id="footerText">MC世界第一</div>
 <div class="danger-section">
 <button type="button" class="danger-btn" id="dangerBtn"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg> 千万别点 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg></button>
-<div class="danger-hint">点了后果自负 · 每次效果不一样</div>
+<div class="danger-hint">点了后果自负 · 每次效果不一样 · 打乱后刷新恢复</div>
 </div>
 </div>
 <button type="button" class="back-to-top" id="backToTop" aria-label="返回顶部"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg></button>
+<div class="prank-banner" id="prankBanner" role="status" aria-live="assertive"><strong>🌀 页面已被打乱</strong><span>刷新页面（F5 / Ctrl+R）即可恢复</span></div>
 <div class="copy-toast" id="copyToast" role="status" aria-live="polite">✓ 已复制到剪贴板</div>
 <script>
 (function () {
@@ -806,7 +752,16 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
   }
 
   updateTime();
-  window.setInterval(updateTime, 1000);
+  let clockTimer = window.setInterval(updateTime, 1000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      window.clearInterval(clockTimer);
+      clockTimer = 0;
+    } else if (!clockTimer) {
+      updateTime();
+      clockTimer = window.setInterval(updateTime, 1000);
+    }
+  });
 
   /* ------------------------------------------------------------------ */
   /* Number base converter                                               */
@@ -1063,288 +1018,82 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
   }
 
   /* ------------------------------------------------------------------ */
-  /* Text reverse (grapheme-aware so emoji stay intact)                  */
+  /* UTF-8 converter                                                     */
   /* ------------------------------------------------------------------ */
-  const reverseInput = $('reverseInput');
-  const reverseBtn = $('reverseBtn');
-  const reverseResult = $('reverseResult');
-  let segmenter = null;
-  try {
-    if (window.Intl && Intl.Segmenter) segmenter = new Intl.Segmenter('zh-CN', { granularity: 'grapheme' });
-  } catch (error) { segmenter = null; }
+  const utf8Input = $('utf8Input');
+  const utf8EncodeBtn = $('utf8EncodeBtn');
+  const utf8DecodeBtn = $('utf8DecodeBtn');
+  const utf8Result = $('utf8Result');
 
-  function reverseText(text) {
-    if (segmenter) {
-      return Array.from(segmenter.segment(text), function (part) { return part.segment; })
-        .reverse().join('');
+  function bytesToHex(bytes) {
+    return Array.from(bytes, function (byte) {
+      return byte.toString(16).padStart(2, '0').toUpperCase();
+    }).join(' ');
+  }
+
+  function parseUtf8Bytes(raw) {
+    const cleaned = raw.replace(/0x/gi, ' ').replace(/\\x/gi, ' ').replace(/[^0-9a-fA-F]/g, '');
+    if (!cleaned) throw new Error('empty');
+    if (cleaned.length % 2 !== 0) throw new Error('odd');
+    const bytes = [];
+    for (let i = 0; i < cleaned.length; i += 2) {
+      bytes.push(parseInt(cleaned.slice(i, i + 2), 16));
     }
-    return Array.from(text).reverse().join('');
+    return new Uint8Array(bytes);
   }
 
-  if (reverseBtn && reverseInput && reverseResult) {
-    reverseBtn.addEventListener('click', function () {
-      const raw = reverseInput.value;
-      if (!raw) {
-        reverseResult.innerHTML = '<strong>请输入文字</strong>';
+  function showUtf8Error(message) {
+    if (!utf8Result) return;
+    utf8Result.classList.add('error-text');
+    utf8Result.innerHTML = '<strong>' + message + '</strong>';
+  }
+
+  if (utf8EncodeBtn && utf8Input && utf8Result) {
+    utf8EncodeBtn.addEventListener('click', function () {
+      const text = utf8Input.value;
+      if (!text) {
+        showUtf8Error('请输入要编码的文字');
         return;
       }
-      const reversed = reverseText(raw);
-      reverseResult.innerHTML = '<strong>' + escapeHTML(reversed) + '</strong>';
-      reverseInput.value = reversed;
-      clickFeedback(reverseBtn);
-    });
-    reverseInput.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') reverseBtn.click();
+      utf8Result.classList.remove('error-text');
+      const bytes = new TextEncoder().encode(text);
+      const hex = bytesToHex(bytes);
+      const percent = Array.from(bytes, function (byte) {
+        return '%' + byte.toString(16).padStart(2, '0').toUpperCase();
+      }).join('');
+      utf8Result.innerHTML = '十六进制: <strong>' + hex + '</strong><br>' +
+        '字节数: <strong>' + bytes.length + '</strong><br>' +
+        '百分号编码: <strong>' + percent + '</strong>';
+      clickFeedback(utf8EncodeBtn);
     });
   }
 
-  /* ------------------------------------------------------------------ */
-  /* URL encoder / decoder                                               */
-  /* ------------------------------------------------------------------ */
-  const urlInput = $('urlInput');
-  const urlEncodeBtn = $('urlEncodeBtn');
-  const urlDecodeBtn = $('urlDecodeBtn');
-  const urlResult = $('urlResult');
-
-  function showUrlResult(label, value, isError) {
-    if (!urlResult) return;
-    urlResult.classList.toggle('error-text', !!isError);
-    urlResult.innerHTML = '<strong>' + label + '</strong><br><span class="result-code">' +
-      escapeHTML(value) + '</span>';
-  }
-
-  if (urlEncodeBtn && urlInput && urlResult) {
-    urlEncodeBtn.addEventListener('click', function () {
-      const raw = urlInput.value;
+  if (utf8DecodeBtn && utf8Input && utf8Result) {
+    utf8DecodeBtn.addEventListener('click', function () {
+      const raw = utf8Input.value.trim();
       if (!raw) {
-        showUrlResult('请输入内容', '支持中文、空格和查询参数', true);
-        return;
-      }
-      try {
-        showUrlResult('URL 编码结果', encodeURIComponent(raw), false);
-        clickFeedback(urlEncodeBtn);
-      } catch (error) {
-        showUrlResult('编码失败', '输入中包含无法编码的字符', true);
-      }
-    });
-  }
-  if (urlDecodeBtn && urlInput && urlResult) {
-    urlDecodeBtn.addEventListener('click', function () {
-      const raw = urlInput.value.trim();
-      if (!raw) {
-        showUrlResult('请输入内容', '例如 %E4%B9%90%E5%AD%90', true);
+        showUtf8Error('请输入 UTF-8 十六进制字节');
         return;
       }
       try {
-        showUrlResult('URL 解码结果', decodeURIComponent(raw.replace(/\+/g, '%20')), false);
-        clickFeedback(urlDecodeBtn);
+        const bytes = parseUtf8Bytes(raw);
+        const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+        utf8Result.classList.remove('error-text');
+        utf8Result.innerHTML = '解码结果: <strong>' + escapeHTML(text) + '</strong><br>' +
+          '字节数: <strong>' + bytes.length + '</strong>';
+        clickFeedback(utf8DecodeBtn);
       } catch (error) {
-        showUrlResult('解码失败', '这不是有效的 URL 编码字符串', true);
+        showUtf8Error('不是有效的 UTF-8 字节序列，请检查十六进制内容');
       }
     });
   }
-  [urlInput, urlEncodeBtn].forEach(function (el) {
+
+  [utf8Input, utf8EncodeBtn].forEach(function (el) {
     if (!el) return;
     el.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' && urlEncodeBtn) urlEncodeBtn.click();
+      if (event.key === 'Enter' && utf8EncodeBtn) utf8EncodeBtn.click();
     });
   });
-
-  /* ------------------------------------------------------------------ */
-  /* Unix timestamp converter                                            */
-  /* ------------------------------------------------------------------ */
-  const tsInput = $('tsInput');
-  const tsConvertBtn = $('tsConvertBtn');
-  const tsNowBtn = $('tsNowBtn');
-  const tsResult = $('tsResult');
-
-  function formatDateTime(date) {
-    const pad = function (value) { return String(value).padStart(2, '0'); };
-    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) +
-      ' ' + pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds());
-  }
-
-  function convertTimestamp() {
-    if (!tsInput || !tsResult) return;
-    const raw = tsInput.value.trim();
-    if (!raw) {
-      tsResult.innerHTML = '<strong>请输入时间戳或日期</strong><br>例如 1761900000 或 2026-10-31 18:30:00';
-      return;
-    }
-    let date;
-    if (/^\d{10,13}$/.test(raw)) {
-      const numeric = Number(raw);
-      date = new Date(raw.length <= 10 ? numeric * 1000 : numeric);
-    } else if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
-      date = new Date(raw + 'T00:00:00');
-    } else {
-      date = new Date(raw.replace(' ', 'T'));
-    }
-    if (Number.isNaN(date.getTime())) {
-      tsResult.innerHTML = '<strong>无法识别</strong><br>请输入 10/13 位时间戳，或 2026-10-31 18:30:00 格式';
-      return;
-    }
-    const seconds = Math.floor(date.getTime() / 1000);
-    const millis = date.getTime();
-    tsResult.innerHTML =
-      '本地时间: <strong>' + formatDateTime(date) + '</strong><br>' +
-      'ISO 8601: <strong>' + escapeHTML(date.toISOString()) + '</strong><br>' +
-      'Unix 秒: <strong>' + seconds + '</strong><br>' +
-      'Unix 毫秒: <strong>' + millis + '</strong>';
-    clickFeedback(tsConvertBtn);
-  }
-
-  if (tsConvertBtn) tsConvertBtn.addEventListener('click', convertTimestamp);
-  if (tsNowBtn && tsInput) {
-    tsNowBtn.addEventListener('click', function () {
-      tsInput.value = String(Math.floor(Date.now() / 1000));
-      convertTimestamp();
-      clickFeedback(tsNowBtn);
-    });
-  }
-  [tsInput, tsConvertBtn].forEach(function (el) {
-    if (!el) return;
-    el.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') convertTimestamp();
-    });
-  });
-
-  /* ------------------------------------------------------------------ */
-  /* JSON formatter                                                      */
-  /* ------------------------------------------------------------------ */
-  const jsonInput = $('jsonInput');
-  const jsonFormatBtn = $('jsonFormatBtn');
-  const jsonMinifyBtn = $('jsonMinifyBtn');
-  const jsonResult = $('jsonResult');
-
-  function formatJson(minify) {
-    if (!jsonInput || !jsonResult) return;
-    const raw = jsonInput.value.trim();
-    jsonResult.classList.remove('error-text');
-    if (!raw) {
-      jsonResult.textContent = '请输入 JSON 内容';
-      jsonResult.classList.add('error-text');
-      return;
-    }
-    try {
-      const parsed = JSON.parse(raw);
-      jsonResult.textContent = JSON.stringify(parsed, null, minify ? 0 : 2);
-      clickFeedback(minify ? jsonMinifyBtn : jsonFormatBtn);
-    } catch (error) {
-      jsonResult.textContent = 'JSON 解析失败：' + error.message;
-      jsonResult.classList.add('error-text');
-    }
-  }
-
-  if (jsonFormatBtn) jsonFormatBtn.addEventListener('click', function () { formatJson(false); });
-  if (jsonMinifyBtn) jsonMinifyBtn.addEventListener('click', function () { formatJson(true); });
-  if (jsonInput) {
-    jsonInput.addEventListener('keydown', function (event) {
-      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') {
-        event.preventDefault();
-        formatJson(false);
-      }
-    });
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Password / UUID generator                                           */
-  /* ------------------------------------------------------------------ */
-  const passwordLength = $('passwordLength');
-  const passwordBtn = $('passwordBtn');
-  const uuidBtn = $('uuidBtn');
-  const passwordResult = $('passwordResult');
-  const passwordLower = 'abcdefghijkmnopqrstuvwxyz';
-  const passwordUpper = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  const passwordDigits = '23456789';
-  const passwordSymbols = '!@#$%^&*()-_=+[]{};:,.?';
-
-  function secureRandomInt(max) {
-    if (window.crypto && window.crypto.getRandomValues) {
-      const buffer = new Uint32Array(1);
-      window.crypto.getRandomValues(buffer);
-      return buffer[0] % max;
-    }
-    return Math.floor(Math.random() * max);
-  }
-
-  function shuffleChars(chars) {
-    for (let i = chars.length - 1; i > 0; i--) {
-      const j = secureRandomInt(i + 1);
-      const temp = chars[i];
-      chars[i] = chars[j];
-      chars[j] = temp;
-    }
-    return chars;
-  }
-
-  function makePassword(length) {
-    const sets = [passwordLower, passwordUpper, passwordDigits, passwordSymbols];
-    const chars = sets.map(function (set) { return set[secureRandomInt(set.length)]; });
-    const all = sets.join('');
-    while (chars.length < length) chars.push(all[secureRandomInt(all.length)]);
-    return shuffleChars(chars).join('');
-  }
-
-  function makeUuid() {
-    if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
-    const bytes = new Uint8Array(16);
-    if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(bytes);
-    else for (let i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256);
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    const hex = Array.from(bytes, function (byte) { return byte.toString(16).padStart(2, '0'); }).join('');
-    return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' +
-      hex.slice(16, 20) + '-' + hex.slice(20);
-  }
-
-  function showPasswordResult(value) {
-    if (!passwordResult) return;
-    passwordResult.textContent = value;
-    passwordResult.dataset.value = value;
-    passwordResult.classList.add('password-value');
-  }
-
-  if (passwordBtn && passwordResult && passwordLength) {
-    passwordBtn.addEventListener('click', function () {
-      let length = Number(passwordLength.value);
-      if (!Number.isFinite(length)) length = 20;
-      length = Math.min(64, Math.max(8, Math.floor(length)));
-      passwordLength.value = String(length);
-      showPasswordResult(makePassword(length));
-      clickFeedback(passwordBtn);
-    });
-    passwordLength.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') passwordBtn.click();
-    });
-  }
-  if (uuidBtn) {
-    uuidBtn.addEventListener('click', function () {
-      showPasswordResult(makeUuid());
-      clickFeedback(uuidBtn);
-    });
-  }
-  if (passwordResult) {
-    passwordResult.setAttribute('role', 'button');
-    passwordResult.setAttribute('tabindex', '0');
-    passwordResult.setAttribute('aria-label', '复制生成结果');
-    passwordResult.title = '点击复制';
-    function copyGenerated() {
-      const value = passwordResult.dataset.value;
-      if (!value) return;
-      copyText(value).then(function (copied) {
-        showToast(copied ? '✓ 已复制生成结果' : '⚠ 复制失败，请手动选择复制');
-        clickFeedback(passwordResult);
-      });
-    }
-    passwordResult.addEventListener('click', copyGenerated);
-    passwordResult.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        copyGenerated();
-      }
-    });
-  }
 
   /* ------------------------------------------------------------------ */
   /* Wallpapers                                                          */
@@ -1424,6 +1173,11 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
     return index;
   }
 
+  function wallpaperImageUrl(url) {
+    const width = window.innerWidth < 768 ? 960 : 1600;
+    return url.replace('w=1920&q=80', 'w=' + width + '&q=75');
+  }
+
   function applyWallpaper(index, announce) {
     if (!Number.isInteger(index) || index < 0 || index >= wallpapers.length) return;
     currentWallpaperIdx = index;
@@ -1431,7 +1185,7 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
     const gradient = wallpaperGradients[index % wallpaperGradients.length];
     if (bgLayer) {
       bgLayer.style.backgroundColor = '#0a1410';
-      bgLayer.style.backgroundImage = gradient + ', url("' + wallpaper.url + '")';
+      bgLayer.style.backgroundImage = gradient + ', url("' + wallpaperImageUrl(wallpaper.url) + '")';
     }
     if (wallpaperGrid) {
       Array.from(wallpaperGrid.children).forEach(function (item, itemIndex) {
@@ -1785,37 +1539,27 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
 
   const linksSections = $('linksSections');
   if (linksSections) {
+    let markup = '';
     linkSections.forEach(function (section) {
-      const sectionEl = document.createElement('div');
-      sectionEl.className = 'link-section';
-      const titleEl = document.createElement('div');
-      titleEl.className = 'link-section-title';
-      titleEl.innerHTML = iconMarkup(section.icon) + ' ' + escapeHTML(section.title);
-      const descEl = document.createElement('span');
-      descEl.className = 'link-section-desc';
-      descEl.textContent = section.desc;
-      titleEl.appendChild(descEl);
-      const gridEl = document.createElement('div');
-      gridEl.className = 'links-grid';
+      markup += '<div class="link-section"><div class="link-section-title">' +
+        iconMarkup(section.icon) + ' ' + escapeHTML(section.title) +
+        '<span class="link-section-desc">' + escapeHTML(section.desc) + '</span></div>' +
+        '<div class="links-grid">';
       section.links.forEach(function (link) {
-        const anchor = document.createElement('a');
-        anchor.className = 'link-item';
-        anchor.href = link.url;
-        anchor.target = '_blank';
-        anchor.rel = 'noopener noreferrer';
-        anchor.title = link.name;
-        anchor.setAttribute('aria-label', link.name + '（在新标签页打开）');
-        anchor.innerHTML = iconMarkup(link.icon, 'link-icon') + '<span class="link-name">' +
-          escapeHTML(link.name) + '</span>';
-        anchor.addEventListener('click', function () {
-          showToast('🔗 正在打开 ' + link.name);
-          clickFeedback(anchor);
-        });
-        gridEl.appendChild(anchor);
+        markup += '<a class="link-item" href="' + escapeHTML(link.url) +
+          '" target="_blank" rel="noopener noreferrer" title="' + escapeHTML(link.name) +
+          '" data-name="' + escapeHTML(link.name) + '" aria-label="' + escapeHTML(link.name) +
+          '（在新标签页打开）">' + iconMarkup(link.icon, 'link-icon') +
+          '<span class="link-name">' + escapeHTML(link.name) + '</span></a>';
       });
-      sectionEl.appendChild(titleEl);
-      sectionEl.appendChild(gridEl);
-      linksSections.appendChild(sectionEl);
+      markup += '</div></div>';
+    });
+    linksSections.innerHTML = markup;
+    linksSections.addEventListener('click', function (event) {
+      const anchor = event.target.closest('.link-item');
+      if (!anchor) return;
+      showToast('🔗 正在打开 ' + (anchor.getAttribute('data-name') || '网页'));
+      clickFeedback(anchor);
     });
   }
 
@@ -2064,47 +1808,27 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
   }
 
   /* ------------------------------------------------------------------ */
-  /* Dangerous button (all effects recover automatically)                */
+  /* Dangerous button (the shuffle effect persists until page refresh)   */
   /* ------------------------------------------------------------------ */
   const dangerBtn = $('dangerBtn');
-  let prankTimer = 0;
-
   function runFlyingButtons() {
-    if (prankTimer) window.clearTimeout(prankTimer);
+    if (document.body.classList.contains('prank-mode')) return;
+    document.body.classList.add('prank-mode');
     const nodes = Array.from(document.querySelectorAll(
       'button, .icon-btn, .nav-links a, .social a, .email-item, .link-item, .nav-brand'
-    ));
-    const records = [];
-    document.body.style.pointerEvents = 'none';
-    nodes.forEach(function (el, index) {
-      const rect = el.getBoundingClientRect();
-      records.push({ el: el, css: el.style.cssText, hadClass: el.classList.contains('flying-btn') });
+    )).filter(function (el) { return el.getClientRects().length > 0; });
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    nodes.forEach(function (el) {
+      const dx = (Math.random() - 0.5) * viewportWidth * 1.05;
+      const dy = (Math.random() - 0.5) * viewportHeight * 1.05;
+      const rotate = (Math.random() - 0.5) * 44;
+      const scale = 0.82 + Math.random() * 0.34;
       el.classList.add('flying-btn');
-      el.style.left = rect.left + 'px';
-      el.style.top = rect.top + 'px';
-      el.style.width = rect.width + 'px';
-      el.style.height = rect.height + 'px';
-      el.style.margin = '0';
-      const flyX = (Math.random() - 0.5) * window.innerWidth * 1.6;
-      const flyY = (Math.random() - 0.5) * window.innerHeight * 1.6;
-      const rotate = (Math.random() - 0.5) * 1080;
-      window.setTimeout(function () {
-        el.style.left = (rect.left + flyX) + 'px';
-        el.style.top = (rect.top + flyY) + 'px';
-        el.style.transform = 'rotate(' + rotate + 'deg) scale(' + (0.5 + Math.random()) + ')';
-        el.style.opacity = '0.72';
-      }, index * 35);
+      el.style.transform = 'translate3d(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px,0) rotate(' +
+        rotate.toFixed(1) + 'deg) scale(' + scale.toFixed(2) + ')';
+      el.style.opacity = '0.86';
     });
-    showToast('🌀 按钮们飞走了！5 秒后自动恢复', 5200);
-    prankTimer = window.setTimeout(function () {
-      records.forEach(function (record) {
-        record.el.style.cssText = record.css;
-        if (!record.hadClass) record.el.classList.remove('flying-btn');
-      });
-      document.body.style.pointerEvents = '';
-      prankTimer = 0;
-      showToast('🛠 按钮已全部归位');
-    }, 5200);
   }
 
   const dangerEffects = [
@@ -2145,8 +1869,10 @@ html.dark .code-output{background:rgba(0,0,0,.22);border-color:rgba(150,230,190,
       event.preventDefault();
       const effect = dangerEffects[getNextDangerIdx()];
       if (effect && typeof effect.run === 'function') effect.run();
-      dangerBtn.style.transform = 'scale(0.9) rotate(-3deg)';
-      window.setTimeout(function () { dangerBtn.style.transform = ''; }, 150);
+      if (!effect || effect.name !== 'fly') {
+        dangerBtn.style.transform = 'scale(0.9) rotate(-3deg)';
+        window.setTimeout(function () { dangerBtn.style.transform = ''; }, 150);
+      }
     });
   }
 
