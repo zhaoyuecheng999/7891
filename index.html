@@ -1704,22 +1704,21 @@ body.prank-mode .prank-banner{display:flex}
   const fortuneBtn = $('fortuneBtn');
   const fortuneResult = $('fortuneResult');
   const fortunes = [
-    { text: '🌟 大吉：今天会有好事发生！', big: true },
-    { text: '✨ 中吉：适合摸鱼，效率奇高', big: false },
-    { text: '🍀 小吉：会遇到一个乐子', big: false },
-    { text: '😎 吉：MC 世界第一，你也第一', big: false },
-    { text: '🎮 游戏吉：适合打游戏，上分顺利', big: false },
-    { text: '☕ 摸鱼吉：今天适合多喝热水', big: false },
-    { text: '⛏ 挖矿吉：今天挖矿必出钻石', big: false },
-    { text: '🤣 乐子吉：你会笑到停不下来', big: false },
-    { text: '😐 平平：今天平平无奇，但乐子多', big: false },
-    { text: '🐱 猫猫吉：会遇到一只可爱的猫', big: false },
-    { text: '😱 凶：今天不宜点「千万别点」', big: false },
-    { text: '🌧 小凶：记得带伞，乐子不减', big: false },
-    { text: '🎬 追番吉：今天适合补完积压的番剧', big: false },
-    { text: '🍜 干饭吉：今天会遇到超好吃的店', big: false },
-    { text: '💤 躺平吉：今天最适合什么都不做', big: false },
-    { text: '🎁 惊喜吉：会收到意料之外的小礼物', big: false }
+    { text: '6767676767676767', big: true },
+    { text: '老牧师十八码', big: false },
+    { text: '请输入文本', big: false },
+    { text: '雷石东直放站', big: false },
+    { text: '你每天会忘记几百件事，为什么不把这件事也忘了', big: false },
+    { text: '114514', big: false },
+    { text: 'GrandTheftAuto V', big: false },
+    { text: 'GrandTheftAutoVI', big: false },
+    { text: 'ViceCity', big: false },
+    { text: '滚木滚木滚木滚木滚木', big: false },
+    { text: 'Call of Duty', big: false },
+    { text: 'Minecraft', big: false },
+    { text: '6767676767', big: false },
+    { text: 'GrandTheftAuto ViceCity', big: false },
+    { text: 'shit', big: false },
   ];
   let fortuneRolling = false;
   if (fortuneBtn && fortuneResult) {
@@ -1727,7 +1726,7 @@ body.prank-mode .prank-banner{display:flex}
       if (fortuneRolling) return;
       fortuneRolling = true;
       fortuneBtn.disabled = true;
-      fortuneResult.textContent = '🔮 正在抽取…';
+      fortuneResult.textContent = 'wait';
       fortuneResult.classList.remove('big');
       let count = 0;
       const interval = window.setInterval(function () {
@@ -1739,7 +1738,7 @@ body.prank-mode .prank-banner{display:flex}
           const finalFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
           fortuneResult.textContent = finalFortune.text;
           if (finalFortune.big) fortuneResult.classList.add('big');
-          showToast('🔮 抽签结果：' + Array.from(finalFortune.text).slice(0, 12).join('') + '…');
+          showToast(' 抽签结果：' + Array.from(finalFortune.text).slice(0, 12).join('') + '…');
           fortuneRolling = false;
           fortuneBtn.disabled = false;
         }
@@ -1787,13 +1786,13 @@ body.prank-mode .prank-banner{display:flex}
       updateFunDisplay();
       saveFunCount();
       clickFeedback(funReset);
-      showToast('🔄 乐子指数已重置');
+      showToast(' 老牧师指数已重置');
     });
   }
   updateFunDisplay();
 
   const footerText = $('footerText');
-  const footerMessages = ['MC世界第一', 'MC永远的神', '方块世界，无限可能', '苦力怕警告 ⚠', '钻石镐在此 ⛏', 'MC世界第一，不接受反驳'];
+  const footerMessages = ['MC世界第一', 'GrandTheftAuto永远的神', 'token', '6767', 'PCL2', '请输入文本'];
   let footerIdx = 0;
   if (footerText) {
     footerText.setAttribute('role', 'button');
