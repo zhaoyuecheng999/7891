@@ -478,7 +478,7 @@ body.prank-mode .prank-banner{display:flex}
 <div class="blog">
 <nav class="navbar">
 <div class="nav-left">
-<a href="#" class="nav-brand" id="brandLink" aria-label="ZYC1145·乐子，返回顶部"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">ZYC1145·乐子</span></a>
+<a href="#" class="nav-brand" id="brandLink" aria-label="ZYC1145·乐子，返回顶部"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">最NB网站</span></a>
 <div class="nav-links">
 <a href="#profile" class="nav-link active" data-target="profile">个人</a>
 <a href="#social-links" class="nav-link" data-target="social-links">社交</a>
@@ -488,7 +488,7 @@ body.prank-mode .prank-banner{display:flex}
 </div>
 </div>
 <div class="nav-right">
-<a class="icon-btn bili-btn" id="biliTopBtn" href="www.bilibili.com" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩个人空间（在新标签页打开）" title="哔哩哔哩个人空间"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-bilibili"></use></svg></a>
+<a class="icon-btn bili-btn" id="biliTopBtn" href="www.bilibili.com" target="_blank" rel="noopener noreferrer" aria-label="哔哩哔哩" title="哔哩哔哩"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-bilibili"></use></svg></a>
 <button type="button" class="icon-btn" id="wallpaperBtn" aria-label="更换壁纸" aria-controls="wallpaperPanel" aria-expanded="false" title="更换壁纸"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-image"></use></svg></button>
 <button type="button" class="icon-btn" id="themeToggle" aria-label="切换主题模式" title="浅色 / 深色 / 自动"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-moon"></use></svg></button>
 </div>
@@ -499,7 +499,7 @@ body.prank-mode .prank-banner{display:flex}
 <div class="hero-time"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg><span id="currentTime">--:--:--</span><span id="lunarDate" class="lunar-text"></span></div>
 </section>
 <header class="profile" id="profile">
-<button type="button" class="avatar" id="avatarBtn" aria-label="切换头像表情"><span>ZYC</span></button>
+<button type="button" class="avatar" id="avatarBtn" aria-label="切换头像表情"><span>67</span></button>
 <div class="profile-info">
 <h1 class="profile-name">ZYC1145</h1>
 <div class="social" id="social-links">
@@ -582,7 +582,7 @@ body.prank-mode .prank-banner{display:flex}
 <div class="fun-zone" id="fun-zone">
 <div class="fun-card">
 <div class="fun-card-title"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-quote-left"></use></svg> 乐子格言机</div>
-<div class="quote-text" id="quoteText">点击下方按钮，随机生成一句乐子格言。</div>
+<div class="quote-text" id="quoteText">点击下方按钮，随机生成一句。</div>
 <button type="button" class="fun-btn" id="quoteBtn">换一句</button>
 </div>
 <div class="fun-card">
@@ -593,26 +593,26 @@ body.prank-mode .prank-banner{display:flex}
 <div class="fun-card">
 <div class="fun-card-title"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-face-smile"></use></svg> 戳戳乐</div>
 <div class="egg-area">
-<div class="egg-face" id="eggFace">(≧▽≦)</div>
+<div class="egg-face" id="eggFace">Hello</div>
 <div class="egg-hint" id="eggHint">点我试试，看看会变什么脸</div>
 </div>
 </div>
 <div class="fun-card">
 <div class="fun-card-title"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-wand-magic-sparkles"></use></svg> 幸运抽签</div>
-<div class="fortune-result" id="fortuneResult">点击下方按钮，测测今天的运势</div>
+<div class="fortune-result" id="fortuneResult">点击下方按钮，测测</div>
 <button type="button" class="fun-btn" id="fortuneBtn">抽一签</button>
 </div>
 </div>
 <div class="fun-counter">
-<span class="fun-label">今日乐子指数</span>
+<span class="fun-label">今日67指数</span>
 <span class="count-num" id="funCount" aria-live="polite">0</span>
-<button type="button" id="funBtn">+1 乐子</button>
+<button type="button" id="funBtn">+1 </button>
 <button type="button" id="funReset">重置</button>
 </div>
-<div class="footer" id="footerText">MC世界第一</div>
+<div class="footer" id="footerText">emmmm</div>
 <div class="danger-section">
 <button type="button" class="danger-btn" id="dangerBtn"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg> 千万别点 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-triangle-exclamation"></use></svg></button>
-<div class="danger-hint">点了后果自负 · 每次效果不一样 · 打乱后刷新恢复</div>
+<div class="danger-hint">点了等废吧</div>
 </div>
 </div>
 <button type="button" class="back-to-top" id="backToTop" aria-label="返回顶部"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg></button>
@@ -1373,7 +1373,7 @@ body.prank-mode .prank-banner{display:flex}
 
   const avatarBtn = $('avatarBtn');
   const avatarSpan = avatarBtn ? avatarBtn.querySelector('span') : null;
-  const avatarFaces = ['ZYC', '乐子', '(≧▽≦)', 'MC', '嗨！', 'ZYC', '桑晨曦', '^_^'];
+ 
   let avatarIdx = 0;
   if (avatarBtn && avatarSpan) {
     avatarBtn.addEventListener('click', function () {
@@ -1573,27 +1573,19 @@ body.prank-mode .prank-banner{display:flex}
   /* Quotes, dice, egg, fortune, counter, footer                         */
   /* ------------------------------------------------------------------ */
   const quotes = [
-    '看到的都是给，给出去的都是乐子。',
-    '人生苦短，及时行乐，但别乐过头。',
-    '乐子不是找来的，是撞上来的。',
-    '别人笑我太疯癫，我笑别人看不穿。',
-    '世界上只有一种英雄主义，就是看清生活后依然乐呵。',
-    '快乐是免费的，但乐子可能需要一点创意。',
-    '如果你觉得生活无聊，那一定是你还没开始整活。',
-    '每一个乐子背后，都藏着一个认真的灵魂。',
-    '桑晨曦是个乐子，刘轩廷也是，大家都是。',
-    '不要问乐子能给你什么，要问你能给乐子什么。',
-    '今日事今日毕，今日乐子今日笑。',
-    '生活就像一盒巧克力，你永远不知道下一颗是不是乐子。',
-    '乐子人，乐子魂，乐子都是人上人。',
-    '与其内耗自己，不如外耗别人。',
-    '摸鱼是对生活最基本的尊重。',
-    'MC 世界第一，不接受反驳。',
-    '看到的都是给，看不到的也是给，只是你还没发现。',
-    '乐子不分大小，快乐不分前后。',
-    '把日子过成段子，把段子过成日子。',
-    '人生如戏，全靠乐子撑场。'
-  ];
+    '蓝色大肥鱼',
+    '我要放假',
+    'PCL2',
+    '育碧老牧师',
+    'Rockstar ',
+    'ohhhhhhhhhhhhhh',
+    '请输入文本',
+    'r星服务器拉完了',
+    'Grand Theft Auto VI',
+    '676767676767',
+    'EA服务器一坨',
+    'Java',
+     ];
   const quoteText = $('quoteText');
   const quoteBtn = $('quoteBtn');
   let lastQuoteIdx = -1;
@@ -1657,19 +1649,18 @@ body.prank-mode .prank-banner{display:flex}
   }
 
   const eggFaces = [
-    '(≧▽≦)', '(๑•̀ㅂ•́)و✧', '( ͡° ͜ʖ ͡°)', '(╯°□°）╯︵ ┻━┻',
-    '(づ｡◕‿‿◕｡)づ', '٩(◕‿◕｡)۶', '(⌐■_■)', '(ᵔᴥᵔ)',
-    '(ಥ﹏ಥ)', '(っ˘̩╭╮˘̩)っ', 'ᕕ( ᐛ )ᕗ', '(๑˃̵ᴗ˂̵)و',
-    '(＠_＠)', '(⊙_⊙)', '(￣▽￣)', '(✿◡‿◡)',
-    '(≖ᴗ≖)', '(◕ᴗ◕✿)', '(๑´ㅂ`๑)', '(•̀ᴗ•́)و',
-    '(｡♥‿♥｡)', '(｡•́︿•̀｡)', '(๑•́ ₃ •̀๑)', '(๑>؂<๑)',
-    '(⁄ ⁄•⁄ω⁄•⁄ ⁄)', '(๑•̀ㅁ•́ฅ)', '(๑¯◡¯๑)', '(๑´•.̫ • `๑)'
+    '点吧',
+    '还点',
+    '一直点啥',
+    '别点了',
+    '随便',
+    '？？？',
   ];
   const eggHints = [
-    '嘿嘿，被你戳到了！', '再戳一下试试？', '乐子 +1', '桑晨曦看到了会笑', '刘轩廷表示很赞',
-    '你戳得真准', '这个脸不错吧', '乐子能量满格', '戳戳乐大师是你', '继续，别停',
-    '点这里会有好事发生', '你的手气不错哦', '要不要再来一次？', '这张脸你爱了吗？', '越戳越有意思',
-    '乐子人认证通过', '这个表情绝了', '你已经停不下来了', '戳戳乐，乐无穷', '下一个表情更好看'
+    '！？点点？！',
+    '6',
+    '冰冰冰',
+    '！？高高？！'
   ];
   const eggFace = $('eggFace');
   const eggHint = $('eggHint');
@@ -1691,7 +1682,7 @@ body.prank-mode .prank-banner{display:flex}
   if (eggFace) {
     eggFace.setAttribute('role', 'button');
     eggFace.setAttribute('tabindex', '0');
-    eggFace.setAttribute('aria-label', '戳一戳，切换表情');
+    eggFace.setAttribute('aria-label', '哈哈哈');
     eggFace.addEventListener('click', changeEggFace);
     eggFace.addEventListener('keydown', function (event) {
       if (event.key === 'Enter' || event.key === ' ') {
